@@ -1,2959 +1,1345 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <meta name="theme-color" content="#050506">
-
 <title>STILL BECOMING — A Living Archive</title>
 
 <style>
-
 :root {
-
   --black: #050506;
-
-  --white: #ededeb;
-
-  --silver: #92929a;
-
-  --dim: #575760;
-
-  --wine: #a42f4d;
-
-  --green: #79ff98;
-
-  --green-light: #c9ffd7;
-
+  --white: #efefec;
+  --silver: #8b8b91;
+  --dim: #45454b;
+  --green: #a2ff9c;
+  --wine: #a23b50;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-
-  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-  --serif: "Bodoni 72", Didot, "Times New Roman", serif;
-
-  /* Golden-ratio layout references */
-
-  --phi: 1.61803398875;
-
-  --golden-major: 61.8034%;
-
-  --golden-minor: 38.1966%;
-
+  --sans: Arial, Helvetica, sans-serif;
 }
 
 * {
-
   box-sizing: border-box;
-
-  margin: 0;
-
-  padding: 0;
-
 }
 
 html,
-
 body {
-
+  margin: 0;
   width: 100%;
-
-  height: 100%;
-
-  overflow: hidden;
-
+  min-height: 100%;
   background: var(--black);
-
   color: var(--white);
-
-  font-family: var(--sans);
-
-  -webkit-font-smoothing: antialiased;
-
+  font-family: var(--mono);
 }
 
 body {
-
-  position: relative;
-
+  overflow: hidden;
 }
 
 button,
-
 a {
-
-  font: inherit;
-
   color: inherit;
-
+  font: inherit;
 }
 
 button {
-
-  border: 0;
-
-  background: none;
-
+  cursor: pointer;
 }
 
 a {
-
   text-decoration: none;
-
-}
-
-button:focus-visible,
-
-a:focus-visible {
-
-  outline: 1px solid var(--wine);
-
-  outline-offset: 5px;
-
 }
 
 ::selection {
-
-  background: var(--wine);
-
-  color: white;
-
+  background: var(--green);
+  color: var(--black);
 }
 
-/* =========================================
+/* ---------- BACKGROUND ---------- */
 
-   BACKGROUND LAYERS
-
-========================================= */
-
-#spaceCanvas,
-
-#grainCanvas {
-
+#space {
   position: fixed;
-
   inset: 0;
-
   width: 100%;
-
   height: 100%;
-
-  pointer-events: none;
-
-}
-
-#spaceCanvas {
-
   z-index: 0;
-
-}
-
-#grainCanvas {
-
-  z-index: 3;
-
-  opacity: 0.15;
-
-  mix-blend-mode: screen;
-
-}
-
-.ambient {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 1;
-
   pointer-events: none;
-
-  background:
-
-    radial-gradient(
-
-      ellipse at 50% 49%,
-
-      rgba(38, 38, 45, 0.15),
-
-      transparent 56%
-
-    ),
-
-    radial-gradient(
-
-      ellipse at 18% 72%,
-
-      rgba(88, 25, 43, 0.07),
-
-      transparent 35%
-
-    ),
-
-    radial-gradient(
-
-      ellipse at 87% 23%,
-
-      rgba(88, 25, 43, 0.045),
-
-      transparent 34%
-
-    );
-
 }
 
-.ambient::after {
-
-  content: "";
-
-  position: absolute;
-
-  inset: 0;
-
-  background:
-
-    linear-gradient(
-
-      90deg,
-
-      transparent 0%,
-
-      rgba(255, 255, 255, 0.012) 49.95%,
-
-      rgba(255, 255, 255, 0.012) 50.05%,
-
-      transparent 100%
-
-    );
-
-}
-
-/* =========================================
-
-   HEADER
-
-========================================= */
-
-.header {
-
+#grain {
   position: fixed;
-
-  z-index: 20;
-
-  top: 0;
-
-  left: 0;
-
+  inset: 0;
   width: 100%;
+  height: 100%;
+  z-index: 2;
+  opacity: .12;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
 
-  min-height: 82px;
+.vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      transparent 10%,
+      rgba(5,5,6,.12) 60%,
+      rgba(5,5,6,.75) 100%
+    );
+}
 
-  padding: 0 clamp(22px, 4.2vw, 66px);
+/* ---------- HEADER ---------- */
 
-  display: flex;
-
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 29px 4.1vw;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-
-  justify-content: space-between;
-
-  gap: 25px;
-
-  border-bottom: 1px solid rgba(230, 230, 238, 0.12);
-
-  background: rgba(5, 5, 6, 0.72);
-
-  backdrop-filter: blur(18px);
-
-  -webkit-backdrop-filter: blur(18px);
-
+  z-index: 10;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
 .brand {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  flex-shrink: 0;
-
-}
-
-.brand-symbol {
-
-  position: relative;
-
-  width: 8px;
-
-  height: 8px;
-
-  border-radius: 50%;
-
-  background: var(--wine);
-
-  box-shadow: 0 0 13px rgba(164, 47, 77, 0.45);
-
-}
-
-.brand-symbol::before {
-
-  content: "";
-
-  position: absolute;
-
-  inset: -5px;
-
-  border: 1px solid rgba(164, 47, 77, 0.55);
-
-  border-radius: 50%;
-
-}
-
-.brand-name {
-
-  color: #d3d3d6;
-
-  font-size: 10px;
-
-  font-weight: 400;
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-
-  white-space: nowrap;
-
-}
-
-.header-right {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: flex-end;
-
-  gap: clamp(20px, 3.5vw, 52px);
-
-}
-
-.nav {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: clamp(15px, 2.5vw, 36px);
-
-}
-
-.nav-link {
-
-  position: relative;
-
-  padding: 12px 0;
-
-  color: #85858d;
-
-  font-size: 9px;
-
-  letter-spacing: 0.08em;
-
-  white-space: nowrap;
-
-  transition: color 0.3s ease;
-
-}
-
-.nav-link::after {
-
-  content: "";
-
-  position: absolute;
-
-  bottom: 5px;
-
-  left: 0;
-
-  width: 100%;
-
-  height: 1px;
-
-  background: var(--wine);
-
-  transform: scaleX(0);
-
-  transform-origin: right;
-
-  transition: transform 0.35s ease;
-
-}
-
-.nav-link:hover,
-
-.nav-link.active {
-
+  justify-self: start;
   color: var(--white);
-
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 10px;
+  letter-spacing: .13em;
+  white-space: nowrap;
 }
 
-.nav-link:hover::after,
+.brand span {
+  color: var(--silver);
+  margin-left: 8px;
+}
 
-.nav-link.active::after {
+nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(15px, 2.5vw, 38px);
+}
 
-  transform: scaleX(1);
+nav a {
+  position: relative;
+  color: #a2a2a7;
+  white-space: nowrap;
+  transition: color .25s ease;
+}
 
-  transform-origin: left;
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -7px;
+  height: 1px;
+  background: var(--green);
+  transition: right .3s ease;
+}
 
+nav a:hover,
+nav a.active {
+  color: var(--white);
+}
+
+nav a:hover::after,
+nav a.active::after {
+  right: 0;
 }
 
 .languages {
-
+  justify-self: end;
   display: flex;
-
-  align-items: center;
-
-  gap: 9px;
-
-  flex-shrink: 0;
-
+  gap: 11px;
 }
 
-.language {
-
-  cursor: pointer;
-
-  color: #66666e;
-
+.languages button {
+  background: none;
+  border: 0;
+  padding: 4px 0;
   font-size: 10px;
-
-  transition: color 0.25s ease;
-
+  color: #66666c;
 }
 
-.language + .language::before {
-
-  content: "/";
-
-  margin-right: 9px;
-
-  color: #36363c;
-
+.languages button.active,
+.languages button:hover {
+  color: var(--green);
 }
 
-.language:hover,
+/* ---------- MAIN COMPOSITION ---------- */
 
-.language.active {
-
-  color: var(--wine-light, #d14a67);
-
-}
-
-/* =========================================
-
-   HOMEPAGE
-
-========================================= */
-
-.home {
-
+main {
   position: relative;
-
-  z-index: 2;
-
   width: 100%;
-
-  height: 100%;
-
+  height: 100svh;
+  min-height: 520px;
   overflow: hidden;
-
-  transition: opacity 0.45s ease;
-
+  z-index: 3;
 }
-
-.home.is-hidden {
-
-  opacity: 0;
-
-  pointer-events: none;
-
-}
-
-.hero {
-
-  position: relative;
-
-  width: 100%;
-
-  height: 100%;
-
-}
-
-/*
-
-  The composition uses the golden ratio as a
-
-  spatial guide, not a rigid centering rule.
-
-*/
 
 .composition {
-
   position: absolute;
-
-  top: 49%;
-
+  width: min(82vw, 1120px);
+  height: min(66vh, 590px);
+  min-height: 390px;
   left: 50%;
-
-  width: min(1000px, 90vw);
-
-  height: min(610px, 67vh);
-
-  min-height: 350px;
-
+  top: 49%;
   transform: translate(-50%, -50%);
-
 }
 
-.composition::before {
+/* Golden-ratio registration line */
 
-  content: "";
-
+.registration {
   position: absolute;
-
+  left: 61.8%;
   top: 0;
-
-  bottom: 0;
-
-  left: var(--golden-major);
-
+  height: 100%;
   width: 1px;
-
-  background: linear-gradient(
-
-    to bottom,
-
-    transparent,
-
-    rgba(210, 210, 220, 0.12) 20%,
-
-    rgba(210, 210, 220, 0.08) 75%,
-
-    transparent
-
-  );
-
-  opacity: 0.45;
-
-  pointer-events: none;
-
+  background: rgba(255,255,255,.11);
 }
 
-.hero-kicker {
-
+.registration::before,
+.registration::after {
+  content: "";
   position: absolute;
-
-  top: 7%;
-
-  left: 5%;
-
-  color: #92929a;
-
-  font: 9px/1.8 var(--mono);
-
-  letter-spacing: 0.15em;
-
-  text-transform: uppercase;
-
-  animation: fadeIn 1.3s ease both;
-
+  left: -3px;
+  width: 7px;
+  height: 1px;
+  background: rgba(255,255,255,.38);
 }
 
-.hero-kicker span {
-
-  color: var(--wine);
-
+.registration::before {
+  top: 38.2%;
 }
 
-.hero-note {
+.registration::after {
+  top: 61.8%;
+}
 
+/* Fine registration marks */
+
+.cross {
   position: absolute;
-
-  top: 10%;
-
-  right: 5%;
-
-  max-width: 140px;
-
-  color: #707078;
-
-  font: 9px/1.9 var(--mono);
-
-  letter-spacing: 0.04em;
-
-  text-align: right;
-
-  animation: fadeIn 1.8s ease both;
-
+  width: 11px;
+  height: 11px;
+  opacity: .6;
 }
 
-.hero-note strong {
-
-  display: block;
-
-  color: #c4c4c9;
-
-  font-weight: 400;
-
-}
-
-.side-note {
-
+.cross::before,
+.cross::after {
+  content: "";
   position: absolute;
-
-  top: 48%;
-
-  color: #65656e;
-
-  font: 8px/1.8 var(--mono);
-
-  letter-spacing: 0.11em;
-
-  writing-mode: vertical-rl;
-
-  pointer-events: none;
-
+  background: rgba(255,255,255,.5);
 }
 
-.side-note.left {
-
-  left: 1%;
-
-  transform: rotate(180deg);
-
+.cross::before {
+  left: 5px;
+  top: 0;
+  width: 1px;
+  height: 11px;
 }
 
-.side-note.right {
-
-  right: 1%;
-
+.cross::after {
+  top: 5px;
+  left: 0;
+  width: 11px;
+  height: 1px;
 }
 
-.coordinates {
+.cross.one {
+  left: 29.5%;
+  top: 25%;
+}
 
+.cross.two {
+  left: 77%;
+  top: 72%;
+}
+
+.cross.three {
+  left: 15%;
+  top: 76%;
+  transform: scale(.65);
+}
+
+/* ---------- TITLE ---------- */
+
+.title-field {
   position: absolute;
-
-  left: clamp(22px, 4.2vw, 66px);
-
-  bottom: 30px;
-
-  color: #66666e;
-
-  font: 9px/1.8 var(--mono);
-
-  letter-spacing: 0.08em;
-
+  inset: 0;
 }
 
-.coordinates span {
-
-  color: var(--wine);
-
-}
-
-.system-status {
-
+.word {
   position: absolute;
-
-  right: clamp(22px, 4.2vw, 66px);
-
-  bottom: 30px;
-
+  height: 100px;
   display: flex;
-
   align-items: center;
+  white-space: nowrap;
+}
 
-  gap: 9px;
+.word-one {
+  left: 17%;
+  top: 28%;
+}
 
-  color: #85858d;
+.word-two {
+  left: 34%;
+  top: 51%;
+}
 
-  font: 9px var(--mono);
+.letter {
+  display: inline-block;
+  position: relative;
+  color: var(--green);
+  font-family: var(--sans);
+  font-size: clamp(47px, 7.3vw, 104px);
+  line-height: .9;
+  font-weight: 400;
+  letter-spacing: -.085em;
+  transform-origin: center center;
+  will-change: transform;
+  transition: color .25s ease;
+  user-select: none;
+}
 
-  letter-spacing: 0.08em;
+.letter:hover {
+  color: #e4ffe1;
+  text-shadow: 0 0 20px rgba(162,255,156,.3);
+}
 
+.word-one .letter:nth-child(1) { margin-right: .04em; }
+.word-one .letter:nth-child(2) { margin-right: .01em; }
+.word-one .letter:nth-child(3) { margin-right: .11em; }
+.word-one .letter:nth-child(4) { margin-right: -.015em; }
+.word-one .letter:nth-child(5) { margin-right: 0; }
+
+.word-two .letter:nth-child(1) { margin-right: .08em; }
+.word-two .letter:nth-child(2) { margin-right: -.025em; }
+.word-two .letter:nth-child(3) { margin-right: .035em; }
+.word-two .letter:nth-child(4) { margin-right: .12em; }
+.word-two .letter:nth-child(5) { margin-right: -.025em; }
+.word-two .letter:nth-child(6) { margin-right: .06em; }
+.word-two .letter:nth-child(7) { margin-right: -.02em; }
+.word-two .letter:nth-child(8) { margin-right: 0; }
+
+/* Small labels */
+
+.label {
+  position: absolute;
+  font-size: 9px;
+  line-height: 1.8;
+  color: var(--silver);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+.label-top {
+  left: 17.3%;
+  top: 18%;
+}
+
+.label-right {
+  right: 0;
+  top: 38.2%;
+  text-align: right;
+}
+
+.label-left {
+  left: 0;
+  top: 62%;
+}
+
+.label-bottom {
+  right: 0;
+  bottom: 10%;
+  text-align: right;
+}
+
+.label .accent {
+  color: var(--wine);
+}
+
+/* ---------- FOOTER ---------- */
+
+footer {
+  position: fixed;
+  z-index: 10;
+  left: 4.1vw;
+  right: 4.1vw;
+  bottom: 27px;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  color: #77777d;
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  line-height: 1.9;
+}
+
+.footer-right {
+  text-align: right;
 }
 
 .status-dot {
-
+  display: inline-block;
   width: 5px;
-
   height: 5px;
-
+  margin-right: 7px;
   border-radius: 50%;
-
-  background: var(--wine);
-
-  box-shadow: 0 0 10px rgba(164, 47, 77, 0.65);
-
-  animation: pulse 3s ease-in-out infinite;
-
+  background: var(--green);
+  box-shadow: 0 0 9px rgba(162,255,156,.4);
+  animation: blink 2.4s infinite;
 }
 
-@keyframes fadeIn {
-
-  from {
-
-    opacity: 0;
-
-    transform: translateY(7px);
-
-  }
-
-  to {
-
-    opacity: 1;
-
-    transform: translateY(0);
-
-  }
-
+@keyframes blink {
+  0%, 100% { opacity: .9; }
+  50% { opacity: .3; }
 }
 
-@keyframes pulse {
+/* ---------- SECTION OVERLAY ---------- */
 
-  0%, 100% {
-
-    opacity: 0.45;
-
-  }
-
-  50% {
-
-    opacity: 1;
-
-  }
-
-}
-
-/* =========================================
-
-   GENERATIVE TYPOGRAPHY
-
-========================================= */
-
-.letter-field {
-
-  position: absolute;
-
-  inset: 0;
-
-  perspective: 900px;
-
-}
-
-/*
-
-  Letters are positioned independently.
-
-  The irregular offsets are intentional.
-
-*/
-
-.theme-letter {
-
-  position: absolute;
-
-  display: block;
-
-  color: var(--green);
-
-  font-family: var(--mono);
-
-  font-size: clamp(15px, 1.55vw, 21px);
-
-  font-weight: 400;
-
-  line-height: 1;
-
-  user-select: none;
-
-  cursor: default;
-
-  transform-origin: center;
-
-  will-change: transform;
-
-  opacity: 0;
-
-  text-shadow:
-
-    0 0 5px rgba(121, 255, 152, 0.18),
-
-    0 0 15px rgba(121, 255, 152, 0.07);
-
-  transition:
-
-    color 0.25s ease,
-
-    text-shadow 0.25s ease;
-
-}
-
-.theme-letter.is-visible {
-
-  opacity: 1;
-
-}
-
-.theme-letter:hover {
-
-  color: var(--green-light);
-
-  text-shadow:
-
-    0 0 8px rgba(121, 255, 152, 0.75),
-
-    0 0 22px rgba(121, 255, 152, 0.25);
-
-}
-
-/* The word fragments stay horizontal. */
-
-.word-fragment {
-
-  position: absolute;
-
-  inset: 0;
-
-}
-
-/* Small annotations remain grey or wine. */
-
-.micro-note {
-
-  position: absolute;
-
-  color: #777780;
-
-  font: 9px/1.8 var(--mono);
-
-  letter-spacing: 0.08em;
-
-  white-space: nowrap;
-
-  pointer-events: none;
-
-}
-
-.micro-note.wine {
-
-  color: #b54a63;
-
-}
-
-.micro-note.green {
-
-  color: var(--green);
-
-  opacity: 0.65;
-
-}
-
-/* =========================================
-
-   SECTION NAVIGATION
-
-========================================= */
-
-.section-screen {
-
+.overlay {
   position: fixed;
-
   inset: 0;
-
-  z-index: 10;
-
+  z-index: 20;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  padding: 110px clamp(25px, 9vw, 150px) 65px;
-
-  background:
-
-    radial-gradient(
-
-      ellipse at 68% 40%,
-
-      rgba(45, 45, 53, 0.18),
-
-      transparent 55%
-
-    ),
-
-    rgba(5, 5, 6, 0.97);
-
+  padding: 30px;
+  background: rgba(5,5,6,.96);
   opacity: 0;
-
   visibility: hidden;
-
-  transform: translateY(12px);
-
-  transition:
-
-    opacity 0.4s ease,
-
-    transform 0.4s ease,
-
-    visibility 0.4s ease;
-
-  overflow-y: auto;
-
+  transition: opacity .35s ease, visibility .35s ease;
 }
 
-.section-screen.is-open {
-
+.overlay.open {
   opacity: 1;
-
   visibility: visible;
-
-  transform: translateY(0);
-
 }
 
-.section-inner {
-
-  width: 100%;
-
-  max-width: 1000px;
-
-  margin: auto;
-
+.panel {
+  position: relative;
+  width: min(680px, 100%);
+  border-top: 1px solid rgba(255,255,255,.25);
+  padding-top: 22px;
 }
 
-.section-topline {
-
-  display: flex;
-
-  justify-content: space-between;
-
-  gap: 20px;
-
-  padding-bottom: 22px;
-
-  border-bottom: 1px solid rgba(220, 220, 230, 0.16);
-
-  color: #777780;
-
-  font: 9px var(--mono);
-
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
-
-}
-
-.section-topline span:last-child {
-
+.panel-index {
   color: var(--wine);
-
-}
-
-.section-title {
-
-  margin: clamp(50px, 10vh, 100px) 0 30px;
-
-  max-width: 900px;
-
-  font: 400 clamp(48px, 9vw, 120px)/0.98 var(--serif);
-
-  letter-spacing: -0.055em;
-
-  overflow-wrap: anywhere;
-
-}
-
-.section-title em {
-
-  color: var(--wine);
-
-  font-weight: 400;
-
-}
-
-.section-description {
-
-  max-width: 480px;
-
-  color: #92929a;
-
-  font-size: 13px;
-
-  line-height: 2;
-
-}
-
-.section-bottom {
-
-  margin-top: clamp(60px, 10vh, 100px);
-
-  padding-top: 20px;
-
-  border-top: 1px solid rgba(220, 220, 230, 0.13);
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
-
-  gap: 20px;
-
-}
-
-.section-index {
-
-  color: #686872;
-
-  font: 9px var(--mono);
-
-  letter-spacing: 0.1em;
-
-}
-
-.back-home {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  color: #bdbdc4;
-
   font-size: 10px;
-
-  letter-spacing: 0.1em;
-
-  cursor: pointer;
-
-  transition: color 0.3s ease;
-
+  letter-spacing: .15em;
+  margin-bottom: 35px;
 }
 
-.back-home span:first-child {
-
-  color: var(--wine);
-
-  transition: transform 0.3s ease;
-
+.panel h1 {
+  margin: 0 0 24px;
+  font-family: var(--sans);
+  font-size: clamp(35px, 7vw, 68px);
+  font-weight: 400;
+  letter-spacing: -.06em;
 }
 
-.back-home:hover {
-
-  color: white;
-
+.panel p {
+  max-width: 460px;
+  color: #99999f;
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.9;
 }
 
-.back-home:hover span:first-child {
-
-  transform: translateX(-4px);
-
+.close-panel {
+  margin-top: 32px;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid #777;
+  background: none;
+  color: var(--white);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
 }
 
-/* =========================================
-
-   RESPONSIVE
-
-========================================= */
-
-@media (max-width: 950px) {
-
-  .header {
-
-    gap: 18px;
-
-  }
-
-  .header-right {
-
-    gap: 22px;
-
-  }
-
-  .nav {
-
-    gap: 16px;
-
-  }
-
-  .nav-link {
-
-    font-size: 8px;
-
-  }
-
-  .composition {
-
-    width: 92vw;
-
-  }
-
+.close-panel:hover {
+  color: var(--green);
+  border-color: var(--green);
 }
 
-@media (max-width: 700px) {
+/* ---------- MOBILE ---------- */
 
-  .header {
+@media (max-width: 760px) {
+  body {
+    overflow: hidden;
+  }
 
-    min-height: 108px;
-
-    padding-top: 16px;
-
-    padding-bottom: 14px;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    justify-content: center;
-
-    gap: 15px;
-
+  header {
+    padding: 22px 6vw;
+    grid-template-columns: 1fr auto;
+    row-gap: 23px;
   }
 
   .brand {
-
-    align-self: flex-start;
-
-  }
-
-  .header-right {
-
-    width: 100%;
-
-    justify-content: space-between;
-
-    gap: 12px;
-
-  }
-
-  .nav {
-
-    display: grid;
-
-    grid-template-columns: repeat(2, auto);
-
-    gap: 9px 16px;
-
-  }
-
-  .nav-link {
-
-    padding: 2px 0;
-
-    font-size: 8px;
-
-  }
-
-  .nav-link::after {
-
-    bottom: -3px;
-
+    font-size: 9px;
   }
 
   .languages {
-
-    gap: 5px;
-
+    grid-column: 2;
+    grid-row: 1;
   }
 
-  .language {
-
-    font-size: 9px;
-
-  }
-
-  .language + .language::before {
-
-    margin-right: 5px;
-
+  nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    font-size: 8px;
   }
 
   .composition {
+    width: 92vw;
+    height: 54vh;
+    min-height: 320px;
+    top: 51%;
+  }
 
+  .word {
+    height: 70px;
+  }
+
+  .word-one {
+    left: 3%;
+    top: 30%;
+  }
+
+  .word-two {
+    left: 16%;
     top: 49%;
-
-    width: 94vw;
-
-    height: 52vh;
-
-    min-height: 330px;
-
   }
 
-  .hero-kicker {
-
-    top: 5%;
-
-    left: 5%;
-
-    font-size: 8px;
-
+  .letter {
+    font-size: clamp(36px, 10.2vw, 72px);
+    letter-spacing: -.08em;
   }
 
-  .hero-note {
-
-    top: 8%;
-
-    right: 5%;
-
-    max-width: 105px;
-
-    font-size: 8px;
-
-  }
-
-  .theme-letter {
-
-    font-size: 13px;
-
-  }
-
-  .side-note {
-
+  .label {
     font-size: 7px;
-
   }
 
-  .coordinates,
-
-  .system-status {
-
-    bottom: 22px;
-
-    font-size: 8px;
-
+  .label-top {
+    left: 3%;
+    top: 18%;
   }
 
-  .section-screen {
-
-    padding: 145px 25px 35px;
-
-    align-items: flex-start;
-
+  .label-right {
+    right: 2%;
+    top: 37%;
   }
 
-  .section-title {
-
-    margin-top: 65px;
-
+  .label-left {
+    left: 2%;
+    top: 65%;
   }
 
-  .section-description {
-
-    font-size: 12px;
-
+  .label-bottom {
+    right: 2%;
+    bottom: 7%;
   }
 
+  footer {
+    left: 6vw;
+    right: 6vw;
+    bottom: 18px;
+    font-size: 7px;
+  }
 }
 
 @media (max-width: 390px) {
-
-  .brand-name {
-
-    font-size: 9px;
-
-  }
-
-  .nav {
-
-    gap: 9px 11px;
-
-  }
-
-  .nav-link {
-
+  nav {
     font-size: 7px;
-
   }
 
-  .hero-note {
-
-    max-width: 90px;
-
+  .word-one {
+    left: 1%;
   }
 
-  .system-status {
-
-    font-size: 7px;
-
+  .word-two {
+    left: 9%;
   }
 
+  .letter {
+    font-size: 9.5vw;
+  }
+
+  .label-right {
+    right: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
-
   *::before,
-
   *::after {
-
-    animation-duration: 0.01ms !important;
-
-    animation-iteration-count: 1 !important;
-
-    transition-duration: 0.01ms !important;
-
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
   }
-
 }
-
 </style>
-
 </head>
 
 <body>
 
-<canvas id="spaceCanvas" aria-hidden="true"></canvas>
+<canvas id="space" aria-hidden="true"></canvas>
+<canvas id="grain" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
 
-<div class="ambient" aria-hidden="true"></div>
+<header>
+  <button class="brand" id="homeButton" aria-label="Return home">
+    A LIVING ARCHIVE <span>/ 001</span>
+  </button>
 
-<canvas id="grainCanvas" aria-hidden="true"></canvas>
+  <nav aria-label="Main navigation">
+    <a href="#about" data-section="about" data-i18n="navAbout">About me</a>
+    <a href="#thoughts" data-section="thoughts" data-i18n="navThoughts">About what I think</a>
+    <a href="#reading" data-section="reading" data-i18n="navReading">About what I read</a>
+    <a href="#desire" data-section="desire" data-i18n="navDesire">About what I want</a>
+  </nav>
 
-<header class="header">
-
-  <a href="#home" class="brand" id="brandHome">
-
-    <span class="brand-symbol"></span>
-
-    <span class="brand-name">A Living Archive</span>
-
-  </a>
-
-  <div class="header-right">
-
-    <nav class="nav" aria-label="Main navigation">
-
-      <a href="#about" class="nav-link"
-
-         data-section="about" data-i18n="navAbout">
-
-        ABOUT ME
-
-      </a>
-
-      <a href="#think" class="nav-link"
-
-         data-section="think" data-i18n="navThink">
-
-        WHAT I THINK
-
-      </a>
-
-      <a href="#read" class="nav-link"
-
-         data-section="read" data-i18n="navRead">
-
-        WHAT I READ
-
-      </a>
-
-      <a href="#want" class="nav-link"
-
-         data-section="want" data-i18n="navWant">
-
-        WHAT I WANT
-
-      </a>
-
-    </nav>
-
-    <div class="languages" aria-label="Language selection">
-
-      <button class="language" data-lang="zh" aria-label="中文">中</button>
-
-      <button class="language active" data-lang="en" aria-label="English">EN</button>
-
-      <button class="language" data-lang="fr" aria-label="Français">FR</button>
-
-    </div>
-
+  <div class="languages" aria-label="Language selection">
+    <button data-lang="zh">中</button>
+    <button data-lang="en" class="active">EN</button>
+    <button data-lang="fr">FR</button>
   </div>
-
 </header>
 
-<main class="home" id="home">
+<main id="home">
+  <section class="composition" aria-label="Still Becoming">
 
-  <section class="hero" aria-label="Still Becoming">
+    <div class="registration"></div>
+    <div class="cross one"></div>
+    <div class="cross two"></div>
+    <div class="cross three"></div>
 
-    <div class="composition" id="composition">
-
-      <div class="hero-kicker" data-i18n="kicker">
-
-        PERSONAL ARCHIVE <span>/ 001</span>
-
-      </div>
-
-      <div class="hero-note">
-
-        <strong data-i18n="noteTitle">AN OPEN SYSTEM</strong>
-
-        <span data-i18n="noteText">IDENTITY IN PROGRESS</span>
-
-      </div>
-
-      <div class="side-note left" data-i18n="sideLeft">
-
-        OBSERVE / CONNECT / BECOME
-
-      </div>
-
-      <div class="side-note right" data-i18n="sideRight">
-
-        VERSION 001 — ONGOING
-
-      </div>
-
-      <div class="letter-field" id="letterField">
-
-        <div class="word-fragment" id="stillWord"></div>
-
-        <div class="word-fragment" id="becomingWord"></div>
-
-      </div>
-
+    <div class="label label-top" data-i18n="topLabel">
+      PERSONAL ARCHIVE<br>
+      <span class="accent">A WORK IN PROGRESS</span>
     </div>
 
-    <div class="coordinates">
-
-      <span>FIG. 001</span><br>
-
-      <span data-i18n="coordinates">A STUDY OF BEING</span>
-
+    <div class="label label-right" data-i18n="rightLabel">
+      AN OPEN<br>SYSTEM
     </div>
 
-    <div class="system-status">
-
-      <span class="status-dot"></span>
-
-      <span data-i18n="status">SYSTEM / EVOLVING</span>
-
+    <div class="label label-left" data-i18n="leftLabel">
+      NOT FIXED.<br>NOT FINISHED.
     </div>
 
+    <div class="label label-bottom" data-i18n="bottomLabel">
+      FORM / THOUGHT / BECOMING
+    </div>
+
+    <div class="title-field" id="titleField">
+      <div class="word word-one" data-word="STILL"></div>
+      <div class="word word-two" data-word="BECOMING"></div>
+    </div>
   </section>
-
 </main>
 
-<section class="section-screen" id="sectionScreen" aria-hidden="true">
-
-  <div class="section-inner">
-
-    <div class="section-topline">
-
-      <span id="sectionCategory">ARCHIVE / IDENTITY</span>
-
-      <span id="sectionNumber">01 — 04</span>
-
-    </div>
-
-    <h1 class="section-title" id="sectionTitle">
-
-      About <em>me.</em>
-
-    </h1>
-
-    <p class="section-description" id="sectionDescription"></p>
-
-    <div class="section-bottom">
-
-      <span class="section-index" data-i18n="sectionFooter">
-
-        A LIVING ARCHIVE / CONTINUOUSLY EVOLVING
-
-      </span>
-
-      <button class="back-home" id="backHome">
-
-        <span>←</span>
-
-        <span data-i18n="backHome">RETURN TO THE UNIVERSE</span>
-
-      </button>
-
-    </div>
-
+<footer>
+  <div class="footer-left">
+    <span class="status-dot"></span>
+    <span data-i18n="status">SYSTEM EVOLVING</span><br>
+    <span>26°N / 114°E</span>
   </div>
 
+  <div class="footer-right">
+    <span data-i18n="footerTop">A PERSONAL UNIVERSE</span><br>
+    <span>© <span id="year"></span> — STILL IN PROCESS</span>
+  </div>
+</footer>
+
+<section class="overlay" id="overlay" aria-hidden="true">
+  <div class="panel">
+    <div class="panel-index" id="panelIndex">ARCHIVE / 001</div>
+    <h1 id="panelTitle">About me</h1>
+    <p id="panelDescription"></p>
+    <button class="close-panel" id="closePanel" data-i18n="back">
+      ← Back to the beginning
+    </button>
+  </div>
 </section>
 
 <script>
-
-/* =========================================
-
-   01. LANGUAGE SYSTEM
-
-========================================= */
+/* =====================================================
+   1. LANGUAGE SYSTEM
+===================================================== */
 
 const translations = {
-
   en: {
-
-    navAbout: "ABOUT ME",
-
-    navThink: "WHAT I THINK",
-
-    navRead: "WHAT I READ",
-
-    navWant: "WHAT I WANT",
-
-    kicker: 'PERSONAL ARCHIVE <span>/ 001</span>',
-
-    noteTitle: "AN OPEN SYSTEM",
-
-    noteText: "IDENTITY IN PROGRESS",
-
-    sideLeft: "OBSERVE / CONNECT / BECOME",
-
-    sideRight: "VERSION 001 — ONGOING",
-
-    coordinates: "A STUDY OF BEING",
-
-    status: "SYSTEM / EVOLVING",
-
-    sectionFooter: "A LIVING ARCHIVE / CONTINUOUSLY EVOLVING",
-
-    backHome: "RETURN TO THE UNIVERSE",
-
+    navAbout: "About me",
+    navThoughts: "About what I think",
+    navReading: "About what I read",
+    navDesire: "About what I want",
+    topLabel: 'PERSONAL ARCHIVE<br><span class="accent">A WORK IN PROGRESS</span>',
+    rightLabel: "AN OPEN<br>SYSTEM",
+    leftLabel: "NOT FIXED.<br>NOT FINISHED.",
+    bottomLabel: "FORM / THOUGHT / BECOMING",
+    status: "SYSTEM EVOLVING",
+    footerTop: "A PERSONAL UNIVERSE",
+    back: "← Back to the beginning",
     sections: {
-
       about: {
-
-        category: "ARCHIVE / IDENTITY",
-
-        number: "01 — 04",
-
-        title: "About <em>me.</em>",
-
-        description:
-
-          "The person behind the work. Experiences, turning points, fragments of memory, and versions of myself that continue to change."
-
+        index: "ARCHIVE / 001",
+        title: "About me",
+        description: "A collection of fragments, experiences and identities. Not a fixed portrait, but a self in continuous formation."
       },
-
-      think: {
-
-        category: "ARCHIVE / THOUGHT",
-
-        number: "02 — 04",
-
-        title: "What I <em>think.</em>",
-
-        description:
-
-          "Notes on design, visual culture, identity, society, and questions that remain unresolved. A place for thoughts to take shape."
-
+      thoughts: {
+        index: "ARCHIVE / 002",
+        title: "About what I think",
+        description: "Notes on design, images, cities, culture and the quiet structures that shape the way we see the world."
       },
-
-      read: {
-
-        category: "ARCHIVE / READING",
-
-        number: "03 — 04",
-
-        title: "What I <em>read.</em>",
-
-        description:
-
-          "Books, essays, quotations, references, and fragments of ideas worth keeping. A personal index of things that have left a trace."
-
+      reading: {
+        index: "ARCHIVE / 003",
+        title: "About what I read",
+        description: "Books, essays, visual references and ideas that stay with me long after the last page."
       },
-
-      want: {
-
-        category: "ARCHIVE / BECOMING",
-
-        number: "04 — 04",
-
-        title: "What I <em>want.</em>",
-
-        description:
-
-          "Future directions, personal ambitions, places to go, and possibilities that have not yet taken form."
-
+      desire: {
+        index: "ARCHIVE / 004",
+        title: "About what I want",
+        description: "Unfinished ambitions, possible futures and things I have not yet found the words to describe."
       }
-
     }
-
   },
 
   zh: {
-
     navAbout: "关于我",
-
-    navThink: "关于我的思考",
-
-    navRead: "关于我的阅读",
-
-    navWant: "关于我想要的",
-
-    kicker: '个人档案 <span>/ 001</span>',
-
-    noteTitle: "一个开放的系统",
-
-    noteText: "身份持续生成中",
-
-    sideLeft: "观察 / 连接 / 成为",
-
-    sideRight: "版本 001 — 持续更新",
-
-    coordinates: "关于存在的观察",
-
-    status: "系统 / 演化中",
-
-    sectionFooter: "一份持续生长的个人档案",
-
-    backHome: "返回数字宇宙",
-
+    navThoughts: "关于思考",
+    navReading: "关于阅读",
+    navDesire: "关于渴望",
+    topLabel: '个人档案<br><span class="accent">持续生成中</span>',
+    rightLabel: "一个开放的<br>系统",
+    leftLabel: "未被定义。<br>尚未完成。",
+    bottomLabel: "形式 / 思想 / 生成",
+    status: "系统持续演变",
+    footerTop: "一个私人宇宙",
+    back: "← 回到起点",
     sections: {
-
       about: {
-
-        category: "档案 / 身份",
-
-        number: "01 — 04",
-
-        title: "关于<em>我。</em>",
-
-        description:
-
-          "作品背后的人。关于我的经历、人生转折、记忆碎片，以及那些仍在不断变化的自我。"
-
+        index: "档案 / 001",
+        title: "关于我",
+        description: "关于身份、经历与自我认知的片段。这不是一幅固定的肖像，而是一个仍在不断形成中的自我。"
       },
-
-      think: {
-
-        category: "档案 / 思考",
-
-        number: "02 — 04",
-
-        title: "关于我的<em>思考。</em>",
-
-        description:
-
-          "关于设计、视觉文化、身份与社会的观察，以及那些尚未得到答案的问题。让想法在这里逐渐成形。"
-
+      thoughts: {
+        index: "档案 / 002",
+        title: "关于思考",
+        description: "关于设计、图像、城市与文化的观察，以及那些悄然影响我们观看世界的结构。"
       },
-
-      read: {
-
-        category: "档案 / 阅读",
-
-        number: "03 — 04",
-
-        title: "关于我的<em>阅读。</em>",
-
-        description:
-
-          "书籍、文章、摘录、参考资料与值得留下的思想片段。记录那些曾经触动我、并留下痕迹的事物。"
-
+      reading: {
+        index: "档案 / 003",
+        title: "关于阅读",
+        description: "书籍、文章、视觉参考与那些在合上书页之后，仍然留在脑海里的想法。"
       },
-
-      want: {
-
-        category: "档案 / 未来",
-
-        number: "04 — 04",
-
-        title: "关于我<em>想要的。</em>",
-
-        description:
-
-          "未来的方向、个人的愿望、想去的地方，以及那些尚未成形的可能性。"
-
+      desire: {
+        index: "档案 / 004",
+        title: "关于渴望",
+        description: "尚未完成的野心、仍有可能的未来，以及那些暂时还无法准确描述的事物。"
       }
-
     }
-
   },
 
   fr: {
-
-    navAbout: "À PROPOS",
-
-    navThink: "MES PENSÉES",
-
-    navRead: "MES LECTURES",
-
-    navWant: "MES ENVIES",
-
-    kicker: 'ARCHIVE PERSONNELLE <span>/ 001</span>',
-
-    noteTitle: "UN SYSTÈME OUVERT",
-
-    noteText: "IDENTITÉ EN ÉVOLUTION",
-
-    sideLeft: "OBSERVER / RELIER / DEVENIR",
-
-    sideRight: "VERSION 001 — EN COURS",
-
-    coordinates: "UNE ÉTUDE DE L'ÊTRE",
-
-    status: "SYSTÈME / EN ÉVOLUTION",
-
-    sectionFooter: "UNE ARCHIVE PERSONNELLE EN ÉVOLUTION",
-
-    backHome: "RETOURNER À L'UNIVERS",
-
+    navAbout: "À propos de moi",
+    navThoughts: "Mes réflexions",
+    navReading: "Mes lectures",
+    navDesire: "Mes aspirations",
+    topLabel: 'ARCHIVE PERSONNELLE<br><span class="accent">EN COURS DE CRÉATION</span>',
+    rightLabel: "UN SYSTÈME<br>OUVERT",
+    leftLabel: "NON FIXÉE.<br>INACHEVÉE.",
+    bottomLabel: "FORME / PENSÉE / DEVENIR",
+    status: "SYSTÈME EN ÉVOLUTION",
+    footerTop: "UN UNIVERS PERSONNEL",
+    back: "← Retour au commencement",
     sections: {
-
       about: {
-
-        category: "ARCHIVE / IDENTITÉ",
-
-        number: "01 — 04",
-
-        title: "À propos de <em>moi.</em>",
-
-        description:
-
-          "La personne derrière le travail. Des expériences, des tournants, des fragments de mémoire et des versions de moi qui continuent d'évoluer."
-
+        index: "ARCHIVE / 001",
+        title: "À propos de moi",
+        description: "Des fragments d'identité, d'expériences et de perceptions. Non pas un portrait figé, mais un être en formation continue."
       },
-
-      think: {
-
-        category: "ARCHIVE / PENSÉE",
-
-        number: "02 — 04",
-
-        title: "Ce que je <em>pense.</em>",
-
-        description:
-
-          "Des notes sur le design, la culture visuelle, l'identité, la société et les questions qui restent ouvertes."
-
+      thoughts: {
+        index: "ARCHIVE / 002",
+        title: "Mes réflexions",
+        description: "Des notes sur le design, les images, les villes et la culture, ainsi que sur les structures discrètes qui façonnent notre regard."
       },
-
-      read: {
-
-        category: "ARCHIVE / LECTURE",
-
-        number: "03 — 04",
-
-        title: "Ce que je <em>lis.</em>",
-
-        description:
-
-          "Des livres, des essais, des citations, des références et des fragments d'idées à conserver."
-
+      reading: {
+        index: "ARCHIVE / 003",
+        title: "Mes lectures",
+        description: "Des livres, des essais, des références visuelles et des idées qui persistent bien après la dernière page."
       },
-
-      want: {
-
-        category: "ARCHIVE / DEVENIR",
-
-        number: "04 — 04",
-
-        title: "Ce que je <em>veux.</em>",
-
-        description:
-
-          "Des directions futures, des ambitions personnelles, des lieux à découvrir et des possibilités qui n'ont pas encore pris forme."
-
+      desire: {
+        index: "ARCHIVE / 004",
+        title: "Mes aspirations",
+        description: "Des ambitions inachevées, des futurs possibles et des choses que je ne sais pas encore décrire avec précision."
       }
-
     }
-
   }
-
 };
 
 let currentLanguage = "en";
 
-function applyLanguage(language) {
-
-  if (!translations[language]) return;
-
+function setLanguage(language) {
   currentLanguage = language;
 
-  document.documentElement.lang = language;
+  document.documentElement.lang =
+    language === "zh" ? "zh-CN" : language;
 
-  const dictionary = translations[language];
-
-  document.querySelectorAll("[data-i18n]").forEach((element) => {
-
+  document.querySelectorAll("[data-i18n]").forEach(element => {
     const key = element.dataset.i18n;
+    const value = translations[language][key];
 
-    if (dictionary[key] !== undefined) {
-
-      element.innerHTML = dictionary[key];
-
+    if (value !== undefined) {
+      element.innerHTML = value;
     }
-
   });
 
-  document.querySelectorAll(".language").forEach((button) => {
-
-    const active = button.dataset.lang === language;
-
-    button.classList.toggle("active", active);
-
-    button.setAttribute("aria-pressed", String(active));
-
+  document.querySelectorAll("[data-lang]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.lang === language
+    );
   });
 
-  try {
-
-    localStorage.setItem("archive-language", language);
-
-  } catch (error) {}
-
-  const activeLink = document.querySelector(".nav-link.active");
-
-  if (activeLink) {
-
-    renderSection(activeLink.dataset.section);
-
+  if (activeSection) {
+    openSection(activeSection);
   }
-
 }
 
-document.querySelectorAll(".language").forEach((button) => {
-
+document.querySelectorAll("[data-lang]").forEach(button => {
   button.addEventListener("click", () => {
-
-    applyLanguage(button.dataset.lang);
-
+    setLanguage(button.dataset.lang);
   });
-
 });
 
-try {
+/* =====================================================
+   2. GENERATIVE LETTERS
+===================================================== */
 
-  const savedLanguage = localStorage.getItem("archive-language");
+const words = document.querySelectorAll(".word");
+const letters = [];
+const reducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+).matches;
 
-  if (savedLanguage && translations[savedLanguage]) {
+words.forEach(word => {
+  const text = word.dataset.word;
 
-    currentLanguage = savedLanguage;
-
-  }
-
-} catch (error) {}
-
-/* =========================================
-
-   02. GOLDEN-RATIO TYPOGRAPHY
-
-========================================= */
-
-/*
-
-  Approximate golden-ratio placement:
-
-  φ = 1.61803398875
-
-  minor / major = 0.61803398875
-
-  Each word stays readable, while each letter
-
-  has its own spacing, offset and rotation.
-
-*/
-
-const stillLayout = [
-
-  { x: 29.5, y: 40.0, r: -5 },
-
-  { x: 33.0, y: 38.5, r: 3 },
-
-  { x: 36.8, y: 41.0, r: -2 },
-
-  { x: 40.0, y: 39.0, r: 5 },
-
-  { x: 44.2, y: 42.0, r: -4 }
-
-];
-
-const becomingLayout = [
-
-  { x: 40.5, y: 57.0, r: 4 },
-
-  { x: 44.2, y: 55.5, r: -5 },
-
-  { x: 47.6, y: 58.0, r: 3 },
-
-  { x: 51.4, y: 56.0, r: -2 },
-
-  { x: 55.0, y: 59.0, r: 5 },
-
-  { x: 59.0, y: 56.5, r: -4 },
-
-  { x: 62.7, y: 58.0, r: 2 },
-
-  { x: 66.2, y: 55.5, r: -3 }
-
-];
-
-const stillWord = document.getElementById("stillWord");
-
-const becomingWord = document.getElementById("becomingWord");
-
-const composition = document.getElementById("composition");
-
-const allLetters = [];
-
-function buildWord(container, word, layout, wordIndex) {
-
-  container.innerHTML = "";
-
-  [...word].forEach((character, index) => {
-
+  [...text].forEach((character, index) => {
     const span = document.createElement("span");
-
-    span.className = "theme-letter";
-
+    span.className = "letter";
     span.textContent = character;
 
-    const point = layout[index];
+    const seed = (index + 1) * 1.73 +
+                 text.length * 0.41;
 
-    span.style.left = point.x + "%";
+    const rotation = Math.sin(seed) * 3.2;
+    const driftX = Math.sin(seed * 1.4) * 2.5;
+    const driftY = Math.cos(seed * 1.8) * 2.4;
 
-    span.style.top = point.y + "%";
+    span.dataset.rotation = rotation;
+    span.dataset.driftX = driftX;
+    span.dataset.driftY = driftY;
 
-    span.style.transitionDelay = (index * 28) + "ms";
+    span.style.transform =
+      `translate(${driftX}px, ${driftY}px) rotate(${rotation}deg)`;
 
-    container.appendChild(span);
+    word.appendChild(span);
 
-    allLetters.push({
-
+    letters.push({
       element: span,
-
-      baseX: point.x,
-
-      baseY: point.y,
-
-      rotation: point.r,
-
-      phase: Math.random() * Math.PI * 2,
-
-      speed: 0.15 + Math.random() * 0.25,
-
-      drift: 1.2 + Math.random() * 2.3,
-
-      wordIndex,
-
-      index
-
-    });
-
-  });
-
-}
-
-function buildTypography() {
-
-  allLetters.length = 0;
-
-  buildWord(stillWord, "STILL", stillLayout, 0);
-
-  buildWord(becomingWord, "BECOMING", becomingLayout, 1);
-
-  requestAnimationFrame(() => {
-
-    allLetters.forEach((letter, index) => {
-
-      setTimeout(() => {
-
-        letter.element.classList.add("is-visible");
-
-      }, 100 + index * 65);
-
-    });
-
-  });
-
-}
-
-/* =========================================
-
-   03. INTERACTIVE LETTER MOTION
-
-========================================= */
-
-const pointer = {
-
-  x: -1000,
-
-  y: -1000,
-
-  active: false
-
-};
-
-let motionTime = 0;
-
-let letterAnimationFrame = null;
-
-function animateTypography() {
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
-    letterAnimationFrame = null;
-
-    return;
-
-  }
-
-  motionTime += 0.012;
-
-  const rect = composition.getBoundingClientRect();
-
-  allLetters.forEach((letter) => {
-
-    const {
-
-      element,
-
-      baseX,
-
-      baseY,
-
       rotation,
+      driftX,
+      driftY,
+      phase: seed,
+      x: 0,
+      y: 0
+    });
+  });
+});
 
-      phase,
+let mouseX = -1000;
+let mouseY = -1000;
+let smoothMouseX = -1000;
+let smoothMouseY = -1000;
 
-      speed,
+window.addEventListener("pointermove", event => {
+  mouseX = event.clientX;
+  mouseY = event.clientY;
+}, { passive: true });
 
-      drift
+window.addEventListener("pointerleave", () => {
+  mouseX = -1000;
+  mouseY = -1000;
+});
 
-    } = letter;
+let animationFrame;
 
-    let dx = Math.sin(motionTime * speed + phase) * drift;
+function animateLetters(time) {
+  smoothMouseX += (mouseX - smoothMouseX) * 0.08;
+  smoothMouseY += (mouseY - smoothMouseY) * 0.08;
 
-    let dy = Math.cos(motionTime * speed * 0.8 + phase) * drift;
+  letters.forEach(letter => {
+    const rect = letter.element.getBoundingClientRect();
 
-    let mouseRotation = 0;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
 
-    const px = rect.left + rect.width * baseX / 100;
+    const dx = centerX - smoothMouseX;
+    const dy = centerY - smoothMouseY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-    const py = rect.top + rect.height * baseY / 100;
+    let pushX = 0;
+    let pushY = 0;
+    let pushRotation = 0;
 
-    if (pointer.active) {
-
-      const mx = px - pointer.x;
-
-      const my = py - pointer.y;
-
-      const distance = Math.sqrt(mx * mx + my * my);
-
-      const radius = 170;
-
-      if (distance < radius && distance > 0) {
-
-        const strength = (1 - distance / radius);
-
-        dx += mx / distance * strength * 13;
-
-        dy += my / distance * strength * 13;
-
-        mouseRotation = mx / distance * strength * 9;
-
-      }
-
+    if (!reducedMotion && distance < 180) {
+      const force = (180 - distance) / 180;
+      pushX = (dx / (distance || 1)) * force * 13;
+      pushY = (dy / (distance || 1)) * force * 11;
+      pushRotation = (dx / 180) * force * 5;
     }
 
-    element.style.transform =
+    const breathingX = reducedMotion
+      ? 0
+      : Math.sin(time * 0.0005 + letter.phase) * 1.4;
 
-      "translate(" +
+    const breathingY = reducedMotion
+      ? 0
+      : Math.cos(time * 0.0004 + letter.phase) * 1.2;
 
-      "calc(-50% + " + dx.toFixed(2) + "px), " +
-
-      "calc(-50% + " + dy.toFixed(2) + "px)" +
-
-      ") rotate(" +
-
-      (
-
-        rotation +
-
-        Math.sin(motionTime * speed + phase) * 2.2 +
-
-        mouseRotation
-
-      ) +
-
-      "deg)";
-
+    letter.element.style.transform = `
+      translate(
+        ${letter.driftX + pushX + breathingX}px,
+        ${letter.driftY + pushY + breathingY}px
+      )
+      rotate(${letter.rotation + pushRotation}deg)
+    `;
   });
 
-  letterAnimationFrame = requestAnimationFrame(animateTypography);
-
+  animationFrame = requestAnimationFrame(animateLetters);
 }
 
-function startTypographyAnimation() {
+animateLetters(0);
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+/* =====================================================
+   3. ABSTRACT SPATIAL FIELD
+   Layered cartography, interrupted trajectories,
+   architectural vectors and gestural line systems.
+===================================================== */
 
-    if (letterAnimationFrame !== null) {
+const canvas = document.getElementById("space");
+const ctx = canvas.getContext("2d");
 
-      cancelAnimationFrame(letterAnimationFrame);
+let width = 0;
+let height = 0;
+let dpr = 1;
+let paths = [];
+let stars = [];
 
-      letterAnimationFrame = null;
+function seededRandom(seed) {
+  let value = seed >>> 0;
 
+  return function() {
+    value = (value * 1664525 + 1013904223) >>> 0;
+    return value / 4294967296;
+  };
+}
+
+function buildSpace() {
+  const random = seededRandom(20000907);
+
+  paths = [];
+  stars = [];
+
+  const lineCount = Math.max(
+    40,
+    Math.min(95, Math.floor(width / 14))
+  );
+
+  for (let i = 0; i < lineCount; i++) {
+    const side = random() > .5 ? -1 : 1;
+
+    const startX = random() * width;
+    const startY = random() * height;
+
+    const length = width * (.12 + random() * .6);
+    const bend = (random() - .5) * height * .55;
+
+    const segments = [];
+    const steps = 4 + Math.floor(random() * 8);
+
+    for (let j = 0; j <= steps; j++) {
+      const t = j / steps;
+
+      segments.push({
+        x: startX + side * length * t,
+        y: startY + bend * t +
+           Math.sin(t * Math.PI * (1 + random())) *
+           height * .035
+      });
     }
 
-    return;
-
+    paths.push({
+      segments,
+      opacity: .06 + random() * .31,
+      width: random() > .8 ? 1.15 : .55 + random() * .35,
+      dash: random() > .45
+        ? []
+        : [random() * 5 + 2, random() * 12 + 4],
+      offset: random() * 30,
+      drift: (random() - .5) * 8,
+      phase: random() * Math.PI * 2
+    });
   }
 
-  if (letterAnimationFrame === null) {
+  const starCount = Math.floor(width * height / 8000);
 
-    letterAnimationFrame = requestAnimationFrame(animateTypography);
-
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: random() * width,
+      y: random() * height,
+      radius: random() > .92 ? 1.2 : random() * .7 + .15,
+      opacity: random() * .65
+    });
   }
-
 }
-
-/* =========================================
-
-   04. ABSTRACT SPATIAL DRAWING
-
-========================================= */
-
-const spaceCanvas = document.getElementById("spaceCanvas");
-
-const spaceCtx = spaceCanvas.getContext("2d");
-
-let W = 0;
-
-let H = 0;
-
-let DPR = 1;
-
-let spatialTime = 0;
-
-let spaceFrame = null;
-
-let lastSpaceDraw = 0;
 
 function resizeSpace() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  DPR = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
 
-  W = window.innerWidth;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
 
-  H = window.innerHeight;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  spaceCanvas.width = Math.round(W * DPR);
-
-  spaceCanvas.height = Math.round(H * DPR);
-
-  spaceCanvas.style.width = W + "px";
-
-  spaceCanvas.style.height = H + "px";
-
-  spaceCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
+  buildSpace();
   drawSpace(0);
-
 }
 
-/*
+function drawSpace(time) {
+  ctx.clearRect(0, 0, width, height);
 
-  Layered spatial curves:
-
-  - varied density
-
-  - broken paths
-
-  - contour-like trajectories
-
-  - low-opacity geometric structures
-
-  - asymmetrical spatial clusters
-
-*/
-
-function drawContourFamily(ctx, config) {
-
-  const {
-
-    cx,
-
-    cy,
-
-    rx,
-
-    ry,
-
-    count,
-
-    rotation,
-
-    opacity,
-
-    phase,
-
-    broken
-
-  } = config;
-
+  /* Faint cartographic grid fragments */
   ctx.save();
+  ctx.lineWidth = .45;
+  ctx.strokeStyle = "rgba(210,215,225,.10)";
 
-  ctx.translate(cx, cy);
+  const gridStep = 82;
 
-  ctx.rotate(rotation);
+  for (let x = 0; x < width; x += gridStep) {
+    for (let y = 0; y < height; y += gridStep) {
+      const selector = Math.sin(x * .02 + y * .017);
 
-  for (let i = 0; i < count; i++) {
-
-    const t = i / Math.max(1, count - 1);
-
-    const a = rx * (0.28 + t * 0.95);
-
-    const b = ry * (0.3 + t * 0.92);
-
-    const shift = Math.sin(phase + i * 0.31) * 13;
-
-    const wobble = Math.cos(phase * 0.7 + i * 0.23) * 9;
-
-    ctx.beginPath();
-
-    const steps = 110;
-
-    let penDown = false;
-
-    for (let s = 0; s <= steps; s++) {
-
-      const u = s / steps;
-
-      const angle = u * Math.PI * 2;
-
-      const irregular =
-
-        1 +
-
-        0.07 * Math.sin(angle * 3 + phase + i * 0.2) +
-
-        0.035 * Math.cos(angle * 7 - phase);
-
-      const x =
-
-        Math.cos(angle) * a * irregular +
-
-        Math.sin(angle * 2 + phase) * shift;
-
-      const y =
-
-        Math.sin(angle) * b * irregular +
-
-        Math.cos(angle * 3 - phase) * wobble;
-
-      /*
-
-        Gaps produce a drawing that feels erased,
-
-        interrupted or still under construction.
-
-      */
-
-      const gap =
-
-        broken &&
-
-        (
-
-          (u > 0.17 + (i % 4) * 0.025 &&
-
-           u < 0.21 + (i % 4) * 0.025) ||
-
-          (u > 0.65 + (i % 5) * 0.018 &&
-
-           u < 0.68 + (i % 5) * 0.018)
-
-        );
-
-      if (gap) {
-
-        penDown = false;
-
-        continue;
-
-      }
-
-      if (!penDown) {
-
+      if (selector > .2) {
+        ctx.beginPath();
         ctx.moveTo(x, y);
-
-        penDown = true;
-
-      } else {
-
-        ctx.lineTo(x, y);
-
+        ctx.lineTo(x + 13, y);
+        ctx.stroke();
       }
 
+      if (selector < -.5) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + 9);
+        ctx.stroke();
+      }
     }
-
-    const variation = 0.4 + (i % 5) * 0.12;
-
-    ctx.strokeStyle =
-
-      "rgba(220, 220, 230, " +
-
-      (opacity * variation) +
-
-      ")";
-
-    ctx.lineWidth = i % 7 === 0 ? 0.8 : 0.45;
-
-    ctx.stroke();
-
   }
 
   ctx.restore();
 
-}
-
-function drawSpatialGeometry(ctx, time) {
-
-  /*
-
-    The geometry is intentionally asymmetrical.
-
-    Its main clusters avoid the exact center so
-
-    the typography remains the focal point.
-
-  */
-
-  drawContourFamily(ctx, {
-
-    cx: W * 0.13,
-
-    cy: H * 0.45,
-
-    rx: W * 0.18,
-
-    ry: H * 0.30,
-
-    count: 28,
-
-    rotation: -0.44,
-
-    opacity: 0.19,
-
-    phase: time * 0.15,
-
-    broken: true
-
+  /* Distant stars and registration points */
+  stars.forEach(star => {
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(240,242,247,${star.opacity})`;
+    ctx.fill();
   });
 
-  drawContourFamily(ctx, {
-
-    cx: W * 0.88,
-
-    cy: H * 0.62,
-
-    rx: W * 0.19,
-
-    ry: H * 0.33,
-
-    count: 31,
-
-    rotation: 0.38,
-
-    opacity: 0.15,
-
-    phase: 1.8 + time * 0.12,
-
-    broken: true
-
-  });
-
-  drawContourFamily(ctx, {
-
-    cx: W * 0.52,
-
-    cy: H * 0.12,
-
-    rx: W * 0.24,
-
-    ry: H * 0.12,
-
-    count: 14,
-
-    rotation: -0.12,
-
-    opacity: 0.08,
-
-    phase: 2.4,
-
-    broken: false
-
-  });
-
-}
-
-function drawVectorFragments(ctx, time) {
-
-  const clusters = [
-
-    { x: W * 0.12, y: H * 0.25, angle: -0.18 },
-
-    { x: W * 0.82, y: H * 0.32, angle: 0.36 },
-
-    { x: W * 0.25, y: H * 0.79, angle: -0.52 },
-
-    { x: W * 0.75, y: H * 0.82, angle: 0.15 }
-
-  ];
-
-  clusters.forEach((cluster, index) => {
-
-    const cx = cluster.x;
-
-    const cy = cluster.y;
+  /* Layered trajectories */
+  paths.forEach((path, index) => {
+    const movement = reducedMotion
+      ? 0
+      : Math.sin(time * .00018 + path.phase) * path.drift;
 
     ctx.save();
-
-    ctx.translate(cx, cy);
-
-    ctx.rotate(cluster.angle);
-
-    for (let i = 0; i < 16; i++) {
-
-      const x = i * 13 - 100;
-
-      const y = Math.sin(i * 0.47 + index) * 30;
-
-      const len = 20 + (i % 4) * 16;
-
-      ctx.beginPath();
-
-      ctx.moveTo(x, y);
-
-      ctx.lineTo(x + len, y);
-
-      ctx.strokeStyle = i % 4 === 0
-
-        ? "rgba(195, 195, 207, 0.27)"
-
-        : "rgba(195, 195, 207, 0.10)";
-
-      ctx.lineWidth = 0.55;
-
-      ctx.stroke();
-
-      if (i % 4 === 0) {
-
-        ctx.beginPath();
-
-        ctx.arc(x, y, 1.1, 0, Math.PI * 2);
-
-        ctx.fillStyle = "rgba(180, 70, 96, 0.65)";
-
-        ctx.fill();
-
-      }
-
-    }
-
-    ctx.restore();
-
-  });
-
-}
-
-function drawStars(ctx, time) {
-
-  const count = Math.min(
-
-    180,
-
-    Math.max(60, Math.floor(W * H / 7000))
-
-  );
-
-  for (let i = 0; i < count; i++) {
-
-    const x = ((i * 7919) % 10007) / 10007 * W;
-
-    const y = ((i * 3571) % 10009) / 10009 * H;
-
-    const pulse =
-
-      0.5 + 0.5 * Math.sin(time * 0.45 + i * 1.7);
-
-    const radius = i % 17 === 0 ? 1.1 : 0.45;
-
     ctx.beginPath();
 
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    path.segments.forEach((point, i) => {
+      const x = point.x;
+      const y = point.y + movement;
 
-    ctx.fillStyle = i % 23 === 0
+      if (i === 0) {
+        ctx.moveTo(x, y);
+      } else {
+        const previous = path.segments[i - 1];
+        const midX = (previous.x + x) / 2;
+        const midY = (previous.y + y) / 2;
 
-      ? "rgba(183, 66, 92, " + (0.12 + pulse * 0.24) + ")"
+        ctx.quadraticCurveTo(
+          previous.x,
+          previous.y + movement,
+          midX,
+          midY
+        );
+      }
+    });
 
-      : "rgba(210, 210, 222, " + (0.06 + pulse * 0.17) + ")";
+    ctx.strokeStyle =
+      `rgba(220,224,232,${path.opacity})`;
 
-    ctx.fill();
+    ctx.lineWidth = path.width;
+    ctx.setLineDash(path.dash);
+    ctx.lineDashOffset = path.offset;
 
+    ctx.stroke();
+    ctx.restore();
+
+    /* Selected paths break into isolated fragments */
+    if (index % 5 === 0) {
+      const point = path.segments[
+        Math.floor(path.segments.length * .58)
+      ];
+
+      ctx.beginPath();
+      ctx.moveTo(point.x - 9, point.y + movement + 3);
+      ctx.lineTo(point.x + 20, point.y + movement - 2);
+
+      ctx.strokeStyle =
+        "rgba(220,224,232,.48)";
+
+      ctx.lineWidth = .65;
+      ctx.stroke();
+    }
+  });
+
+  /* Fine diagonal vectors */
+  ctx.save();
+  ctx.lineWidth = .55;
+
+  for (let i = 0; i < 12; i++) {
+    const x = width * ((i * .137 + .09) % 1);
+    const y = height * ((i * .213 + .17) % 1);
+    const length = 25 + (i % 4) * 17;
+
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + length, y - length * .37);
+
+    ctx.strokeStyle = i % 3 === 0
+      ? "rgba(162,255,156,.24)"
+      : "rgba(240,240,245,.25)";
+
+    ctx.setLineDash(i % 2 === 0 ? [2, 5] : []);
+    ctx.stroke();
   }
 
-}
+  ctx.restore();
 
-function drawMouseField(ctx) {
+  /* Mouse-responsive field: subtle distortion */
+  if (!reducedMotion && mouseX > 0 && mouseY > 0) {
+    const radius = 210;
+    const gradient = ctx.createRadialGradient(
+      mouseX, mouseY, 0,
+      mouseX, mouseY, radius
+    );
 
-  if (!pointer.active) return;
+    gradient.addColorStop(0, "rgba(162,255,156,.035)");
+    gradient.addColorStop(1, "rgba(162,255,156,0)");
 
-  const radius = 180;
-
-  const gradient = ctx.createRadialGradient(
-
-    pointer.x,
-
-    pointer.y,
-
-    0,
-
-    pointer.x,
-
-    pointer.y,
-
-    radius
-
-  );
-
-  gradient.addColorStop(0, "rgba(145, 45, 67, 0.055)");
-
-  gradient.addColorStop(1, "rgba(145, 45, 67, 0)");
-
-  ctx.fillStyle = gradient;
-
-  ctx.fillRect(
-
-    pointer.x - radius,
-
-    pointer.y - radius,
-
-    radius * 2,
-
-    radius * 2
-
-  );
-
-}
-
-function drawSpace(time) {
-
-  spaceCtx.clearRect(0, 0, W, H);
-
-  const elapsed = time / 1000;
-
-  drawStars(spaceCtx, elapsed);
-
-  drawSpatialGeometry(spaceCtx, elapsed);
-
-  drawVectorFragments(spaceCtx, elapsed);
-
-  drawMouseField(spaceCtx);
-
+    ctx.fillStyle = gradient;
+    ctx.fillRect(
+      mouseX - radius,
+      mouseY - radius,
+      radius * 2,
+      radius * 2
+    );
+  }
 }
 
 function animateSpace(time) {
+  drawSpace(time);
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
-    drawSpace(0);
-
-    spaceFrame = null;
-
-    return;
-
+  if (!reducedMotion) {
+    requestAnimationFrame(animateSpace);
   }
-
-  if (time - lastSpaceDraw > 45) {
-
-    spatialTime = time;
-
-    drawSpace(time);
-
-    lastSpaceDraw = time;
-
-  }
-
-  spaceFrame = requestAnimationFrame(animateSpace);
-
 }
 
-function startSpaceAnimation() {
+window.addEventListener("resize", resizeSpace);
 
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+resizeSpace();
 
-    if (spaceFrame !== null) {
-
-      cancelAnimationFrame(spaceFrame);
-
-      spaceFrame = null;
-
-    }
-
-    drawSpace(0);
-
-    return;
-
-  }
-
-  if (spaceFrame === null) {
-
-    spaceFrame = requestAnimationFrame(animateSpace);
-
-  }
-
+if (!reducedMotion) {
+  requestAnimationFrame(animateSpace);
 }
 
-/* =========================================
+/* =====================================================
+   4. SUBTLE ANALOG GRAIN
+===================================================== */
 
-   05. SUBTLE ANALOG GRAIN
-
-========================================= */
-
-const grainCanvas = document.getElementById("grainCanvas");
-
+const grainCanvas = document.getElementById("grain");
 const grainCtx = grainCanvas.getContext("2d");
 
-let grainFrame = null;
-
 function resizeGrain() {
+  grainCanvas.width = Math.ceil(window.innerWidth / 3);
+  grainCanvas.height = Math.ceil(window.innerHeight / 3);
 
-  grainCanvas.width = Math.max(1, Math.floor(W / 3));
-
-  grainCanvas.height = Math.max(1, Math.floor(H / 3));
-
-  grainCanvas.style.width = W + "px";
-
-  grainCanvas.style.height = H + "px";
-
-  drawGrain();
-
+  grainCanvas.style.width = window.innerWidth + "px";
+  grainCanvas.style.height = window.innerHeight + "px";
 }
 
 function drawGrain() {
+  const imageData = grainCtx.createImageData(
+    grainCanvas.width,
+    grainCanvas.height
+  );
 
-  const width = grainCanvas.width;
-
-  const height = grainCanvas.height;
-
-  const image = grainCtx.createImageData(width, height);
-
-  const data = image.data;
+  const data = imageData.data;
 
   for (let i = 0; i < data.length; i += 4) {
-
     const noise = Math.random() * 255;
 
     data[i] = noise;
-
     data[i + 1] = noise;
-
     data[i + 2] = noise;
-
-    data[i + 3] = Math.random() > 0.94 ? 19 : 5;
-
+    data[i + 3] = Math.random() * 24;
   }
 
-  grainCtx.putImageData(image, 0, 0);
-
+  grainCtx.putImageData(imageData, 0, 0);
 }
+
+resizeGrain();
+
+let grainFrame;
 
 function animateGrain() {
-
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
-    grainFrame = null;
-
-    return;
-
-  }
-
   drawGrain();
 
-  grainFrame = setTimeout(() => {
-
-    grainFrame = requestAnimationFrame(animateGrain);
-
-  }, 180);
-
+  if (!reducedMotion) {
+    grainFrame = setTimeout(() => {
+      requestAnimationFrame(animateGrain);
+    }, 180);
+  }
 }
 
-/* =========================================
+animateGrain();
 
-   06. MOUSE INPUT
+window.addEventListener("resize", resizeGrain);
 
-========================================= */
+/* =====================================================
+   5. NAVIGATION AND SECTION PANELS
+===================================================== */
 
-window.addEventListener("pointermove", (event) => {
+const overlay = document.getElementById("overlay");
+const panelIndex = document.getElementById("panelIndex");
+const panelTitle = document.getElementById("panelTitle");
+const panelDescription = document.getElementById("panelDescription");
 
-  pointer.x = event.clientX;
+let activeSection = null;
 
-  pointer.y = event.clientY;
+function openSection(section) {
+  const content = translations[currentLanguage].sections[section];
 
-  pointer.active = true;
+  if (!content) return;
 
-});
+  activeSection = section;
 
-document.addEventListener("pointerleave", () => {
+  panelIndex.textContent = content.index;
+  panelTitle.textContent = content.title;
+  panelDescription.textContent = content.description;
 
-  pointer.active = false;
+  overlay.classList.add("open");
+  overlay.setAttribute("aria-hidden", "false");
 
-});
-
-/* =========================================
-
-   07. NAVIGATION PANELS
-
-========================================= */
-
-const home = document.getElementById("home");
-
-const sectionScreen = document.getElementById("sectionScreen");
-
-const sectionCategory = document.getElementById("sectionCategory");
-
-const sectionNumber = document.getElementById("sectionNumber");
-
-const sectionTitle = document.getElementById("sectionTitle");
-
-const sectionDescription = document.getElementById("sectionDescription");
-
-function renderSection(sectionKey) {
-
-  const section =
-
-    translations[currentLanguage].sections[sectionKey];
-
-  if (!section) return;
-
-  sectionCategory.textContent = section.category;
-
-  sectionNumber.textContent = section.number;
-
-  sectionTitle.innerHTML = section.title;
-
-  sectionDescription.textContent = section.description;
-
-}
-
-function openSection(sectionKey, updateHash = true) {
-
-  renderSection(sectionKey);
-
-  home.classList.add("is-hidden");
-
-  sectionScreen.classList.add("is-open");
-
-  sectionScreen.setAttribute("aria-hidden", "false");
-
-  document.querySelectorAll(".nav-link").forEach((link) => {
-
-    const active = link.dataset.section === sectionKey;
-
-    link.classList.toggle("active", active);
-
-    if (active) {
-
-      link.setAttribute("aria-current", "page");
-
-    } else {
-
-      link.removeAttribute("aria-current");
-
-    }
-
+  document.querySelectorAll("nav a").forEach(link => {
+    link.classList.toggle(
+      "active",
+      link.dataset.section === section
+    );
   });
 
-  if (updateHash) {
-
-    history.pushState(
-
-      { section: sectionKey },
-
-      "",
-
-      "#" + sectionKey
-
-    );
-
-  }
-
+  history.replaceState(null, "", "#" + section);
 }
 
-function goHome(updateHash = true) {
+function closeSection() {
+  activeSection = null;
 
-  sectionScreen.classList.remove("is-open");
+  overlay.classList.remove("open");
+  overlay.setAttribute("aria-hidden", "true");
 
-  sectionScreen.setAttribute("aria-hidden", "true");
-
-  home.classList.remove("is-hidden");
-
-  document.querySelectorAll(".nav-link").forEach((link) => {
-
+  document.querySelectorAll("nav a").forEach(link => {
     link.classList.remove("active");
-
-    link.removeAttribute("aria-current");
-
   });
 
-  if (updateHash) {
-
-    history.pushState(
-
-      {},
-
-      "",
-
-      window.location.pathname + window.location.search
-
-    );
-
-  }
-
+  history.replaceState(
+    null,
+    "",
+    window.location.pathname + window.location.search
+  );
 }
 
-document.querySelectorAll(".nav-link").forEach((link) => {
-
-  link.addEventListener("click", (event) => {
-
+document.querySelectorAll("nav a").forEach(link => {
+  link.addEventListener("click", event => {
     event.preventDefault();
-
     openSection(link.dataset.section);
-
   });
-
 });
 
-document.getElementById("brandHome").addEventListener("click", (event) => {
+document.getElementById("homeButton").addEventListener(
+  "click",
+  closeSection
+);
 
-  event.preventDefault();
+document.getElementById("closePanel").addEventListener(
+  "click",
+  closeSection
+);
 
-  goHome();
-
-});
-
-document.getElementById("backHome").addEventListener("click", () => {
-
-  goHome();
-
-});
-
-window.addEventListener("popstate", () => {
-
-  const hash = window.location.hash.replace("#", "");
-
-  const matchingLink = [...document.querySelectorAll(".nav-link")]
-
-    .find((link) => link.dataset.section === hash);
-
-  if (matchingLink) {
-
-    openSection(matchingLink.dataset.section, false);
-
-  } else {
-
-    goHome(false);
-
-  }
-
-});
-
-document.addEventListener("keydown", (event) => {
-
+document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
-
-    goHome();
-
+    closeSection();
   }
-
 });
 
-/* =========================================
-
-   08. INITIALIZATION
-
-========================================= */
-
-function initialize() {
-
-  buildTypography();
-
-  resizeSpace();
-
-  resizeGrain();
-
-  startSpaceAnimation();
-
-  startTypographyAnimation();
-
-  animateGrain();
-
-  applyLanguage(currentLanguage);
-
-}
-
-window.addEventListener("resize", () => {
-
-  resizeSpace();
-
-  resizeGrain();
-
+overlay.addEventListener("click", event => {
+  if (event.target === overlay) {
+    closeSection();
+  }
 });
 
-if (window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener) {
+/* =====================================================
+   6. INITIALIZATION
+===================================================== */
 
-  window.matchMedia("(prefers-reduced-motion: reduce)")
+document.getElementById("year").textContent =
+  new Date().getFullYear();
 
-    .addEventListener("change", () => {
-
-      startSpaceAnimation();
-
-      startTypographyAnimation();
-
-      if (grainFrame !== null) {
-
-        clearTimeout(grainFrame);
-
-        cancelAnimationFrame(grainFrame);
-
-        grainFrame = null;
-
-      }
-
-      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
-        animateGrain();
-
-      } else {
-
-        drawGrain();
-
-      }
-
-    });
-
-}
-
-initialize();
-
+setLanguage("en");
 </script>
 
 </body>
-
 </html>
