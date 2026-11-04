@@ -1,1732 +1,1749 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f3f2ee">
-
-  <title>A Living Archive — Personal Website</title>
-
-  <meta
-    name="description"
-    content="A living archive of thoughts, images, readings, and becoming."
-  >
-
-  <style>
-    /* ========================================
-       01. DESIGN SYSTEM
-    ======================================== */
-
-    :root {
-      --paper: #f3f2ee;
-      --paper-light: #faf9f6;
-      --ink: #171717;
-      --muted: #777773;
-      --silver: #c5c5c1;
-      --silver-light: #deded9;
-      --wine: #781f32;
-      --wine-dark: #551522;
-      --line: rgba(23, 23, 23, 0.18);
-
-      --page-padding: clamp(22px, 5vw, 76px);
-      --serif: "Bodoni 72", "Didot", "Times New Roman", serif;
-      --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--sans);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      font: inherit;
-    }
-
-    ::selection {
-      background: var(--wine);
-      color: white;
-    }
-
-    /* ========================================
-       02. INTRO LOADING EFFECT
-    ======================================== */
-
-    .intro {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--ink);
-      color: var(--paper);
-      pointer-events: none;
-      animation: introLeave 1s ease 0.7s forwards;
-    }
-
-    .intro-text {
-      font-family: var(--serif);
-      font-size: clamp(24px, 5vw, 58px);
-      font-weight: 400;
-      letter-spacing: 0.12em;
-      animation: introText 0.8s ease forwards;
-    }
-
-    @keyframes introText {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes introLeave {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    /* ========================================
-       03. HEADER & NAVIGATION
-    ======================================== */
-
-    .site-header {
-      position: relative;
-      z-index: 20;
-      width: 100%;
-      min-height: 96px;
-      padding: 27px var(--page-padding);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 28px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .wordmark {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-
-    .wordmark-symbol {
-      width: 12px;
-      height: 12px;
-      background: var(--wine);
-      border-radius: 50%;
-      position: relative;
-    }
-
-    .wordmark-symbol::after {
-      content: "";
-      position: absolute;
-      inset: -5px;
-      border: 1px solid var(--wine);
-      border-radius: 50%;
-      opacity: 0.45;
-    }
-
-    .wordmark-text {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: clamp(24px, 4vw, 64px);
-    }
-
-    .main-nav {
-      display: flex;
-      align-items: center;
-      gap: clamp(16px, 2.5vw, 38px);
-    }
-
-    .nav-link {
-      position: relative;
-      padding: 8px 0;
-      color: #5f5f5a;
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.055em;
-      white-space: nowrap;
-      transition: color 0.3s ease;
-    }
-
-    .nav-link::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 1px;
-      width: 100%;
-      height: 1px;
-      background: var(--wine);
-      transform: scaleX(0);
-      transform-origin: right;
-      transition: transform 0.35s ease;
-    }
-
-    .nav-link:hover {
-      color: var(--wine);
-    }
-
-    .nav-link:hover::after {
-      transform: scaleX(1);
-      transform-origin: left;
-    }
-
-    .language-switch {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      flex-shrink: 0;
-    }
-
-    .lang-btn {
-      border: 0;
-      background: transparent;
-      color: #92928d;
-      cursor: pointer;
-      font-size: 10px;
-      letter-spacing: 0.04em;
-      transition: color 0.25s ease;
-    }
-
-    .lang-btn + .lang-btn::before {
-      content: "/";
-      color: var(--silver);
-      margin-right: 9px;
-    }
-
-    .lang-btn:hover,
-    .lang-btn.active {
-      color: var(--wine);
-    }
-
-    /* ========================================
-       04. HERO SECTION
-    ======================================== */
-
-    .hero {
-      min-height: min(790px, calc(100svh - 96px));
-      min-height: max(660px, calc(100svh - 96px));
-      position: relative;
-      isolation: isolate;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 88px var(--page-padding) 70px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    #network {
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background-image:
-        linear-gradient(
-          to right,
-          transparent calc(25% - 0.5px),
-          rgba(23, 23, 23, 0.035) 25%,
-          transparent calc(25% + 0.5px)
-        ),
-        linear-gradient(
-          to right,
-          transparent calc(50% - 0.5px),
-          rgba(23, 23, 23, 0.035) 50%,
-          transparent calc(50% + 0.5px)
-        ),
-        linear-gradient(
-          to right,
-          transparent calc(75% - 0.5px),
-          rgba(23, 23, 23, 0.035) 75%,
-          transparent calc(75% + 0.5px)
-        );
-    }
-
-    .hero-topline {
-      position: absolute;
-      top: 34px;
-      left: var(--page-padding);
-      right: var(--page-padding);
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-    }
-
-    .hero-topline span:last-child {
-      text-align: right;
-    }
-
-    .hero-content {
-      position: relative;
-      width: 100%;
-      max-width: 1450px;
-      margin: 0 auto;
-    }
-
-    .hero-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-left: 8%;
-      margin-bottom: 28px;
-      color: var(--wine);
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      animation: reveal 1s ease 1s both;
-    }
-
-    .hero-eyebrow::before {
-      content: "";
-      width: 30px;
-      height: 1px;
-      background: var(--wine);
-    }
-
-    .hero-title {
-      position: relative;
-      z-index: 2;
-      font-family: var(--serif);
-      font-size: clamp(76px, 13.5vw, 200px);
-      font-weight: 400;
-      line-height: 0.77;
-      letter-spacing: -0.075em;
-      text-transform: uppercase;
-      animation: reveal 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.9s both;
-    }
-
-    .hero-title .line-one {
-      display: block;
-      white-space: nowrap;
-    }
-
-    .hero-title .line-two {
-      display: block;
-      margin-top: 0.19em;
-      margin-left: 19%;
-      color: var(--wine);
-      white-space: nowrap;
-    }
-
-    .hero-title .outline {
-      color: transparent;
-      -webkit-text-stroke: 1px var(--ink);
-    }
-
-    .hero-description {
-      width: min(310px, 43%);
-      margin-top: 44px;
-      margin-left: 57%;
-      color: #5f5f5a;
-      font-size: 12px;
-      line-height: 1.9;
-      letter-spacing: 0.015em;
-      animation: reveal 1s ease 1.2s both;
-    }
-
-    .hero-description em {
-      color: var(--wine);
-      font-family: var(--serif);
-      font-size: 16px;
-    }
-
-    .hero-note {
-      position: absolute;
-      z-index: 3;
-      font-size: 9px;
-      line-height: 1.7;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      animation: reveal 1s ease 1.4s both;
-    }
-
-    .hero-note.note-left {
-      top: 10%;
-      left: 0;
-    }
-
-    .hero-note.note-right {
-      top: 13%;
-      right: 0;
-      text-align: right;
-    }
-
-    .hero-note strong {
-      display: block;
-      color: var(--ink);
-      font-size: 10px;
-      font-weight: 500;
-    }
-
-    .hero-index {
-      position: absolute;
-      left: var(--page-padding);
-      bottom: 30px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: 0.13em;
-    }
-
-    .hero-index .index-line {
-      width: 42px;
-      height: 1px;
-      background: var(--wine);
-    }
-
-    .scroll-cue {
-      position: absolute;
-      right: var(--page-padding);
-      bottom: 26px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .scroll-cue .arrow {
-      display: inline-block;
-      color: var(--wine);
-      animation: arrowFloat 1.8s ease-in-out infinite;
-    }
-
-    @keyframes arrowFloat {
-      0%, 100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(5px);
-      }
-    }
-
-    @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(22px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* ========================================
-       05. INTRODUCTION / STATEMENT
-    ======================================== */
-
-    .statement {
-      position: relative;
-      padding: 125px var(--page-padding) 135px;
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 7vw;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .section-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: 0.14em;
-      line-height: 1.8;
-      text-transform: uppercase;
-    }
-
-    .section-label .number {
-      color: var(--wine);
-    }
-
-    .statement-content {
-      max-width: 800px;
-    }
-
-    .statement-heading {
-      margin-bottom: 38px;
-      font-family: var(--serif);
-      font-size: clamp(36px, 5.5vw, 76px);
-      font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -0.04em;
-    }
-
-    .statement-heading em {
-      color: var(--wine);
-      font-weight: 400;
-    }
-
-    .statement-bottom {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 40px;
-    }
-
-    .statement-copy {
-      max-width: 360px;
-      color: #656560;
-      font-size: 12px;
-      line-height: 2;
-    }
-
-    .statement-mark {
-      flex-shrink: 0;
-      font-family: var(--serif);
-      font-size: 54px;
-      color: var(--silver);
-      line-height: 1;
-    }
-
-    /* ========================================
-       06. FOUR ARCHIVE SECTIONS
-    ======================================== */
-
-    .archive {
-      padding: 100px var(--page-padding) 110px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .archive-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 30px;
-      margin-bottom: 58px;
-    }
-
-    .archive-heading {
-      margin-top: 18px;
-      font-family: var(--serif);
-      font-size: clamp(36px, 5vw, 65px);
-      font-weight: 400;
-      letter-spacing: -0.045em;
-    }
-
-    .archive-caption {
-      max-width: 240px;
-      color: var(--muted);
-      font-size: 10px;
-      line-height: 1.9;
-      text-align: right;
-    }
-
-    .archive-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
-    }
-
-    .archive-card {
-      min-height: 290px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: clamp(24px, 3.5vw, 48px);
-      overflow: hidden;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-      background: rgba(250, 249, 246, 0.34);
-      transition:
-        background 0.45s ease,
-        color 0.45s ease;
-    }
-
-    .archive-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--wine);
-      transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .archive-card:hover {
-      background: #e9e7e1;
-    }
-
-    .archive-card:hover::before {
-      width: 100%;
-    }
-
-    .card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
-
-    .card-number {
-      color: var(--wine);
-      font-size: 10px;
-      letter-spacing: 0.12em;
-    }
-
-    .card-symbol {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      border: 1px solid var(--silver);
-      border-radius: 50%;
-      color: var(--wine);
-      font-size: 16px;
-      transition:
-        transform 0.4s ease,
-        border-color 0.4s ease,
-        background 0.4s ease,
-        color 0.4s ease;
-    }
-
-    .archive-card:hover .card-symbol {
-      transform: rotate(45deg);
-      border-color: var(--wine);
-      background: var(--wine);
-      color: white;
-    }
-
-    .card-title {
-      position: relative;
-      z-index: 1;
-      max-width: 470px;
-      margin-top: 54px;
-      font-family: var(--serif);
-      font-size: clamp(30px, 4.1vw, 55px);
-      font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -0.035em;
-      transition: color 0.3s ease;
-    }
-
-    .archive-card:hover .card-title {
-      color: var(--wine);
-    }
-
-    .card-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      gap: 20px;
-      margin-top: 35px;
-    }
-
-    .card-description {
-      max-width: 280px;
-      color: var(--muted);
-      font-size: 10px;
-      line-height: 1.8;
-    }
-
-    .card-link {
-      color: var(--wine);
-      font-size: 9px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    /* ========================================
-       07. FOOTER
-    ======================================== */
-
-    .site-footer {
-      padding: 38px var(--page-padding) 30px;
-    }
-
-    .footer-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 30px;
-      padding-bottom: 60px;
-    }
-
-    .footer-title {
-      font-family: var(--serif);
-      font-size: clamp(28px, 4vw, 54px);
-      font-weight: 400;
-      letter-spacing: -0.04em;
-    }
-
-    .footer-title span {
-      color: var(--wine);
-      font-style: italic;
-    }
-
-    .footer-meta {
-      max-width: 210px;
-      color: var(--muted);
-      font-size: 9px;
-      line-height: 2;
-      letter-spacing: 0.08em;
-      text-align: right;
-      text-transform: uppercase;
-    }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      gap: 20px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 9px;
-      letter-spacing: 0.06em;
-    }
-
-    .footer-bottom span:last-child {
-      text-align: right;
-    }
-
-    /* ========================================
-       08. RESPONSIVE DESIGN
-    ======================================== */
-
-    @media (min-width: 1600px) {
-      .hero-title {
-        font-size: 210px;
-      }
-    }
-
-    @media (max-width: 1000px) {
-      .site-header {
-        align-items: flex-start;
-        flex-wrap: wrap;
-      }
-
-      .header-right {
-        flex: 1;
-        gap: 22px;
-      }
-
-      .main-nav {
-        flex-wrap: wrap;
-        row-gap: 10px;
-      }
-
-      .hero-title {
-        font-size: clamp(76px, 13vw, 135px);
-      }
-
-      .hero-note.note-right {
-        right: 0;
-      }
-
-      .statement {
-        grid-template-columns: 1fr 2.5fr;
-      }
-    }
-
-    @media (max-width: 700px) {
-      :root {
-        --page-padding: 22px;
-      }
-
-      .site-header {
-        min-height: auto;
-        padding-top: 23px;
-        padding-bottom: 22px;
-        gap: 22px;
-      }
-
-      .header-right {
-        width: 100%;
-        flex: auto;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 14px;
-      }
-
-      .main-nav {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 8px 18px;
-      }
-
-      .nav-link {
-        font-size: 9px;
-      }
-
-      .language-switch {
-        padding-top: 7px;
-        gap: 6px;
-      }
-
-      .lang-btn {
-        font-size: 9px;
-      }
-
-      .lang-btn + .lang-btn::before {
-        margin-right: 6px;
-      }
-
-      .hero {
-        min-height: 680px;
-        min-height: max(680px, calc(100svh - 130px));
-        padding-top: 115px;
-        padding-bottom: 85px;
-      }
-
-      .hero-topline {
-        top: 25px;
-        font-size: 8px;
-        line-height: 1.8;
-      }
-
-      .hero-eyebrow {
-        margin-left: 0;
-        margin-bottom: 27px;
-        font-size: 9px;
-      }
-
-      .hero-title {
-        font-size: clamp(66px, 15.5vw, 110px);
-        line-height: 0.82;
-        letter-spacing: -0.08em;
-      }
-
-      .hero-title .line-two {
-        margin-left: 8%;
-        margin-top: 0.22em;
-      }
-
-      .hero-title .outline {
-        -webkit-text-stroke-width: 0.7px;
-      }
-
-      .hero-description {
-        width: 75%;
-        margin-top: 36px;
-        margin-left: 23%;
-        font-size: 11px;
-      }
-
-      .hero-note.note-left {
-        top: 8%;
-        font-size: 8px;
-      }
-
-      .hero-note.note-right {
-        top: auto;
-        bottom: 21%;
-        right: 0;
-        font-size: 8px;
-      }
-
-      .hero-index,
-      .scroll-cue {
-        bottom: 24px;
-        font-size: 8px;
-      }
-
-      .statement {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        padding-top: 85px;
-        padding-bottom: 90px;
-      }
-
-      .statement-heading {
-        font-size: clamp(39px, 10vw, 60px);
-      }
-
-      .statement-bottom {
-        gap: 20px;
-      }
-
-      .statement-copy {
-        font-size: 11px;
-      }
-
-      .statement-mark {
-        font-size: 38px;
-      }
-
-      .archive {
-        padding-top: 75px;
-        padding-bottom: 80px;
-      }
-
-      .archive-header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 20px;
-        margin-bottom: 35px;
-      }
-
-      .archive-caption {
-        max-width: 290px;
-        text-align: left;
-      }
-
-      .archive-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .archive-card {
-        min-height: 255px;
-        padding: 27px;
-      }
-
-      .card-title {
-        font-size: clamp(34px, 9vw, 48px);
-      }
-
-      .card-description {
-        max-width: 220px;
-      }
-
-      .footer-top {
-        flex-direction: column;
-        padding-bottom: 40px;
-      }
-
-      .footer-meta {
-        text-align: left;
-      }
-
-      .footer-bottom {
-        font-size: 8px;
-        line-height: 1.8;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .wordmark-text {
-        font-size: 9px;
-      }
-
-      .hero-title {
-        font-size: 62px;
-      }
-
-      .hero-note.note-right {
-        display: none;
-      }
-
-      .card-bottom {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-
-    /* ========================================
-       09. ACCESSIBILITY
-    ======================================== */
-
-    a:focus-visible,
-    button:focus-visible {
-      outline: 2px solid var(--wine);
-      outline-offset: 5px;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#070709">
+
+<title>STILL BECOMING — A Living Archive</title>
+
+<style>
+:root {
+  --black: #070709;
+  --black-soft: #0d0d10;
+  --white: #efefed;
+  --silver: #85858d;
+  --silver-dim: #414149;
+  --wine: #a02d49;
+  --wine-light: #d14a67;
+  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --serif: "Bodoni 72", Didot, "Times New Roman", serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  position: relative;
+}
+
+button,
+a {
+  color: inherit;
+  font: inherit;
+}
+
+button {
+  background: none;
+  border: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 1px solid var(--wine-light);
+  outline-offset: 5px;
+}
+
+::selection {
+  color: white;
+  background: var(--wine);
+}
+
+/* =================================
+   BACKGROUND UNIVERSE
+================================= */
+
+#universe {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      ellipse at 50% 48%,
+      rgba(43, 43, 52, 0.15) 0%,
+      rgba(7, 7, 9, 0) 58%
+    ),
+    radial-gradient(
+      ellipse at 82% 75%,
+      rgba(91, 23, 43, 0.07) 0%,
+      transparent 42%
+    );
+}
+
+.ambient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+}
+
+/* =================================
+   HEADER
+================================= */
+
+.header {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 86px;
+  padding: 0 clamp(22px, 4.2vw, 66px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  border-bottom: 1px solid rgba(220, 220, 230, 0.11);
+  background: rgba(7, 7, 9, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.brand-symbol {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--wine-light);
+  box-shadow: 0 0 15px rgba(209, 74, 103, 0.35);
+}
+
+.brand-symbol::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 1px solid rgba(209, 74, 103, 0.4);
+  border-radius: 50%;
+}
+
+.brand-name {
+  color: #d8d8da;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(22px, 4vw, 62px);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.7vw, 40px);
+}
+
+.nav-link {
+  position: relative;
+  padding: 12px 0;
+  color: #77777f;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 5px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--wine-light);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--white);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.languages {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.language {
+  cursor: pointer;
+  color: #62626a;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  transition: color 0.25s ease;
+}
+
+.language + .language::before {
+  content: "/";
+  margin-right: 10px;
+  color: #393940;
+}
+
+.language:hover,
+.language.active {
+  color: var(--wine-light);
+}
+
+/* =================================
+   HOMEPAGE
+================================= */
+
+.home {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.4s ease;
+}
+
+.home.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero {
+  position: relative;
+  width: min(100%, 1600px);
+  height: 100%;
+  margin: auto;
+}
+
+/* Fine coordinate marks */
+
+.coordinates {
+  position: absolute;
+  left: clamp(22px, 4.2vw, 66px);
+  bottom: 38px;
+  color: #575760;
+  font: 9px/1.8 var(--mono);
+  letter-spacing: 0.08em;
+}
+
+.coordinates span {
+  color: var(--wine-light);
+}
+
+.system-status {
+  position: absolute;
+  right: clamp(22px, 4.2vw, 66px);
+  bottom: 38px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #777780;
+  font: 9px var(--mono);
+  letter-spacing: 0.08em;
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--wine-light);
+  box-shadow: 0 0 10px rgba(209, 74, 103, 0.7);
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Main composition */
+
+.composition {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: min(100%, 1250px);
+  height: min(64vh, 570px);
+  transform: translate(-50%, -50%);
+}
+
+.hero-kicker {
+  position: absolute;
+  top: 5%;
+  left: 13%;
+  color: #888890;
+  font: 9px/1.8 var(--mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  animation: fadeIn 1.3s ease both;
+}
+
+.hero-kicker span {
+  color: var(--wine-light);
+}
+
+.hero-subnote {
+  position: absolute;
+  right: 10%;
+  top: 13%;
+  max-width: 135px;
+  color: #66666f;
+  font: 9px/1.9 var(--mono);
+  letter-spacing: 0.05em;
+  text-align: right;
+  animation: fadeIn 1.8s ease both;
+}
+
+.hero-subnote strong {
+  display: block;
+  color: #b7b7bd;
+  font-weight: 400;
+}
+
+/* Each character is an independent element */
+
+.letter-field {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+}
+
+.letter {
+  position: absolute;
+  display: inline-block;
+  color: var(--white);
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 0.8;
+  letter-spacing: -0.09em;
+  user-select: none;
+  will-change: transform;
+  transform-origin: center;
+  transition:
+    color 0.4s ease,
+    text-shadow 0.4s ease;
+  animation: letterAppear 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.letter:hover {
+  color: var(--wine-light);
+  text-shadow: 0 0 35px rgba(209, 74, 103, 0.24);
+}
+
+.letter.serif-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(215, 215, 220, 0.66);
+}
+
+.letter.serif-outline:hover {
+  color: var(--wine-light);
+  -webkit-text-stroke-color: var(--wine-light);
+}
+
+.letter.wine {
+  color: var(--wine-light);
+}
+
+.letter.tiny {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: #777780;
+  line-height: 1.5;
+}
+
+.letter.tiny.wine {
+  color: var(--wine-light);
+}
+
+@keyframes letterAppear {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Thin graphic connections */
+
+.graphic-line {
+  position: absolute;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(
+    90deg,
+    rgba(185, 185, 195, 0.45),
+    rgba(185, 185, 195, 0.02)
+  );
+  pointer-events: none;
+}
+
+.graphic-node {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--wine-light);
+  box-shadow: 0 0 14px rgba(209, 74, 103, 0.45);
+  pointer-events: none;
+}
+
+/* Subtle center axis */
+
+.axis {
+  position: absolute;
+  top: 17%;
+  left: 50%;
+  width: 1px;
+  height: 65%;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(180, 180, 190, 0.12),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Side annotations */
+
+.side-note {
+  position: absolute;
+  top: 49%;
+  color: #55555e;
+  font: 8px/1.8 var(--mono);
+  letter-spacing: 0.1em;
+  writing-mode: vertical-rl;
+}
+
+.side-note.left {
+  left: 4%;
+  transform: rotate(180deg);
+}
+
+.side-note.right {
+  right: 4%;
+}
+
+/* =================================
+   SECTION OVERLAY
+================================= */
+
+.section-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 110px clamp(25px, 9vw, 150px) 70px;
+  background:
+    radial-gradient(
+      ellipse at 70% 40%,
+      rgba(44, 44, 53, 0.18),
+      transparent 55%
+    ),
+    rgba(7, 7, 9, 0.97);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease,
+    visibility 0.4s ease;
+  overflow-y: auto;
+}
+
+.section-screen.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.section-inner {
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.section-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid rgba(220, 220, 230, 0.16);
+  color: #767680;
+  font: 9px var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.section-topline span:last-child {
+  color: var(--wine-light);
+}
+
+.section-title {
+  margin: clamp(50px, 10vh, 100px) 0 30px;
+  max-width: 900px;
+  font: 400 clamp(48px, 9vw, 120px)/0.98 var(--serif);
+  letter-spacing: -0.055em;
+  overflow-wrap: anywhere;
+}
+
+.section-title em {
+  color: var(--wine-light);
+  font-weight: 400;
+}
+
+.section-description {
+  max-width: 480px;
+  color: #92929a;
+  font-size: 13px;
+  line-height: 2;
+}
+
+.section-bottom {
+  margin-top: clamp(60px, 10vh, 100px);
+  padding-top: 20px;
+  border-top: 1px solid rgba(220, 220, 230, 0.13);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.section-index {
+  color: #686872;
+  font: 9px var(--mono);
+  letter-spacing: 0.1em;
+}
+
+.back-home {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #bdbdc4;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.back-home span {
+  color: var(--wine-light);
+  transition: transform 0.3s ease;
+}
+
+.back-home:hover {
+  color: white;
+}
+
+.back-home:hover span {
+  transform: translateX(-4px);
+}
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (min-width: 1500px) {
+  .composition {
+    transform: translate(-50%, -50%) scale(1.08);
+  }
+}
+
+@media (max-width: 1000px) {
+  .header {
+    gap: 18px;
+  }
+
+  .header-right {
+    gap: 22px;
+  }
+
+  .nav {
+    gap: 17px;
+  }
+
+  .nav-link {
+    font-size: 9px;
+  }
+
+  .composition {
+    width: 100%;
+  }
+
+  .hero-kicker {
+    left: 9%;
+  }
+
+  .hero-subnote {
+    right: 8%;
+  }
+}
+
+@media (max-width: 700px) {
+  .header {
+    min-height: 112px;
+    padding-top: 19px;
+    padding-bottom: 17px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 17px;
+  }
+
+  .brand {
+    align-self: flex-start;
+  }
+
+  .header-right {
+    width: 100%;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 9px 18px;
+  }
+
+  .nav-link {
+    padding: 2px 0;
+    font-size: 9px;
+  }
+
+  .nav-link::after {
+    bottom: -3px;
+  }
+
+  .languages {
+    gap: 6px;
+  }
+
+  .language {
+    font-size: 9px;
+  }
+
+  .language + .language::before {
+    margin-right: 6px;
+  }
+
+  .composition {
+    top: 47%;
+    height: 53vh;
+    min-height: 340px;
+    max-height: 500px;
+  }
+
+  .hero-kicker {
+    top: 0;
+    left: 8%;
+    font-size: 8px;
+  }
+
+  .hero-subnote {
+    top: 8%;
+    right: 8%;
+    font-size: 8px;
+  }
+
+  .side-note {
+    font-size: 7px;
+  }
+
+  .side-note.left {
+    left: 2%;
+  }
+
+  .side-note.right {
+    right: 2%;
+  }
+
+  .coordinates {
+    bottom: 24px;
+    font-size: 8px;
+  }
+
+  .system-status {
+    bottom: 24px;
+    font-size: 8px;
+  }
+
+  .section-screen {
+    padding: 145px 25px 35px;
+    align-items: flex-start;
+  }
+
+  .section-title {
+    margin-top: 65px;
+  }
+
+  .section-description {
+    font-size: 12px;
+  }
+
+  .section-topline {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 390px) {
+  .brand-name {
+    font-size: 9px;
+  }
+
+  .nav {
+    gap: 9px 12px;
+  }
+
+  .nav-link {
+    font-size: 8px;
+  }
+
+  .hero-subnote {
+    max-width: 95px;
+  }
+
+  .system-status {
+    font-size: 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Opening transition -->
-  <div class="intro" aria-hidden="true">
-    <div class="intro-text">STILL BECOMING.</div>
-  </div>
+<canvas id="universe" aria-hidden="true"></canvas>
+<div class="ambient" aria-hidden="true"></div>
 
-  <!-- Header -->
-  <header class="site-header">
+<!-- HEADER -->
+<header class="header">
 
-    <a href="#" class="wordmark" aria-label="A Living Archive — Home">
-      <span class="wordmark-symbol"></span>
-      <span class="wordmark-text">A Living Archive</span>
-    </a>
+  <a href="#home" class="brand" id="brandHome">
+    <span class="brand-symbol"></span>
+    <span class="brand-name">A Living Archive</span>
+  </a>
 
-    <div class="header-right">
+  <div class="header-right">
 
-      <nav class="main-nav" aria-label="Main navigation">
-        <a class="nav-link" href="#about-me" data-i18n="navAbout">ABOUT ME</a>
-        <a class="nav-link" href="#what-i-think" data-i18n="navThink">WHAT I THINK</a>
-        <a class="nav-link" href="#what-i-read" data-i18n="navRead">WHAT I READ</a>
-        <a class="nav-link" href="#what-i-want" data-i18n="navWant">WHAT I WANT</a>
-      </nav>
-
-      <div class="language-switch" aria-label="Language selection">
-        <button class="lang-btn" data-lang="zh" aria-label="中文">中</button>
-        <button class="lang-btn active" data-lang="en" aria-label="English">EN</button>
-        <button class="lang-btn" data-lang="fr" aria-label="Français">FR</button>
-      </div>
-
-    </div>
-  </header>
-
-  <main>
-
-    <!-- Hero -->
-    <section class="hero" id="home">
-
-      <canvas id="network" aria-hidden="true"></canvas>
-      <div class="hero-grid" aria-hidden="true"></div>
-
-      <div class="hero-topline">
-        <span data-i18n="topLeft">INDEPENDENT PERSONAL ARCHIVE</span>
-        <span data-i18n="topRight">DESIGN · THOUGHT · LIFE</span>
-      </div>
-
-      <div class="hero-content">
-
-        <div class="hero-note note-left">
-          <strong>FIELD NOTE 001</strong>
-          <span>AN ONGOING STUDY</span>
-        </div>
-
-        <div class="hero-note note-right">
-          <strong>CHAPTER 01</strong>
-          <span>THE PRESENT TENSE</span>
-        </div>
-
-        <div class="hero-eyebrow" data-i18n="eyebrow">
-          A PERSONAL EXPLORATION
-        </div>
-
-        <h1 class="hero-title">
-          <span class="line-one">STILL</span>
-          <span class="line-two">
-            BE<span class="outline">COM</span>ING<span class="outline">.</span>
-          </span>
-        </h1>
-
-        <p class="hero-description" data-i18n="heroDescription">
-          A living archive of things I notice, things I question,
-          and things I am still becoming.
-          <br><br>
-          <em>Not a conclusion, but a process.</em>
-        </p>
-
-      </div>
-
-      <div class="hero-index">
-        <span>01</span>
-        <span class="index-line"></span>
-        <span data-i18n="indexText">A WORK IN PROGRESS</span>
-      </div>
-
-      <a href="#statement" class="scroll-cue">
-        <span data-i18n="scrollText">SCROLL TO EXPLORE</span>
-        <span class="arrow">↓</span>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#about-me" class="nav-link" data-section="about" data-i18n="navAbout">
+        ABOUT ME
       </a>
 
-    </section>
+      <a href="#what-i-think" class="nav-link" data-section="think" data-i18n="navThink">
+        WHAT I THINK
+      </a>
 
-    <!-- Personal statement -->
-    <section class="statement" id="statement">
+      <a href="#what-i-read" class="nav-link" data-section="read" data-i18n="navRead">
+        WHAT I READ
+      </a>
 
-      <div class="section-label">
-        <span class="number">I.</span>
-        <span data-i18n="statementLabel">A NOTE TO MYSELF</span>
+      <a href="#what-i-want" class="nav-link" data-section="want" data-i18n="navWant">
+        WHAT I WANT
+      </a>
+    </nav>
+
+    <div class="languages" aria-label="Language selection">
+      <button class="language" data-lang="zh" aria-label="中文">中</button>
+      <button class="language active" data-lang="en" aria-label="English">EN</button>
+      <button class="language" data-lang="fr" aria-label="Français">FR</button>
+    </div>
+
+  </div>
+</header>
+
+<!-- HOMEPAGE: ONE SCREEN -->
+<main class="home" id="home">
+
+  <section class="hero" aria-label="Still Becoming">
+
+    <div class="composition" id="composition">
+
+      <div class="axis"></div>
+
+      <div class="hero-kicker" data-i18n="kicker">
+        PERSONAL ARCHIVE <span> / 001</span>
       </div>
 
-      <div class="statement-content">
-
-        <h2 class="statement-heading" data-i18n="statementHeading">
-          I am interested in the space between
-          <em>what things are</em>
-          and what they could become.
-        </h2>
-
-        <div class="statement-bottom">
-
-          <p class="statement-copy" data-i18n="statementCopy">
-            This is a space for my ongoing observations of design,
-            culture, images, books, and everyday life. A place to
-            collect fragments, connect ideas, and leave room for change.
-          </p>
-
-          <span class="statement-mark" aria-hidden="true">↗</span>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Archive -->
-    <section class="archive" aria-labelledby="archive-heading">
-
-      <div class="archive-header">
-
-        <div>
-          <div class="section-label">
-            <span class="number">II.</span>
-            <span data-i18n="archiveLabel">THE ARCHIVE</span>
-          </div>
-
-          <h2 class="archive-heading" id="archive-heading" data-i18n="archiveHeading">
-            Four ways of looking.
-          </h2>
-        </div>
-
-        <p class="archive-caption" data-i18n="archiveCaption">
-          Different entry points into one evolving collection.
-          Nothing here needs to stay the same.
-        </p>
-
+      <div class="hero-subnote">
+        <strong data-i18n="subnoteTitle">AN OPEN SYSTEM</strong>
+        <span data-i18n="subnoteText">IDENTITY IN PROGRESS</span>
       </div>
 
-      <div class="archive-grid">
-
-        <!-- Card 01 -->
-        <a class="archive-card" id="about-me" href="#about-me">
-
-          <div class="card-top">
-            <span class="card-number">01 / IDENTITY</span>
-            <span class="card-symbol" aria-hidden="true">↗</span>
-          </div>
-
-          <h3 class="card-title" data-i18n="cardAboutTitle">
-            About me
-          </h3>
-
-          <div class="card-bottom">
-            <p class="card-description" data-i18n="cardAboutDescription">
-              The person behind the work. Background, experiences,
-              turning points, and unfinished versions of myself.
-            </p>
-            <span class="card-link" data-i18n="cardExplore">EXPLORE ↗</span>
-          </div>
-
-        </a>
-
-        <!-- Card 02 -->
-        <a class="archive-card" id="what-i-think" href="#what-i-think">
-
-          <div class="card-top">
-            <span class="card-number">02 / THOUGHT</span>
-            <span class="card-symbol" aria-hidden="true">↗</span>
-          </div>
-
-          <h3 class="card-title" data-i18n="cardThinkTitle">
-            About what I think
-          </h3>
-
-          <div class="card-bottom">
-            <p class="card-description" data-i18n="cardThinkDescription">
-              Notes on design, visual culture, identity, society,
-              and the questions that stay with me.
-            </p>
-            <span class="card-link" data-i18n="cardExplore">EXPLORE ↗</span>
-          </div>
-
-        </a>
-
-        <!-- Card 03 -->
-        <a class="archive-card" id="what-i-read" href="#what-i-read">
-
-          <div class="card-top">
-            <span class="card-number">03 / READING</span>
-            <span class="card-symbol" aria-hidden="true">↗</span>
-          </div>
-
-          <h3 class="card-title" data-i18n="cardReadTitle">
-            About what I read
-          </h3>
-
-          <div class="card-bottom">
-            <p class="card-description" data-i18n="cardReadDescription">
-              Books, essays, quotations, references, and ideas
-              worth returning to.
-            </p>
-            <span class="card-link" data-i18n="cardExplore">EXPLORE ↗</span>
-          </div>
-
-        </a>
-
-        <!-- Card 04 -->
-        <a class="archive-card" id="what-i-want" href="#what-i-want">
-
-          <div class="card-top">
-            <span class="card-number">04 / BECOMING</span>
-            <span class="card-symbol" aria-hidden="true">↗</span>
-          </div>
-
-          <h3 class="card-title" data-i18n="cardWantTitle">
-            About what I want
-          </h3>
-
-          <div class="card-bottom">
-            <p class="card-description" data-i18n="cardWantDescription">
-              Future directions, personal ambitions, places to go,
-              and possibilities I have yet to define.
-            </p>
-            <span class="card-link" data-i18n="cardExplore">EXPLORE ↗</span>
-          </div>
-
-        </a>
-
+      <div class="side-note left" data-i18n="sideLeft">
+        OBSERVE / CONNECT / BECOME
       </div>
-    </section>
 
-  </main>
+      <div class="side-note right" data-i18n="sideRight">
+        VERSION 001 — ONGOING
+      </div>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-
-    <div class="footer-top">
-
-      <p class="footer-title" data-i18n="footerTitle">
-        To be continued<span>...</span>
-      </p>
-
-      <p class="footer-meta" data-i18n="footerMeta">
-        A PERSONAL ARCHIVE<br>
-        MADE OF FRAGMENTS<br>
-        AND OPEN QUESTIONS
-      </p>
+      <div class="letter-field" id="letterField" aria-label="Still Becoming">
+      </div>
 
     </div>
 
-    <div class="footer-bottom">
-      <span>© <span id="year"></span> A LIVING ARCHIVE</span>
-      <span data-i18n="footerNote">MADE SLOWLY, WITH INTENTION.</span>
+    <div class="coordinates">
+      <span>FIG. 001</span><br>
+      <span data-i18n="coordinates">A STUDY OF BEING</span>
     </div>
 
-  </footer>
+    <div class="system-status">
+      <span class="status-dot"></span>
+      <span data-i18n="status">SYSTEM / EVOLVING</span>
+    </div>
 
-  <script>
-    /* ========================================
-       01. THREE-LANGUAGE CONTENT
-    ======================================== */
+  </section>
+</main>
 
-    const translations = {
-      en: {
-        navAbout: "ABOUT ME",
-        navThink: "WHAT I THINK",
-        navRead: "WHAT I READ",
-        navWant: "WHAT I WANT",
+<!-- FULL-SCREEN SECTIONS -->
+<section
+  class="section-screen"
+  id="sectionScreen"
+  aria-hidden="true"
+  aria-label="Archive section"
+>
+  <div class="section-inner">
 
-        topLeft: "INDEPENDENT PERSONAL ARCHIVE",
-        topRight: "DESIGN · THOUGHT · LIFE",
-        eyebrow: "A PERSONAL EXPLORATION",
+    <div class="section-topline">
+      <span id="sectionCategory">ARCHIVE / 001</span>
+      <span id="sectionNumber">01 — 04</span>
+    </div>
 
-        heroDescription:
-          "A living archive of things I notice, things I question, and things I am still becoming.<br><br><em>Not a conclusion, but a process.</em>",
+    <h1 class="section-title" id="sectionTitle">
+      About <em>me.</em>
+    </h1>
 
-        indexText: "A WORK IN PROGRESS",
-        scrollText: "SCROLL TO EXPLORE",
+    <p class="section-description" id="sectionDescription">
+      A space for personal stories, experiences, and reflections.
+    </p>
 
-        statementLabel: "A NOTE TO MYSELF",
-        statementHeading:
-          "I am interested in the space between <em>what things are</em> and what they could become.",
+    <div class="section-bottom">
+      <span class="section-index" data-i18n="sectionFooter">
+        A LIVING ARCHIVE / CONTINUOUSLY EVOLVING
+      </span>
 
-        statementCopy:
-          "This is a space for my ongoing observations of design, culture, images, books, and everyday life. A place to collect fragments, connect ideas, and leave room for change.",
+      <button class="back-home" id="backHome">
+        <span>←</span>
+        <span data-i18n="backHome">RETURN TO THE UNIVERSE</span>
+      </button>
+    </div>
 
-        archiveLabel: "THE ARCHIVE",
-        archiveHeading: "Four ways of looking.",
+  </div>
+</section>
 
-        archiveCaption:
-          "Different entry points into one evolving collection. Nothing here needs to stay the same.",
+<script>
+/* =================================
+   01. TRANSLATIONS
+================================= */
 
-        cardAboutTitle: "About me",
-        cardAboutDescription:
-          "The person behind the work. Background, experiences, turning points, and unfinished versions of myself.",
+const translations = {
+  en: {
+    navAbout: "ABOUT ME",
+    navThink: "WHAT I THINK",
+    navRead: "WHAT I READ",
+    navWant: "WHAT I WANT",
 
-        cardThinkTitle: "About what I think",
-        cardThinkDescription:
-          "Notes on design, visual culture, identity, society, and the questions that stay with me.",
+    kicker: 'PERSONAL ARCHIVE <span> / 001</span>',
+    subnoteTitle: "AN OPEN SYSTEM",
+    subnoteText: "IDENTITY IN PROGRESS",
+    sideLeft: "OBSERVE / CONNECT / BECOME",
+    sideRight: "VERSION 001 — ONGOING",
+    coordinates: "A STUDY OF BEING",
+    status: "SYSTEM / EVOLVING",
 
-        cardReadTitle: "About what I read",
-        cardReadDescription:
-          "Books, essays, quotations, references, and ideas worth returning to.",
+    sectionFooter: "A LIVING ARCHIVE / CONTINUOUSLY EVOLVING",
+    backHome: "RETURN TO THE UNIVERSE",
 
-        cardWantTitle: "About what I want",
-        cardWantDescription:
-          "Future directions, personal ambitions, places to go, and possibilities I have yet to define.",
-
-        cardExplore: "EXPLORE ↗",
-        footerTitle: "To be continued<span>...</span>",
-        footerMeta:
-          "A PERSONAL ARCHIVE<br>MADE OF FRAGMENTS<br>AND OPEN QUESTIONS",
-        footerNote: "MADE SLOWLY, WITH INTENTION."
+    sections: {
+      about: {
+        category: "ARCHIVE / IDENTITY",
+        number: "01 — 04",
+        title: "About <em>me.</em>",
+        description:
+          "The person behind the work. A collection of experiences, turning points, fragments of memory, and versions of myself that continue to change."
       },
 
-      zh: {
-        navAbout: "关于我",
-        navThink: "关于我的思考",
-        navRead: "关于我的阅读",
-        navWant: "关于我想要的",
-
-        topLeft: "独立个人档案",
-        topRight: "设计 · 思考 · 生活",
-        eyebrow: "一场关于自我的探索",
-
-        heroDescription:
-          "记录那些我注意到的事、我想要追问的问题，以及那个仍在不断形成中的自己。<br><br><em>这不是一个结论，而是一个过程。</em>",
-
-        indexText: "持续进行中",
-        scrollText: "向下探索",
-
-        statementLabel: "写给自己的一段话",
-        statementHeading:
-          "我感兴趣的，是 <em>事物本来的样子</em> 与它可能成为的样子之间的空间。",
-
-        statementCopy:
-          "这里记录我对设计、文化、图像、书籍与日常生活的持续观察。收集零散的片段，连接不同的想法，也为变化留出空间。",
-
-        archiveLabel: "个人档案",
-        archiveHeading: "四种观察世界的方式。",
-
-        archiveCaption:
-          "四个不同的入口，共同构成一份持续生长的个人档案。这里的一切，都可以改变。",
-
-        cardAboutTitle: "关于我",
-        cardAboutDescription:
-          "作品背后的人。我的经历、成长背景、人生转折，以及那些尚未定型的自我。",
-
-        cardThinkTitle: "关于我的思考",
-        cardThinkDescription:
-          "关于设计、视觉文化、身份与社会的观察，以及那些始终留在心里的问题。",
-
-        cardReadTitle: "关于我的阅读",
-        cardReadDescription:
-          "值得反复翻阅的书籍、文章、摘录、参考资料与思想片段。",
-
-        cardWantTitle: "关于我想要的",
-        cardWantDescription:
-          "未来的方向、个人的愿望、想去的地方，以及尚未被定义的可能性。",
-
-        cardExplore: "进入栏目 ↗",
-        footerTitle: "未完待续<span>...</span>",
-        footerMeta:
-          "一份个人档案<br>由零散片段组成<br>也由开放的问题组成",
-        footerNote: "慢慢构建，认真对待。"
+      think: {
+        category: "ARCHIVE / THOUGHT",
+        number: "02 — 04",
+        title: "What I <em>think.</em>",
+        description:
+          "Notes on design, visual culture, identity, society, and the questions that remain unresolved. A place for thoughts to take shape."
       },
 
-      fr: {
-        navAbout: "À PROPOS",
-        navThink: "MES PENSÉES",
-        navRead: "MES LECTURES",
-        navWant: "MES ENVIES",
+      read: {
+        category: "ARCHIVE / READING",
+        number: "03 — 04",
+        title: "What I <em>read.</em>",
+        description:
+          "Books, essays, quotations, references, and fragments of ideas worth keeping. A personal index of things that have left a trace."
+      },
 
-        topLeft: "ARCHIVE PERSONNELLE INDÉPENDANTE",
-        topRight: "DESIGN · PENSÉE · VIE",
-        eyebrow: "UNE EXPLORATION PERSONNELLE",
-
-        heroDescription:
-          "Une archive vivante de ce que je remarque, de ce que je questionne et de ce que je suis encore en train de devenir.<br><br><em>Non pas une conclusion, mais un processus.</em>",
-
-        indexText: "EN COURS",
-        scrollText: "DÉFILER POUR EXPLORER",
-
-        statementLabel: "UNE NOTE À MOI-MÊME",
-        statementHeading:
-          "Ce qui m'intéresse, c'est l'espace entre <em>ce que les choses sont</em> et ce qu'elles pourraient devenir.",
-
-        statementCopy:
-          "Un espace consacré à mes observations sur le design, la culture, les images, les livres et la vie quotidienne. Un lieu pour recueillir des fragments, relier des idées et laisser place au changement.",
-
-        archiveLabel: "LES ARCHIVES",
-        archiveHeading: "Quatre façons de regarder.",
-
-        archiveCaption:
-          "Quatre points d'entrée dans une collection en évolution. Rien n'a besoin de rester identique.",
-
-        cardAboutTitle: "À propos de moi",
-        cardAboutDescription:
-          "La personne derrière le travail. Mon parcours, mes expériences, mes tournants et les versions de moi encore inachevées.",
-
-        cardThinkTitle: "Ce que je pense",
-        cardThinkDescription:
-          "Des notes sur le design, la culture visuelle, l'identité, la société et les questions qui m'accompagnent.",
-
-        cardReadTitle: "Ce que je lis",
-        cardReadDescription:
-          "Des livres, des essais, des citations, des références et des idées auxquelles revenir.",
-
-        cardWantTitle: "Ce que je veux",
-        cardWantDescription:
-          "Des directions futures, des ambitions personnelles, des lieux à découvrir et des possibilités encore indéfinies.",
-
-        cardExplore: "EXPLORER ↗",
-        footerTitle: "À suivre<span>...</span>",
-        footerMeta:
-          "UNE ARCHIVE PERSONNELLE<br>FAITE DE FRAGMENTS<br>ET DE QUESTIONS OUVERTES",
-        footerNote: "CONSTRUIT LENTEMENT, AVEC INTENTION."
-      }
-    };
-
-    function setLanguage(language) {
-      const dictionary = translations[language];
-
-      if (!dictionary) return;
-
-      document.documentElement.lang = language;
-
-      document.querySelectorAll("[data-i18n]").forEach((element) => {
-        const key = element.dataset.i18n;
-
-        if (dictionary[key] !== undefined) {
-          element.innerHTML = dictionary[key];
-        }
-      });
-
-      document.querySelectorAll(".lang-btn").forEach((button) => {
-        const isActive = button.dataset.lang === language;
-
-        button.classList.toggle("active", isActive);
-
-        if (isActive) {
-          button.setAttribute("aria-pressed", "true");
-        } else {
-          button.setAttribute("aria-pressed", "false");
-        }
-      });
-
-      const titles = {
-        en: "A Living Archive — Personal Website",
-        zh: "一份持续生长的个人档案",
-        fr: "A Living Archive — Archive personnelle"
-      };
-
-      document.title = titles[language];
-
-      try {
-        localStorage.setItem("archive-language", language);
-      } catch (error) {
-        // The site still works if browser storage is unavailable.
+      want: {
+        category: "ARCHIVE / BECOMING",
+        number: "04 — 04",
+        title: "What I <em>want.</em>",
+        description:
+          "Future directions, personal ambitions, places to go, and possibilities that have not yet taken form."
       }
     }
+  },
 
-    document.querySelectorAll(".lang-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        setLanguage(button.dataset.lang);
-      });
+  zh: {
+    navAbout: "关于我",
+    navThink: "关于我的思考",
+    navRead: "关于我的阅读",
+    navWant: "关于我想要的",
+
+    kicker: '个人档案 <span> / 001</span>',
+    subnoteTitle: "一个开放的系统",
+    subnoteText: "身份持续生成中",
+    sideLeft: "观察 / 连接 / 成为",
+    sideRight: "版本 001 — 持续更新",
+    coordinates: "关于存在的观察",
+    status: "系统 / 演化中",
+
+    sectionFooter: "一份持续生长的个人档案",
+    backHome: "返回数字宇宙",
+
+    sections: {
+      about: {
+        category: "档案 / 身份",
+        number: "01 — 04",
+        title: "关于<em>我。</em>",
+        description:
+          "作品背后的人。关于我的经历、人生转折、记忆碎片，以及那些仍在不断变化的自我。"
+      },
+
+      think: {
+        category: "档案 / 思考",
+        number: "02 — 04",
+        title: "关于我的<em>思考。</em>",
+        description:
+          "关于设计、视觉文化、身份与社会的观察，以及那些尚未得到答案的问题。让想法在这里逐渐成形。"
+      },
+
+      read: {
+        category: "档案 / 阅读",
+        number: "03 — 04",
+        title: "关于我的<em>阅读。</em>",
+        description:
+          "书籍、文章、摘录、参考资料与值得留下的思想片段。记录那些曾经触动我、并留下痕迹的事物。"
+      },
+
+      want: {
+        category: "档案 / 未来",
+        number: "04 — 04",
+        title: "关于我<em>想要的。</em>",
+        description:
+          "未来的方向、个人的愿望、想去的地方，以及那些尚未成形的可能性。"
+      }
+    }
+  },
+
+  fr: {
+    navAbout: "À PROPOS",
+    navThink: "MES PENSÉES",
+    navRead: "MES LECTURES",
+    navWant: "MES ENVIES",
+
+    kicker: 'ARCHIVE PERSONNELLE <span> / 001</span>',
+    subnoteTitle: "UN SYSTÈME OUVERT",
+    subnoteText: "IDENTITÉ EN ÉVOLUTION",
+    sideLeft: "OBSERVER / RELIER / DEVENIR",
+    sideRight: "VERSION 001 — EN COURS",
+    coordinates: "UNE ÉTUDE DE L'ÊTRE",
+    status: "SYSTÈME / EN ÉVOLUTION",
+
+    sectionFooter: "UNE ARCHIVE PERSONNELLE EN ÉVOLUTION",
+    backHome: "RETOURNER À L'UNIVERS",
+
+    sections: {
+      about: {
+        category: "ARCHIVE / IDENTITÉ",
+        number: "01 — 04",
+        title: "À propos de <em>moi.</em>",
+        description:
+          "La personne derrière le travail. Des expériences, des tournants, des fragments de mémoire et des versions de moi qui continuent d'évoluer."
+      },
+
+      think: {
+        category: "ARCHIVE / PENSÉE",
+        number: "02 — 04",
+        title: "Ce que je <em>pense.</em>",
+        description:
+          "Des notes sur le design, la culture visuelle, l'identité, la société et les questions qui restent ouvertes. Un espace où les idées prennent forme."
+      },
+
+      read: {
+        category: "ARCHIVE / LECTURE",
+        number: "03 — 04",
+        title: "Ce que je <em>lis.</em>",
+        description:
+          "Des livres, des essais, des citations, des références et des fragments d'idées à conserver. Un index personnel de ce qui laisse une trace."
+      },
+
+      want: {
+        category: "ARCHIVE / DEVENIR",
+        number: "04 — 04",
+        title: "Ce que je <em>veux.</em>",
+        description:
+          "Des directions futures, des ambitions personnelles, des lieux à découvrir et des possibilités qui n'ont pas encore pris forme."
+      }
+    }
+  }
+};
+
+let currentLanguage = "en";
+
+function applyLanguage(language) {
+  if (!translations[language]) return;
+
+  currentLanguage = language;
+  document.documentElement.lang = language;
+
+  const dictionary = translations[language];
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const key = element.dataset.i18n;
+
+    if (dictionary[key] !== undefined) {
+      element.innerHTML = dictionary[key];
+    }
+  });
+
+  document.querySelectorAll(".language").forEach((button) => {
+    const active = button.dataset.lang === language;
+
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+
+  const titles = {
+    en: "STILL BECOMING — A Living Archive",
+    zh: "持续生成中 — 一份个人档案",
+    fr: "STILL BECOMING — Archive personnelle"
+  };
+
+  document.title = titles[language];
+
+  const currentSection = document.querySelector(".nav-link.active");
+
+  if (currentSection) {
+    openSection(currentSection.dataset.section, false);
+  }
+
+  try {
+    localStorage.setItem("archive-language", language);
+  } catch (error) {
+    // Language switching still works without local storage.
+  }
+}
+
+document.querySelectorAll(".language").forEach((button) => {
+  button.addEventListener("click", () => {
+    applyLanguage(button.dataset.lang);
+  });
+});
+
+try {
+  const savedLanguage = localStorage.getItem("archive-language");
+
+  if (savedLanguage && translations[savedLanguage]) {
+    currentLanguage = savedLanguage;
+  }
+} catch (error) {
+  // Default to English.
+}
+
+applyLanguage(currentLanguage);
+
+/* =================================
+   02. INDEPENDENT LETTERS
+================================= */
+
+const letterField = document.getElementById("letterField");
+const composition = document.getElementById("composition");
+
+const letterData = [
+  // STILL
+  { char: "S", x: 16, y: 25, size: 12.5, rotate: -9, delay: 0.1 },
+  { char: "T", x: 29, y: 16, size: 10.2, rotate: 5, delay: 0.18 },
+  { char: "I", x: 39, y: 26, size: 9.3, rotate: -3, delay: 0.25 },
+  { char: "L", x: 47, y: 12, size: 11.7, rotate: 8, delay: 0.32 },
+  { char: "L", x: 56, y: 22, size: 9.8, rotate: -6, delay: 0.4 },
+
+  // BECOMING
+  { char: "B", x: 10, y: 47, size: 9.8, rotate: 6, delay: 0.48 },
+  { char: "E", x: 22, y: 57, size: 11.6, rotate: -7, delay: 0.56 },
+  { char: "C", x: 34, y: 43, size: 12.8, rotate: 4, delay: 0.64 },
+  { char: "O", x: 46, y: 56, size: 10.4, rotate: -5, delay: 0.72 },
+  { char: "M", x: 57, y: 42, size: 13.1, rotate: 7, delay: 0.8 },
+  { char: "I", x: 69, y: 54, size: 8.8, rotate: -8, delay: 0.88 },
+  { char: "N", x: 77, y: 42, size: 11.5, rotate: 4, delay: 0.96 },
+  { char: "G", x: 86, y: 54, size: 10.4, rotate: -4, delay: 1.04 }
+];
+
+const floatingNotes = [
+  { text: "STILL", x: 7, y: 38, size: 10, wine: false },
+  { text: "BECOMING", x: 68, y: 28, size: 10, wine: true },
+  { text: "01001001", x: 17, y: 74, size: 0.75, wine: false },
+  { text: "I AM HERE", x: 71, y: 76, size: 0.8, wine: false },
+  { text: "001", x: 90, y: 34, size: 0.8, wine: true }
+];
+
+const letterElements = [];
+
+function buildLetters() {
+  letterField.innerHTML = "";
+  letterElements.length = 0;
+
+  const isMobile = window.innerWidth <= 700;
+
+  letterData.forEach((item, index) => {
+    const element = document.createElement("span");
+
+    element.className = "letter";
+    element.textContent = item.char;
+    element.setAttribute("aria-hidden", "true");
+
+    if ([1, 4, 7, 10, 12].includes(index)) {
+      element.classList.add("serif-outline");
+    }
+
+    if ([2, 5, 9].includes(index)) {
+      element.classList.add("wine");
+    }
+
+    const x = isMobile
+      ? 9 + item.x * 0.82
+      : item.x;
+
+    const y = isMobile
+      ? 17 + item.y * 0.8
+      : item.y;
+
+    element.style.left = x + "%";
+    element.style.top = y + "%";
+    element.style.fontSize =
+      (isMobile ? item.size * 0.67 : item.size) + "vw";
+
+    element.style.animationDelay = item.delay + "s";
+
+    const baseRotation = item.rotate;
+
+    element.style.transform =
+      "translate(-50%, -50%) rotate(" + baseRotation + "deg)";
+
+    letterField.appendChild(element);
+
+    letterElements.push({
+      element,
+      x,
+      y,
+      baseRotation,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.15 + Math.random() * 0.24,
+      amplitude: 1.2 + Math.random() * 3.8,
+      index
     });
+  });
 
-    let initialLanguage = "en";
+  floatingNotes.forEach((item, index) => {
+    const element = document.createElement("span");
 
-    try {
-      const savedLanguage = localStorage.getItem("archive-language");
+    element.className =
+      "letter tiny" + (item.wine ? " wine" : "");
 
-      if (savedLanguage && translations[savedLanguage]) {
-        initialLanguage = savedLanguage;
+    element.textContent = item.text;
+    element.style.left = item.x + "%";
+    element.style.top = item.y + "%";
+    element.style.fontSize = item.size + "vw";
+    element.style.animationDelay = (0.9 + index * 0.12) + "s";
+
+    letterField.appendChild(element);
+
+    letterElements.push({
+      element,
+      x: item.x,
+      y: item.y,
+      baseRotation: 0,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.13 + Math.random() * 0.2,
+      amplitude: 1.5 + Math.random() * 2.5,
+      index: letterElements.length
+    });
+  });
+}
+
+/* =================================
+   03. MOUSE-RESPONSIVE LETTERS
+================================= */
+
+const pointer = {
+  x: -1000,
+  y: -1000,
+  active: false
+};
+
+let motion = 0;
+let letterFrame = null;
+
+function animateLetters() {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    letterFrame = null;
+    return;
+  }
+
+  motion += 0.009;
+
+  const rect = composition.getBoundingClientRect();
+
+  letterElements.forEach((item) => {
+    const { element, x, y, baseRotation, phase, speed, amplitude } = item;
+
+    const floatX = Math.sin(motion * speed + phase) * amplitude;
+    const floatY = Math.cos(motion * speed * 0.8 + phase) * amplitude;
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let mouseRotate = 0;
+
+    if (pointer.active) {
+      const letterX = rect.left + rect.width * x / 100;
+      const letterY = rect.top + rect.height * y / 100;
+
+      const dx = letterX - pointer.x;
+      const dy = letterY - pointer.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const radius = 190;
+
+      if (distance < radius && distance > 0) {
+        const strength = (1 - distance / radius) * 12;
+
+        mouseX = (dx / distance) * strength;
+        mouseY = (dy / distance) * strength;
+
+        mouseRotate = (dx / distance) * 1.8;
       }
-    } catch (error) {
-      // Use English if browser storage is unavailable.
     }
 
-    setLanguage(initialLanguage);
+    element.style.transform =
+      "translate(" +
+      "calc(-50% + " + (floatX + mouseX) + "px), " +
+      "calc(-50% + " + (floatY + mouseY) + "px)" +
+      ") rotate(" +
+      (baseRotation + Math.sin(motion * speed + phase) * 1.3 + mouseRotate) +
+      "deg)";
+  });
 
-    /* ========================================
-       02. FOOTER YEAR
-    ======================================== */
+  letterFrame = requestAnimationFrame(animateLetters);
+}
 
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+composition.addEventListener("pointermove", (event) => {
+  pointer.x = event.clientX;
+  pointer.y = event.clientY;
+  pointer.active = true;
+});
 
-    /* ========================================
-       03. INTERACTIVE DIGITAL NETWORK
-    ======================================== */
+composition.addEventListener("pointerleave", () => {
+  pointer.active = false;
+});
 
-    const canvas = document.getElementById("network");
-    const ctx = canvas.getContext("2d");
-
-    const hero = document.querySelector(".hero");
-
-    const motionPreference = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
-
-    const pointer = {
-      x: -1000,
-      y: -1000,
-      active: false
-    };
-
-    let particles = [];
-    let canvasWidth = 0;
-    let canvasHeight = 0;
-    let animationFrame = null;
-    let lastFrameTime = 0;
-
-    const settings = {
-      particleSpacing: 95,
-      maxConnectionDistance: 145,
-      mouseRadius: 175,
-      baseSpeed: 0.12
-    };
-
-    function createParticles() {
-      particles = [];
-
-      const area = canvasWidth * canvasHeight;
-
-      const count = Math.min(
-        125,
-        Math.max(35, Math.floor(area / 10500))
-      );
-
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * canvasWidth,
-          y: Math.random() * canvasHeight,
-          originX: Math.random() * canvasWidth,
-          originY: Math.random() * canvasHeight,
-          vx: (Math.random() - 0.5) * settings.baseSpeed,
-          vy: (Math.random() - 0.5) * settings.baseSpeed,
-          size: Math.random() * 1.5 + 0.6,
-          phase: Math.random() * Math.PI * 2,
-          wine: Math.random() > 0.91
-        });
-      }
+function startLetterAnimation() {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    if (letterFrame !== null) {
+      cancelAnimationFrame(letterFrame);
+      letterFrame = null;
     }
 
-    function resizeCanvas() {
-      const rect = hero.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    return;
+  }
 
-      canvasWidth = rect.width;
-      canvasHeight = rect.height;
+  if (letterFrame === null) {
+    letterFrame = requestAnimationFrame(animateLetters);
+  }
+}
 
-      canvas.width = Math.round(canvasWidth * dpr);
-      canvas.height = Math.round(canvasHeight * dpr);
+/* =================================
+   04. GRAPHIC LINES
+================================= */
 
-      canvas.style.width = canvasWidth + "px";
-      canvas.style.height = canvasHeight + "px";
+function buildGraphicLines() {
+  letterField.querySelectorAll(
+    ".graphic-line, .graphic-node"
+  ).forEach((element) => element.remove());
 
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const points = [
+    [12, 32],
+    [30, 22],
+    [42, 31],
+    [58, 19],
+    [75, 33],
+    [86, 46],
+    [67, 63],
+    [49, 69],
+    [30, 62],
+    [17, 78]
+  ];
 
-      createParticles();
-      drawNetwork(0);
+  const connections = [
+    [0, 1],
+    [1, 2],
+    [2, 3],
+    [3, 4],
+    [4, 5],
+    [5, 6],
+    [6, 7],
+    [7, 8],
+    [8, 9],
+    [1, 8],
+    [2, 7],
+    [3, 6]
+  ];
+
+  connections.forEach(([a, b], index) => {
+    const [x1, y1] = points[a];
+    const [x2, y2] = points[b];
+
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+    const line = document.createElement("div");
+
+    line.className = "graphic-line";
+    line.style.left = x1 + "%";
+    line.style.top = y1 + "%";
+    line.style.width = length + "%";
+    line.style.transform = "rotate(" + angle + "deg)";
+    line.style.opacity = index % 3 === 0 ? "0.75" : "0.4";
+
+    letterField.appendChild(line);
+  });
+
+  points.forEach(([x, y], index) => {
+    const node = document.createElement("div");
+
+    node.className = "graphic-node";
+    node.style.left = x + "%";
+    node.style.top = y + "%";
+
+    if (index % 3 !== 0) {
+      node.style.opacity = "0.45";
+      node.style.background = "#92929b";
+      node.style.boxShadow = "none";
     }
 
-    function drawNetwork(time) {
-      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    letterField.appendChild(node);
+  });
 
-      const reducedMotion = motionPreference.matches;
-      const elapsed = time ? time / 1000 : 0;
+  // Keep the letterforms above the technical graphics.
+  letterField.querySelectorAll(".letter").forEach((element) => {
+    element.style.zIndex = "2";
+  });
 
-      // Move points gently.
-      particles.forEach((particle) => {
-        if (!reducedMotion) {
-          particle.x += particle.vx;
-          particle.y += particle.vy;
+  letterField.querySelectorAll(
+    ".graphic-line, .graphic-node"
+  ).forEach((element) => {
+    element.style.zIndex = "0";
+  });
+}
 
-          particle.x += Math.sin(elapsed * 0.45 + particle.phase) * 0.08;
-          particle.y += Math.cos(elapsed * 0.35 + particle.phase) * 0.08;
-        }
+/* =================================
+   05. INTERACTIVE UNIVERSE CANVAS
+================================= */
 
-        if (particle.x < -10) particle.x = canvasWidth + 10;
-        if (particle.x > canvasWidth + 10) particle.x = -10;
-        if (particle.y < -10) particle.y = canvasHeight + 10;
-        if (particle.y > canvasHeight + 10) particle.y = -10;
-      });
+const canvas = document.getElementById("universe");
+const ctx = canvas.getContext("2d");
 
-      // Draw connecting lines.
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
+let width = 0;
+let height = 0;
+let stars = [];
+let universeFrame = null;
+let lastDraw = 0;
 
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)"
+);
 
-          if (distance < settings.maxConnectionDistance) {
-            const opacity =
-              (1 - distance / settings.maxConnectionDistance) * 0.28;
+function resizeUniverse() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
+  width = window.innerWidth;
+  height = window.innerHeight;
 
-            ctx.strokeStyle = "rgba(110, 110, 106, " + opacity + ")";
-            ctx.lineWidth = 0.65;
-            ctx.stroke();
-          }
-        }
+  canvas.width = Math.round(width * dpr);
+  canvas.height = Math.round(height * dpr);
+
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const count = Math.min(
+    150,
+    Math.max(55, Math.floor(width * height / 8500))
+  );
+
+  stars = Array.from({ length: count }, () => ({
+    x: Math.random() * width,
+    y: Math.random() * height,
+    radius: Math.random() * 1.1 + 0.25,
+    opacity: Math.random() * 0.5 + 0.12,
+    speed: Math.random() * 0.12 + 0.02,
+    phase: Math.random() * Math.PI * 2,
+    wine: Math.random() > 0.91
+  }));
+
+  drawUniverse(0);
+}
+
+function drawUniverse(time) {
+  ctx.clearRect(0, 0, width, height);
+
+  const elapsed = time / 1000;
+  const maxDistance = width < 600 ? 95 : 135;
+
+  stars.forEach((star) => {
+    if (!prefersReducedMotion.matches) {
+      star.y -= star.speed * 0.12;
+      star.x += Math.sin(elapsed * 0.2 + star.phase) * 0.04;
+
+      if (star.y < -2) {
+        star.y = height + 2;
+        star.x = Math.random() * width;
       }
+    }
+  });
 
-      // Draw particles and subtle mouse response.
-      particles.forEach((particle) => {
-        let x = particle.x;
-        let y = particle.y;
-        let highlight = false;
+  // Connect nearby stars with fine, silver threads.
+  for (let i = 0; i < stars.length; i++) {
+    for (let j = i + 1; j < stars.length; j++) {
+      const a = stars[i];
+      const b = stars[j];
 
-        if (pointer.active && !reducedMotion) {
-          const dx = x - pointer.x;
-          const dy = y - pointer.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      const dx = a.x - b.x;
+      const dy = a.y - b.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < settings.mouseRadius && distance > 0) {
-            const force =
-              (1 - distance / settings.mouseRadius) * 12;
-
-            x += (dx / distance) * force;
-            y += (dy / distance) * force;
-
-            highlight = true;
-          }
-        }
+      if (distance < maxDistance) {
+        const opacity =
+          (1 - distance / maxDistance) * 0.16;
 
         ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
 
-        const radius = highlight
-          ? particle.size * 1.9
-          : particle.size;
+        ctx.strokeStyle =
+          "rgba(164, 164, 178, " + opacity + ")";
 
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-
-        if (highlight || particle.wine) {
-          ctx.fillStyle = "rgba(120, 31, 50, 0.8)";
-        } else {
-          ctx.fillStyle = "rgba(105, 105, 101, 0.52)";
-        }
-
-        ctx.fill();
-
-        // Small silver halo around selected points.
-        if (highlight) {
-          ctx.beginPath();
-          ctx.arc(x, y, radius + 4, 0, Math.PI * 2);
-          ctx.strokeStyle = "rgba(120, 31, 50, 0.24)";
-          ctx.lineWidth = 0.7;
-          ctx.stroke();
-        }
-      });
-
-      // A subtle silver ring follows the pointer.
-      if (pointer.active && !reducedMotion) {
-        ctx.beginPath();
-        ctx.arc(pointer.x, pointer.y, 22, 0, Math.PI * 2);
-        ctx.strokeStyle = "rgba(120, 31, 50, 0.16)";
-        ctx.lineWidth = 0.7;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
       }
     }
+  }
 
-    function animateNetwork(time) {
-      if (motionPreference.matches) {
-        drawNetwork(0);
-        animationFrame = null;
-        return;
+  // Mouse creates a local field of interaction.
+  if (pointer.active && !prefersReducedMotion.matches) {
+    stars.forEach((star) => {
+      const dx = star.x - pointer.x;
+      const dy = star.y - pointer.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 145) {
+        const opacity = (1 - distance / 145) * 0.35;
+
+        ctx.beginPath();
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(pointer.x, pointer.y);
+
+        ctx.strokeStyle =
+          "rgba(178, 72, 100, " + opacity + ")";
+
+        ctx.lineWidth = 0.55;
+        ctx.stroke();
       }
-
-      // Limit the animation to about 30 frames per second.
-      if (time - lastFrameTime > 33) {
-        drawNetwork(time);
-        lastFrameTime = time;
-      }
-
-      animationFrame = requestAnimationFrame(animateNetwork);
-    }
-
-    function startAnimation() {
-      if (motionPreference.matches) {
-        if (animationFrame !== null) {
-          cancelAnimationFrame(animationFrame);
-          animationFrame = null;
-        }
-
-        drawNetwork(0);
-        return;
-      }
-
-      if (animationFrame === null) {
-        animationFrame = requestAnimationFrame(animateNetwork);
-      }
-    }
-
-    hero.addEventListener("pointermove", (event) => {
-      const rect = canvas.getBoundingClientRect();
-
-      pointer.x = event.clientX - rect.left;
-      pointer.y = event.clientY - rect.top;
-      pointer.active = true;
     });
+  }
 
-    hero.addEventListener("pointerleave", () => {
-      pointer.active = false;
-      pointer.x = -1000;
-      pointer.y = -1000;
-    });
+  stars.forEach((star) => {
+    const twinkle = prefersReducedMotion.matches
+      ? 1
+      : 0.65 + Math.sin(elapsed * 0.7 + star.phase) * 0.25;
 
-    window.addEventListener("resize", resizeCanvas);
+    ctx.beginPath();
 
-    if (motionPreference.addEventListener) {
-      motionPreference.addEventListener("change", startAnimation);
-    } else if (motionPreference.addListener) {
-      motionPreference.addListener(startAnimation);
+    ctx.arc(
+      star.x,
+      star.y,
+      star.radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle = star.wine
+      ? "rgba(196, 65, 96, " + star.opacity * twinkle + ")"
+      : "rgba(206, 206, 218, " + star.opacity * twinkle + ")";
+
+    ctx.fill();
+  });
+
+  // Cursor halo.
+  if (pointer.active && !prefersReducedMotion.matches) {
+    const gradient = ctx.createRadialGradient(
+      pointer.x,
+      pointer.y,
+      0,
+      pointer.x,
+      pointer.y,
+      100
+    );
+
+    gradient.addColorStop(0, "rgba(120, 31, 50, 0.065)");
+    gradient.addColorStop(1, "rgba(120, 31, 50, 0)");
+
+    ctx.beginPath();
+    ctx.arc(pointer.x, pointer.y, 100, 0, Math.PI * 2);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+  }
+}
+
+function animateUniverse(time) {
+  if (prefersReducedMotion.matches) {
+    drawUniverse(0);
+    universeFrame = null;
+    return;
+  }
+
+  if (time - lastDraw > 33) {
+    drawUniverse(time);
+    lastDraw = time;
+  }
+
+  universeFrame = requestAnimationFrame(animateUniverse);
+}
+
+function startUniverse() {
+  if (prefersReducedMotion.matches) {
+    if (universeFrame !== null) {
+      cancelAnimationFrame(universeFrame);
+      universeFrame = null;
     }
 
-    resizeCanvas();
-    startAnimation();
-  </script>
+    drawUniverse(0);
+    return;
+  }
 
+  if (universeFrame === null) {
+    universeFrame = requestAnimationFrame(animateUniverse);
+  }
+}
+
+window.addEventListener("pointermove", (event) => {
+  pointer.x = event.clientX;
+  pointer.y = event.clientY;
+  pointer.active = true;
+});
+
+document.addEventListener("pointerleave", () => {
+  pointer.active = false;
+});
+
+window.addEventListener("resize", () => {
+  resizeUniverse();
+  buildLetters();
+  buildGraphicLines();
+});
+
+if (prefersReducedMotion.addEventListener) {
+  prefersReducedMotion.addEventListener("change", () => {
+    startUniverse();
+    startLetterAnimation();
+  });
+}
+
+/* =================================
+   06. NAVIGATION / FULL-SCREEN VIEWS
+================================= */
+
+const home = document.getElementById("home");
+const sectionScreen = document.getElementById("sectionScreen");
+const sectionCategory = document.getElementById("sectionCategory");
+const sectionNumber = document.getElementById("sectionNumber");
+const sectionTitle = document.getElementById("sectionTitle");
+const sectionDescription = document.getElementById("sectionDescription");
+
+function openSection(sectionKey, updateHash = true) {
+  const section = translations[currentLanguage].sections[sectionKey];
+
+  if (!section) return;
+
+  sectionCategory.textContent = section.category;
+  sectionNumber.textContent = section.number;
+  sectionTitle.innerHTML = section.title;
+  sectionDescription.textContent = section.description;
+
+  home.classList.add("is-hidden");
+  sectionScreen.classList.add("is-open");
+
+  sectionScreen.setAttribute("aria-hidden", "false");
+
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    const active = link.dataset.section === sectionKey;
+
+    link.classList.toggle("active", active);
+    link.setAttribute("aria-current", active ? "page" : "false");
+  });
+
+  if (updateHash) {
+    history.pushState({ section: sectionKey }, "", "#" + sectionKey);
+  }
+}
+
+function goHome(updateHash = true) {
+  sectionScreen.classList.remove("is-open");
+  sectionScreen.setAttribute("aria-hidden", "true");
+
+  home.classList.remove("is-hidden");
+
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    link.classList.remove("active");
+    link.removeAttribute("aria-current");
+  });
+
+  if (updateHash) {
+    history.pushState({}, "", window.location.pathname + window.location.search);
+  }
+}
+
+document.querySelectorAll(".nav-link").forEach((link) => {
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    openSection(link.dataset.section);
+  });
+});
+
+document.getElementById("brandHome").addEventListener("click", (event) => {
+  event.preventDefault();
+  goHome();
+});
+
+document.getElementById("backHome").addEventListener("click", () => {
+  goHome();
+});
+
+window.addEventListener("popstate", () => {
+  const hash = window.location.hash.replace("#", "");
+
+  const matchingLink = [...document.querySelectorAll(".nav-link")]
+    .find((link) => link.dataset.section === hash);
+
+  if (matchingLink) {
+    openSection(matchingLink.dataset.section, false);
+  } else {
+    goHome(false);
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    goHome();
+  }
+});
+
+/* =================================
+   07. INITIALIZE
+================================= */
+
+buildLetters();
+buildGraphicLines();
+resizeUniverse();
+startUniverse();
+startLetterAnimation();
+
+</script>
 </body>
 </html>
