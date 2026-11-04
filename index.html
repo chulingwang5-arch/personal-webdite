@@ -1,2321 +1,1538 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color" content="#050506">
-
-<title>STILL BECOMING — A Living Archive</title>
-
-<style>
-
-:root {
-
-  --black: #050506;
-
-  --white: #e8e8e5;
-
-  --silver: #85858b;
-
-  --muted: #55555b;
-
-  /* Dark green with a restrained phosphorescent quality */
-
-  --green: #416c49;
-
-  --green-light: #608a64;
-
-  --green-glow: rgba(78, 139, 83, .12);
-
-  /* Near-black burgundy */
-
-  --wine: #431c27;
-
-  --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-
-  --sans: Arial, Helvetica, sans-serif;
-
-}
-
-* {
-
-  box-sizing: border-box;
-
-}
-
-html,
-
-body {
-
-  width: 100%;
-
-  height: 100%;
-
-  margin: 0;
-
-  background: var(--black);
-
-  color: var(--white);
-
-  font-family: var(--mono);
-
-}
-
-body {
-
-  overflow: hidden;
-
-}
-
-button,
-
-a {
-
-  font: inherit;
-
-}
-
-button {
-
-  color: inherit;
-
-  cursor: pointer;
-
-}
-
-a {
-
-  color: inherit;
-
-  text-decoration: none;
-
-}
-
-::selection {
-
-  background: var(--green);
-
-  color: var(--black);
-
-}
-
-/* ========================================
-
-   BACKGROUND
-
-======================================== */
-
-#space,
-
-#grain {
-
-  position: fixed;
-
-  inset: 0;
-
-  width: 100%;
-
-  height: 100%;
-
-  pointer-events: none;
-
-}
-
-#space {
-
-  z-index: 0;
-
-}
-
-#grain {
-
-  z-index: 2;
-
-  opacity: .075;
-
-  mix-blend-mode: screen;
-
-}
-
-.vignette {
-
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 1;
-
-  pointer-events: none;
-
-  background:
-
-    radial-gradient(
-
-      ellipse at 50% 48%,
-
-      rgba(5, 5, 6, 0) 0%,
-
-      rgba(5, 5, 6, .12) 48%,
-
-      rgba(5, 5, 6, .62) 100%
-
-    );
-
-}
-
-/* A subtle blurred atmosphere behind the composition */
-
-.atmosphere {
-
-  position: fixed;
-
-  inset: -10%;
-
-  z-index: 1;
-
-  pointer-events: none;
-
-  background:
-
-    radial-gradient(
-
-      ellipse at 34% 43%,
-
-      rgba(38, 58, 43, .055),
-
-      transparent 39%
-
-    ),
-
-    radial-gradient(
-
-      ellipse at 76% 63%,
-
-      rgba(46, 37, 45, .045),
-
-      transparent 35%
-
-    );
-
-  filter: blur(45px);
-
-}
-
-/* ========================================
-
-   HEADER
-
-======================================== */
-
-header {
-
-  position: fixed;
-
-  z-index: 10;
-
-  top: 0;
-
-  left: 0;
-
-  width: 100%;
-
-  padding: 29px 4.1vw;
-
-  display: grid;
-
-  grid-template-columns: 1fr auto 1fr;
-
-  align-items: center;
-
-  gap: 25px;
-
-  font-size: 10px;
-
-  letter-spacing: .10em;
-
-  text-transform: uppercase;
-
-}
-
-.brand {
-
-  justify-self: start;
-
-  padding: 0;
-
-  border: 0;
-
-  background: transparent;
-
-  font-size: 10px;
-
-  letter-spacing: .11em;
-
-  white-space: nowrap;
-
-}
-
-.brand span {
-
-  margin-left: 7px;
-
-  color: var(--muted);
-
-}
-
-nav {
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: clamp(15px, 2.3vw, 34px);
-
-  white-space: nowrap;
-
-}
-
-nav a {
-
-  position: relative;
-
-  padding: 5px 0;
-
-  color: #929297;
-
-  transition: color .25s ease;
-
-}
-
-nav a::after {
-
-  content: "";
-
-  position: absolute;
-
-  left: 0;
-
-  right: 100%;
-
-  bottom: -3px;
-
-  height: 1px;
-
-  background: var(--green);
-
-  transition: right .3s ease;
-
-}
-
-nav a:hover,
-
-nav a.active {
-
-  color: var(--white);
-
-}
-
-nav a:hover::after,
-
-nav a.active::after {
-
-  right: 0;
-
-}
-
-.languages {
-
-  display: flex;
-
-  justify-self: end;
-
-  gap: 12px;
-
-}
-
-.languages button {
-
-  padding: 3px 0;
-
-  border: 0;
-
-  background: none;
-
-  color: #606067;
-
-  font-size: 10px;
-
-}
-
-.languages button.active,
-
-.languages button:hover {
-
-  color: var(--green-light);
-
-}
-
-/* ========================================
-
-   MAIN COMPOSITION
-
-======================================== */
-
-main {
-
-  position: relative;
-
-  z-index: 3;
-
-  width: 100%;
-
-  height: 100vh;
-
-  height: 100svh;
-
-  min-height: 500px;
-
-  overflow: hidden;
-
-}
-
-.composition {
-
-  position: absolute;
-
-  left: 50%;
-
-  top: 49%;
-
-  width: min(82vw, 1120px);
-
-  height: min(66vh, 590px);
-
-  min-height: 390px;
-
-  transform: translate(-50%, -50%);
-
-}
-
-/* Golden-ratio reference */
-
-.registration {
-
-  position: absolute;
-
-  left: 61.8%;
-
-  top: 0;
-
-  width: 1px;
-
-  height: 100%;
-
-  background: rgba(230, 230, 235, .055);
-
-}
-
-.registration::before,
-
-.registration::after {
-
-  content: "";
-
-  position: absolute;
-
-  left: -2px;
-
-  width: 5px;
-
-  height: 1px;
-
-  background: rgba(230, 230, 235, .22);
-
-}
-
-.registration::before {
-
-  top: 38.2%;
-
-}
-
-.registration::after {
-
-  top: 61.8%;
-
-}
-
-/* Sparse registration marks */
-
-.cross {
-
-  position: absolute;
-
-  width: 9px;
-
-  height: 9px;
-
-  opacity: .42;
-
-}
-
-.cross::before,
-
-.cross::after {
-
-  content: "";
-
-  position: absolute;
-
-  background: rgba(220, 220, 225, .34);
-
-}
-
-.cross::before {
-
-  left: 4px;
-
-  width: 1px;
-
-  height: 9px;
-
-}
-
-.cross::after {
-
-  top: 4px;
-
-  width: 9px;
-
-  height: 1px;
-
-}
-
-.cross-a {
-
-  left: 19%;
-
-  top: 26%;
-
-}
-
-.cross-b {
-
-  left: 77%;
-
-  top: 71%;
-
-  transform: scale(.7);
-
-}
-
-/* ========================================
-
-   TITLE
-
-======================================== */
-
-.title-field {
-
-  position: absolute;
-
-  inset: 0;
-
-  display: grid;
-
-  grid-template-columns: 1fr;
-
-  grid-template-rows: 1fr 1fr;
-
-}
-
-/*
-
-  Both words are forced into horizontal rows.
-
-  Their size is close to the navigation font size.
-
-*/
-
-.word {
-
-  position: relative;
-
-  display: flex;
-
-  flex-direction: row;
-
-  flex-wrap: nowrap;
-
-  align-items: center;
-
-  justify-content: flex-start;
-
-  width: max-content;
-
-  max-width: none;
-
-  height: auto;
-
-  white-space: nowrap;
-
-  writing-mode: horizontal-tb;
-
-  overflow: visible;
-
-}
-
-.word-one {
-
-  grid-row: 1;
-
-  align-self: center;
-
-  justify-self: start;
-
-  margin-left: 25%;
-
-  margin-top: 2%;
-
-}
-
-.word-two {
-
-  grid-row: 2;
-
-  align-self: start;
-
-  justify-self: start;
-
-  margin-left: 39%;
-
-  margin-top: -1%;
-
-}
-
-.letter {
-
-  display: inline-block;
-
-  flex: 0 0 auto;
-
-  position: relative;
-
-  white-space: pre;
-
-  writing-mode: horizontal-tb;
-
-  font-family: var(--mono);
-
-  font-size: clamp(10px, .8vw, 12px);
-
-  font-weight: 400;
-
-  line-height: 1;
-
-  letter-spacing: .025em;
-
-  color: var(--green);
-
-  text-shadow:
-
-    0 0 5px rgba(78, 139, 83, .10);
-
-  transform-origin: center;
-
-  will-change: transform;
-
-  pointer-events: auto;
-
-  user-select: none;
-
-  transition:
-
-    color .3s ease,
-
-    text-shadow .3s ease;
-
-}
-
-.letter:hover {
-
-  color: var(--green-light);
-
-  text-shadow:
-
-    0 0 5px rgba(78, 139, 83, .20),
-
-    0 0 11px rgba(78, 139, 83, .09);
-
-}
-
-/* Irregular spacing: controlled rather than chaotic */
-
-.word-one .letter:nth-child(1) {
-
-  margin-right: .06em;
-
-}
-
-.word-one .letter:nth-child(2) {
-
-  margin-right: .025em;
-
-}
-
-.word-one .letter:nth-child(3) {
-
-  margin-right: .20em;
-
-}
-
-.word-one .letter:nth-child(4) {
-
-  margin-right: -.025em;
-
-}
-
-.word-one .letter:nth-child(5) {
-
-  margin-right: 0;
-
-}
-
-.word-two .letter:nth-child(1) {
-
-  margin-right: .12em;
-
-}
-
-.word-two .letter:nth-child(2) {
-
-  margin-right: -.025em;
-
-}
-
-.word-two .letter:nth-child(3) {
-
-  margin-right: .04em;
-
-}
-
-.word-two .letter:nth-child(4) {
-
-  margin-right: .19em;
-
-}
-
-.word-two .letter:nth-child(5) {
-
-  margin-right: -.025em;
-
-}
-
-.word-two .letter:nth-child(6) {
-
-  margin-right: .08em;
-
-}
-
-.word-two .letter:nth-child(7) {
-
-  margin-right: -.015em;
-
-}
-
-/* Editorial notes */
-
-.label {
-
-  position: absolute;
-
-  color: var(--silver);
-
-  font-size: 9px;
-
-  line-height: 1.8;
-
-  letter-spacing: .12em;
-
-  text-transform: uppercase;
-
-}
-
-.label-top {
-
-  left: 25.2%;
-
-  top: 27%;
-
-}
-
-.label-right {
-
-  right: 0;
-
-  top: 38.2%;
-
-  text-align: right;
-
-}
-
-.label-left {
-
-  left: 0;
-
-  top: 63%;
-
-}
-
-.label-bottom {
-
-  right: 0;
-
-  bottom: 9%;
-
-  text-align: right;
-
-}
-
-.accent {
-
-  color: var(--wine);
-
-}
-
-/* ========================================
-
-   FOOTER
-
-======================================== */
-
-footer {
-
-  position: fixed;
-
-  z-index: 10;
-
-  left: 4.1vw;
-
-  right: 4.1vw;
-
-  bottom: 25px;
-
-  display: flex;
-
-  justify-content: space-between;
-
-  align-items: flex-end;
-
-  color: #77777d;
-
-  font-size: 9px;
-
-  line-height: 1.9;
-
-  letter-spacing: .1em;
-
-  text-transform: uppercase;
-
-}
-
-.footer-right {
-
-  text-align: right;
-
-}
-
-.status-dot {
-
-  display: inline-block;
-
-  width: 5px;
-
-  height: 5px;
-
-  margin-right: 7px;
-
-  border-radius: 50%;
-
-  background: var(--wine);
-
-  box-shadow: 0 0 5px rgba(67, 28, 39, .25);
-
-}
-
-/* ========================================
-
-   SECTION PANELS
-
-======================================== */
-
-.overlay {
-
-  position: fixed;
-
-  z-index: 30;
-
-  inset: 0;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 30px;
-
-  background: rgba(5, 5, 6, .97);
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  transition:
-
-    opacity .3s ease,
-
-    visibility .3s ease;
-
-}
-
-.overlay.open {
-
-  opacity: 1;
-
-  visibility: visible;
-
-}
-
-.panel {
-
-  width: min(680px, 100%);
-
-  padding-top: 23px;
-
-  border-top: 1px solid rgba(255, 255, 255, .23);
-
-}
-
-.panel-index {
-
-  margin-bottom: 34px;
-
-  color: var(--wine);
-
-  font-size: 10px;
-
-  letter-spacing: .14em;
-
-}
-
-.panel h1 {
-
-  margin: 0 0 24px;
-
-  font-family: var(--sans);
-
-  font-size: clamp(36px, 7vw, 68px);
-
-  font-weight: 400;
-
-  letter-spacing: -.055em;
-
-}
-
-.panel p {
-
-  max-width: 480px;
-
-  color: #a0a0a5;
-
-  font-family: var(--sans);
-
-  font-size: 15px;
-
-  line-height: 1.9;
-
-}
-
-.close-panel {
-
-  margin-top: 30px;
-
-  padding: 10px 0;
-
-  border: 0;
-
-  border-bottom: 1px solid #55555b;
-
-  background: none;
-
-  color: var(--white);
-
-  font-size: 10px;
-
-  letter-spacing: .12em;
-
-  text-transform: uppercase;
-
-}
-
-.close-panel:hover {
-
-  color: var(--green-light);
-
-  border-color: var(--green);
-
-}
-
-/* ========================================
-
-   RESPONSIVE
-
-======================================== */
-
-@media (max-width: 900px) {
-
-  header {
-
-    grid-template-columns: 1fr auto;
-
-    row-gap: 22px;
-
-  }
-
-  .brand {
-
-    grid-column: 1;
-
-    grid-row: 1;
-
-  }
-
-  .languages {
-
-    grid-column: 2;
-
-    grid-row: 1;
-
-  }
-
-  nav {
-
-    grid-column: 1 / -1;
-
-    grid-row: 2;
-
-    width: 100%;
-
-    justify-content: space-between;
-
-    gap: 10px;
-
-    font-size: 9px;
-
-  }
-
-  .composition {
-
-    width: 92vw;
-
-    height: 55vh;
-
-  }
-
-  .word-one {
-
-    margin-left: 20%;
-
-  }
-
-  .word-two {
-
-    margin-left: 35%;
-
-  }
-
-  .label {
-
-    font-size: 8px;
-
-  }
-
-}
-
-@media (max-width: 520px) {
-
-  header {
-
-    padding: 21px 5vw;
-
-  }
-
-  nav {
-
-    font-size: 7px;
-
-    letter-spacing: .02em;
-
-  }
-
-  .composition {
-
-    width: 96vw;
-
-    height: 52vh;
-
-    min-height: 300px;
-
-  }
-
-  .word-one {
-
-    margin-left: 16%;
-
-    margin-top: 5%;
-
-  }
-
-  .word-two {
-
-    margin-left: 26%;
-
-    margin-top: 2%;
-
-  }
-
-  .letter {
-
-    font-size: 10px;
-
-  }
-
-  .label {
-
-    font-size: 7px;
-
-  }
-
-  .label-top {
-
-    left: 16%;
-
-    top: 24%;
-
-  }
-
-  .label-right {
-
-    right: 2%;
-
-    top: 40%;
-
-  }
-
-  .label-left {
-
-    left: 2%;
-
-    top: 67%;
-
-  }
-
-  .label-bottom {
-
-    right: 2%;
-
-    bottom: 7%;
-
-  }
-
-  footer {
-
-    left: 5vw;
-
-    right: 5vw;
-
-    bottom: 15px;
-
-    font-size: 7px;
-
-  }
-
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-
-  *::before,
-
-  *::after {
-
-    animation: none !important;
-
-    transition: none !important;
-
-  }
-
-}
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050506">
+
+  <title>Still Becoming — A Living Archive</title>
+
+  <meta
+    name="description"
+    content="A personal living archive of identity, thoughts, reading and becoming."
+  >
+
+  <style>
+    /* =====================================================
+       01. GLOBAL SETTINGS
+       ===================================================== */
+
+    :root {
+      --black: #050506;
+      --white: #e8e8e5;
+      --silver: #85858b;
+
+      --green: #416c49;
+      --green-light: #608a64;
+
+      --wine: #35151e;
+      --wine-light: #49202a;
+
+      --line: rgba(210, 215, 220, 0.15);
+      --line-soft: rgba(210, 215, 220, 0.075);
+
+      --ui-size: 10px;
+      --page-padding: 34px;
+
+      --mono:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        Menlo,
+        monospace;
+
+      --serif:
+        "Times New Roman",
+        "Noto Serif",
+        serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      min-height: 100%;
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: var(--ui-size);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      position: relative;
+      width: 100%;
+      min-width: 280px;
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: var(--black);
+    }
+
+    button,
+    a {
+      color: inherit;
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      border-radius: 0;
+      background: none;
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible {
+      outline: 1px solid var(--green-light);
+      outline-offset: 5px;
+    }
+
+    ::selection {
+      color: var(--white);
+      background: var(--wine-light);
+    }
+
+
+    /* =====================================================
+       02. BACKGROUND LAYERS
+       ===================================================== */
+
+    #space,
+    #grain,
+    .atmosphere,
+    .vignette {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #space {
+      z-index: 0;
+      display: block;
+    }
+
+    .atmosphere {
+      z-index: 1;
+      background:
+        radial-gradient(
+          ellipse at 52% 46%,
+          rgba(25, 36, 28, 0.12) 0%,
+          rgba(10, 13, 11, 0.07) 28%,
+          transparent 66%
+        );
+    }
+
+    #grain {
+      z-index: 2;
+      opacity: 0.075;
+      mix-blend-mode: screen;
+    }
+
+    .vignette {
+      z-index: 3;
+      background:
+        radial-gradient(
+          ellipse at center,
+          transparent 32%,
+          rgba(0, 0, 0, 0.23) 100%
+        );
+    }
+
+
+    /* =====================================================
+       03. HEADER
+       ===================================================== */
+
+    .site-header {
+      position: fixed;
+      z-index: 20;
+      top: 0;
+      left: 0;
+
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
+
+      width: 100%;
+      padding: var(--page-padding);
+
+      color: var(--silver);
+      font-size: var(--ui-size);
+      line-height: 1.7;
+      letter-spacing: 0.055em;
+    }
+
+    .brand {
+      justify-self: start;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+
+      color: var(--silver);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .brand-name {
+      color: var(--white);
+      letter-spacing: 0.14em;
+    }
+
+    .brand-note {
+      color: rgba(180, 180, 185, 0.48);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+    }
+
+    .main-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(14px, 2.1vw, 32px);
+
+      white-space: nowrap;
+    }
+
+    .nav-link {
+      position: relative;
+      padding: 0;
+
+      color: var(--silver);
+      font-size: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+
+      transition:
+        color 240ms ease,
+        opacity 240ms ease;
+    }
+
+    .nav-link::after {
+      content: "";
+
+      position: absolute;
+      right: 0;
+      bottom: -5px;
+      left: 0;
+
+      height: 1px;
+      background: var(--wine-light);
+
+      transform: scaleX(0);
+      transform-origin: left center;
+
+      transition: transform 240ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link[aria-expanded="true"] {
+      color: var(--white);
+    }
+
+    .nav-link:hover::after,
+    .nav-link[aria-expanded="true"]::after {
+      transform: scaleX(1);
+    }
+
+    .language-switch {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-button {
+      padding: 0;
+
+      color: rgba(180, 180, 185, 0.52);
+      font-size: inherit;
+      line-height: inherit;
+
+      transition: color 200ms ease;
+    }
+
+    .language-button:hover,
+    .language-button.active {
+      color: var(--white);
+    }
+
+    .language-divider {
+      color: rgba(180, 180, 185, 0.22);
+    }
+
+
+    /* =====================================================
+       04. HOME COMPOSITION
+       ===================================================== */
+
+    .home {
+      position: relative;
+      z-index: 5;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 100%;
+      height: 100vh;
+      height: 100svh;
+
+      min-height: 400px;
+      padding: 100px var(--page-padding) 90px;
+    }
+
+    .title-composition {
+      position: relative;
+
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+
+      width: min(460px, 72vw);
+      margin: 0 auto;
+
+      transform: translateY(-1vh);
+    }
+
+    /*
+      IMPORTANT:
+      Each word is explicitly a horizontal flex row.
+      writing-mode is explicitly horizontal.
+      white-space prevents letters from wrapping.
+    */
+
+    .title-word {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      width: max-content;
+      max-width: 100%;
+
+      white-space: nowrap;
+      writing-mode: horizontal-tb;
+
+      color: var(--green);
+
+      font-family: var(--mono);
+      font-size: var(--ui-size);
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+
+      text-transform: uppercase;
+
+      text-shadow:
+        0 0 5px rgba(65, 108, 73, 0.16);
+
+      will-change: transform;
+    }
+
+    .word-one {
+      align-self: flex-start;
+      margin-left: 24%;
+    }
+
+    .word-two {
+      align-self: flex-start;
+      margin-top: 18px;
+      margin-left: 39%;
+    }
+
+    .title-letter {
+      display: inline-block;
+      flex: 0 0 auto;
+
+      white-space: pre;
+      writing-mode: horizontal-tb;
+
+      transition:
+        color 260ms ease,
+        text-shadow 260ms ease,
+        transform 360ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .title-letter:hover {
+      color: var(--green-light);
+
+      text-shadow:
+        0 0 5px rgba(96, 138, 100, 0.4),
+        0 0 14px rgba(65, 108, 73, 0.15);
+    }
+
+    .title-letter.gap {
+      width: 0.36em;
+    }
+
+    .word-one .title-letter:nth-child(2) {
+      margin-right: 0.07em;
+    }
+
+    .word-one .title-letter:nth-child(4) {
+      margin-left: 0.05em;
+    }
+
+    .word-two .title-letter:nth-child(3) {
+      margin-right: 0.06em;
+    }
+
+    .word-two .title-letter:nth-child(6) {
+      margin-left: 0.05em;
+    }
+
+    .title-index {
+      position: absolute;
+      top: 50%;
+      left: 4%;
+
+      color: rgba(133, 133, 139, 0.34);
+      font-size: 9px;
+      letter-spacing: 0.08em;
+
+      transform: translateY(-50%);
+    }
+
+    .title-index::after {
+      content: "";
+      display: block;
+
+      width: 16px;
+      height: 1px;
+      margin-top: 8px;
+
+      background: rgba(133, 133, 139, 0.35);
+    }
+
+    .composition-mark {
+      position: absolute;
+      top: -30px;
+      right: 9%;
+
+      width: 4px;
+      height: 4px;
+
+      border-radius: 50%;
+      background: var(--wine-light);
+
+      box-shadow:
+        0 0 8px rgba(73, 32, 42, 0.3);
+    }
+
+
+    /* =====================================================
+       05. FOOTER
+       ===================================================== */
+
+    .site-footer {
+      position: fixed;
+      z-index: 10;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+
+      padding: 0 var(--page-padding) 28px;
+
+      color: rgba(133, 133, 139, 0.58);
+      font-size: 9px;
+      line-height: 1.7;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .footer-left,
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .footer-right {
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .footer-accent {
+      color: rgba(73, 32, 42, 0.85);
+    }
+
+
+    /* =====================================================
+       06. CONTENT PANELS
+       ===================================================== */
+
+    .panel-backdrop {
+      position: fixed;
+      z-index: 29;
+      inset: 0;
+
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+
+      opacity: 0;
+      visibility: hidden;
+
+      transition:
+        opacity 280ms ease,
+        visibility 280ms ease;
+    }
+
+    .panel-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .content-panel {
+      position: fixed;
+      z-index: 30;
+      top: 0;
+      right: 0;
+
+      width: min(500px, 100%);
+      height: 100vh;
+      height: 100dvh;
+
+      padding: 105px 42px 40px;
+
+      overflow-y: auto;
+
+      color: var(--white);
+      background: rgba(8, 8, 9, 0.96);
+
+      border-left: 1px solid var(--line-soft);
+
+      transform: translateX(102%);
+
+      transition:
+        transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .content-panel.open {
+      transform: translateX(0);
+    }
+
+    .panel-topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-number {
+      color: var(--green);
+      font-size: 9px;
+      letter-spacing: 0.12em;
+    }
+
+    .panel-close {
+      color: var(--silver);
+      font-size: 10px;
+      letter-spacing: 0.08em;
+
+      transition: color 200ms ease;
+    }
+
+    .panel-close:hover {
+      color: var(--wine-light);
+    }
+
+    .panel-title {
+      margin: 38px 0 20px;
+
+      color: var(--white);
+      font-family: var(--serif);
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+    }
+
+    .panel-description {
+      max-width: 340px;
+
+      color: var(--silver);
+      font-family: var(--serif);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .panel-rule {
+      width: 28px;
+      height: 1px;
+      margin: 34px 0;
+
+      background: var(--wine-light);
+    }
+
+    .panel-note {
+      color: rgba(133, 133, 139, 0.7);
+      font-size: 9px;
+      line-height: 1.9;
+      letter-spacing: 0.05em;
+    }
+
+
+    /* =====================================================
+       07. RESPONSIVE LAYOUT
+       ===================================================== */
+
+    @media (max-width: 900px) {
+      :root {
+        --page-padding: 22px;
+      }
+
+      .site-header {
+        grid-template-columns: auto 1fr auto;
+      }
+
+      .main-nav {
+        gap: 14px;
+      }
+
+      .brand-note {
+        display: none;
+      }
+
+      .title-composition {
+        width: min(400px, 80vw);
+      }
+    }
+
+    @media (max-width: 620px) {
+      :root {
+        --ui-size: 8px;
+        --page-padding: 16px;
+      }
+
+      .site-header {
+        grid-template-columns: 1fr auto;
+        row-gap: 24px;
+      }
+
+      .brand {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .language-switch {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .main-nav {
+        grid-column: 1 / -1;
+        grid-row: 2;
+
+        justify-content: space-between;
+        gap: 10px;
+
+        width: 100%;
+      }
+
+      .nav-link {
+        font-size: var(--ui-size);
+        letter-spacing: -0.035em;
+      }
+
+      .home {
+        padding-top: 120px;
+        padding-bottom: 80px;
+      }
+
+      .title-composition {
+        width: min(330px, 84vw);
+      }
+
+      .word-one {
+        margin-left: 18%;
+      }
+
+      .word-two {
+        margin-top: 15px;
+        margin-left: 32%;
+      }
+
+      .title-index {
+        left: 0;
+        font-size: 8px;
+      }
+
+      .site-footer {
+        padding-bottom: 18px;
+        font-size: 8px;
+      }
+
+      .content-panel {
+        padding: 115px 25px 35px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      :root {
+        --page-padding: 12px;
+      }
+
+      .main-nav {
+        gap: 7px;
+      }
+
+      .nav-link {
+        font-size: 7px;
+      }
+
+      .title-composition {
+        width: 90vw;
+      }
+
+      .word-one {
+        margin-left: 15%;
+      }
+
+      .word-two {
+        margin-left: 28%;
+      }
+    }
+
+
+    /* =====================================================
+       08. REDUCED MOTION
+       ===================================================== */
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<canvas id="space" aria-hidden="true"></canvas>
+  <!-- Background: stars and continuous traces -->
+  <canvas id="space" aria-hidden="true"></canvas>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <canvas id="grain" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
 
-<canvas id="grain" aria-hidden="true"></canvas>
 
-<div class="atmosphere"></div>
+  <!-- Header -->
+  <header class="site-header">
 
-<div class="vignette"></div>
+    <a class="brand" href="./" aria-label="Return to home">
+      <span class="brand-name">A Living Archive</span>
+      <span class="brand-note">Personal Index / 001</span>
+    </a>
 
-<header>
+    <nav class="main-nav" aria-label="Main navigation">
 
-  <button class="brand" id="homeButton">
+      <button
+        class="nav-link"
+        data-section="about"
+        aria-expanded="false"
+      >
+        About me
+      </button>
 
-    A LIVING ARCHIVE <span>/ 001</span>
+      <button
+        class="nav-link"
+        data-section="thoughts"
+        aria-expanded="false"
+      >
+        About what I think
+      </button>
 
-  </button>
+      <button
+        class="nav-link"
+        data-section="reading"
+        aria-expanded="false"
+      >
+        About what I read
+      </button>
 
-  <nav aria-label="Main navigation">
+      <button
+        class="nav-link"
+        data-section="wants"
+        aria-expanded="false"
+      >
+        About what I want
+      </button>
 
-    <a href="#about" data-section="about" data-i18n="navAbout">About me</a>
+    </nav>
 
-    <a href="#thoughts" data-section="thoughts" data-i18n="navThoughts">About what I think</a>
+    <div class="language-switch" aria-label="Language selection">
 
-    <a href="#reading" data-section="reading" data-i18n="navReading">About what I read</a>
+      <button class="language-button active" data-lang="en">
+        EN
+      </button>
 
-    <a href="#desire" data-section="desire" data-i18n="navDesire">About what I want</a>
+      <span class="language-divider">/</span>
 
-  </nav>
+      <button class="language-button" data-lang="zh">
+        中
+      </button>
 
-  <div class="languages" aria-label="Language selection">
+      <span class="language-divider">/</span>
 
-    <button data-lang="zh">中</button>
-
-    <button data-lang="en" class="active">EN</button>
-
-    <button data-lang="fr">FR</button>
-
-  </div>
-
-</header>
-
-<main id="home">
-
-  <section class="composition">
-
-    <div class="registration"></div>
-
-    <div class="cross cross-a"></div>
-
-    <div class="cross cross-b"></div>
-
-    <div class="label label-top" data-i18n="topLabel">
-
-      PERSONAL ARCHIVE<br>
-
-      <span class="accent">A WORK IN PROGRESS</span>
-
-    </div>
-
-    <div class="label label-right" data-i18n="rightLabel">
-
-      AN OPEN<br>SYSTEM
-
-    </div>
-
-    <div class="label label-left" data-i18n="leftLabel">
-
-      NOT FIXED.<br>NOT FINISHED.
-
-    </div>
-
-    <div class="label label-bottom" data-i18n="bottomLabel">
-
-      FORM / THOUGHT / BECOMING
+      <button class="language-button" data-lang="fr">
+        FR
+      </button>
 
     </div>
 
-    <div class="title-field">
+  </header>
 
-      <div class="word word-one" data-word="STILL"></div>
 
-      <div class="word word-two" data-word="BECOMING"></div>
+  <!-- Main home composition -->
+  <main class="home" id="home">
+
+    <div class="title-composition">
+
+      <span class="title-index" aria-hidden="true">01—04</span>
+      <span class="composition-mark" aria-hidden="true"></span>
+
+      <div
+        class="title-word word-one"
+        id="titleStill"
+        aria-label="Still"
+      >
+        <span class="title-letter">S</span>
+        <span class="title-letter">T</span>
+        <span class="title-letter">I</span>
+        <span class="title-letter">L</span>
+        <span class="title-letter">L</span>
+      </div>
+
+      <div
+        class="title-word word-two"
+        id="titleBecoming"
+        aria-label="Becoming"
+      >
+        <span class="title-letter">B</span>
+        <span class="title-letter">E</span>
+        <span class="title-letter">C</span>
+        <span class="title-letter">O</span>
+        <span class="title-letter">M</span>
+        <span class="title-letter">I</span>
+        <span class="title-letter">N</span>
+        <span class="title-letter">G</span>
+      </div>
 
     </div>
 
-  </section>
+  </main>
 
-</main>
 
-<footer>
+  <!-- Footer -->
+  <footer class="site-footer">
 
-  <div>
+    <div class="footer-left">
+      <span data-i18n="footerOne">AN ONGOING PROCESS</span>
+      <span class="footer-accent" data-i18n="footerTwo">
+        NOTHING IS FINISHED
+      </span>
+    </div>
 
-    <span class="status-dot"></span>
+    <div class="footer-right">
+      <span>SHENZHEN — EVERYWHERE</span>
+      <span id="yearLabel">© 2026</span>
+    </div>
 
-    <span data-i18n="status">SYSTEM EVOLVING</span><br>
+  </footer>
 
-    <span>26°N / 114°E</span>
 
-  </div>
+  <!-- Panel backdrop -->
+  <div class="panel-backdrop" id="panelBackdrop"></div>
 
-  <div class="footer-right">
 
-    <span data-i18n="footerTop">A PERSONAL UNIVERSE</span><br>
+  <!-- Independent content panel -->
+  <aside
+    class="content-panel"
+    id="contentPanel"
+    aria-hidden="true"
+    aria-labelledby="panelTitle"
+  >
 
-    © <span id="year"></span> — STILL IN PROCESS
+    <div class="panel-topline">
 
-  </div>
+      <span class="panel-number" id="panelNumber">
+        INDEX / 01
+      </span>
 
-</footer>
+      <button class="panel-close" id="panelClose">
+        CLOSE ×
+      </button>
 
-<section class="overlay" id="overlay" aria-hidden="true">
+    </div>
 
-  <div class="panel">
+    <h1 class="panel-title" id="panelTitle">
+      About me
+    </h1>
 
-    <div class="panel-index" id="panelIndex">ARCHIVE / 001</div>
+    <p class="panel-description" id="panelDescription">
+      A person is never a finished portrait.
+      This is a place to collect the fragments
+      that make up a life.
+    </p>
 
-    <h1 id="panelTitle">About me</h1>
+    <div class="panel-rule"></div>
 
-    <p id="panelDescription"></p>
+    <p class="panel-note" id="panelNote">
+      THIS SPACE IS STILL TAKING SHAPE.
+    </p>
 
-    <button class="close-panel" id="closePanel" data-i18n="back">
+  </aside>
 
-      ← Back to the beginning
 
-    </button>
+  <script>
+    /* =====================================================
+       01. LANGUAGE CONTENT
+       ===================================================== */
 
-  </div>
+    const translations = {
+      en: {
+        nav: [
+          "About me",
+          "About what I think",
+          "About what I read",
+          "About what I want"
+        ],
 
-</section>
+        footerOne: "AN ONGOING PROCESS",
+        footerTwo: "NOTHING IS FINISHED",
 
-<script>
+        close: "CLOSE ×",
 
-/* ========================================
+        sections: {
+          about: {
+            number: "INDEX / 01",
+            title: "About me",
+            description:
+              "A person is never a finished portrait. This is a place to collect the fragments that make up a life.",
+            note: "IDENTITY IS ALWAYS IN PROGRESS."
+          },
 
-   LANGUAGE CONTENT
+          thoughts: {
+            number: "INDEX / 02",
+            title: "About what I think",
+            description:
+              "Notes from an unfinished mind. Thoughts, questions and observations that may change as I do.",
+            note: "IDEAS ARE ALLOWED TO CHANGE."
+          },
 
-======================================== */
+          reading: {
+            number: "INDEX / 03",
+            title: "About what I read",
+            description:
+              "Books, essays, quotations and other things that stay with me long after I close the page.",
+            note: "A RECORD OF WHAT REMAINS."
+          },
 
-const translations = {
-
-  en: {
-
-    navAbout: "About me",
-
-    navThoughts: "About what I think",
-
-    navReading: "About what I read",
-
-    navDesire: "About what I want",
-
-    topLabel:
-
-      'PERSONAL ARCHIVE<br><span class="accent">A WORK IN PROGRESS</span>',
-
-    rightLabel: "AN OPEN<br>SYSTEM",
-
-    leftLabel: "NOT FIXED.<br>NOT FINISHED.",
-
-    bottomLabel: "FORM / THOUGHT / BECOMING",
-
-    status: "SYSTEM EVOLVING",
-
-    footerTop: "A PERSONAL UNIVERSE",
-
-    back: "← Back to the beginning",
-
-    sections: {
-
-      about: {
-
-        index: "ARCHIVE / 001",
-
-        title: "About me",
-
-        description:
-
-          "A collection of fragments, experiences and identities. Not a fixed portrait, but a self in continuous formation."
-
+          wants: {
+            number: "INDEX / 04",
+            title: "About what I want",
+            description:
+              "Desires, directions and possible futures. Not a fixed destination, but a map that keeps being redrawn.",
+            note: "THE FUTURE IS NOT A FINAL DRAFT."
+          }
+        }
       },
 
-      thoughts: {
+      zh: {
+        nav: [
+          "关于我",
+          "关于思考",
+          "关于阅读",
+          "关于想要"
+        ],
 
-        index: "ARCHIVE / 002",
+        footerOne: "一个持续进行的过程",
+        footerTwo: "一切尚未完成",
 
-        title: "About what I think",
+        close: "关闭 ×",
 
-        description:
+        sections: {
+          about: {
+            number: "索引 / 01",
+            title: "关于我",
+            description:
+              "一个人从来不是一幅已经完成的肖像。这里收集构成我的生活碎片、经历与变化。",
+            note: "关于自我的探索，仍在继续。"
+          },
 
-          "Notes on design, images, cities, culture and the quiet structures that shape the way we see the world."
+          thoughts: {
+            number: "索引 / 02",
+            title: "关于思考",
+            description:
+              "记录尚未定型的想法、问题与观察。它们可以随着时间改变，也可以彼此矛盾。",
+            note: "想法可以改变。"
+          },
 
+          reading: {
+            number: "索引 / 03",
+            title: "关于阅读",
+            description:
+              "书籍、文章、摘录，以及那些合上书页之后，仍然留在脑海里的东西。",
+            note: "记录那些留下来的内容。"
+          },
+
+          wants: {
+            number: "索引 / 04",
+            title: "关于想要",
+            description:
+              "愿望、方向与尚未发生的未来。这里不是一张固定的终点清单，而是一幅不断重绘的地图。",
+            note: "未来不是一份最终定稿。"
+          }
+        }
       },
 
-      reading: {
+      fr: {
+        nav: [
+          "À propos de moi",
+          "Mes pensées",
+          "Mes lectures",
+          "Mes envies"
+        ],
 
-        index: "ARCHIVE / 003",
+        footerOne: "UN PROCESSUS CONTINU",
+        footerTwo: "RIEN N'EST ACHEVÉ",
 
-        title: "About what I read",
+        close: "FERMER ×",
 
-        description:
+        sections: {
+          about: {
+            number: "INDEX / 01",
+            title: "À propos de moi",
+            description:
+              "Une personne n'est jamais un portrait achevé. Cet espace rassemble les fragments qui composent une vie.",
+            note: "L'IDENTITÉ EST EN MOUVEMENT."
+          },
 
-          "Books, essays, visual references and ideas that stay with me long after the last page."
+          thoughts: {
+            number: "INDEX / 02",
+            title: "Mes pensées",
+            description:
+              "Des notes issues d'un esprit en devenir : pensées, questions et observations susceptibles d'évoluer.",
+            note: "LES IDÉES PEUVENT CHANGER."
+          },
 
-      },
+          reading: {
+            number: "INDEX / 03",
+            title: "Mes lectures",
+            description:
+              "Des livres, des textes et des citations qui continuent de résonner après la dernière page.",
+            note: "UNE TRACE DE CE QUI RESTE."
+          },
 
-      desire: {
-
-        index: "ARCHIVE / 004",
-
-        title: "About what I want",
-
-        description:
-
-          "Unfinished ambitions, possible futures and things I have not yet found the words to describe."
-
+          wants: {
+            number: "INDEX / 04",
+            title: "Mes envies",
+            description:
+              "Des désirs, des directions et des futurs possibles. Non pas une destination fixe, mais une carte à redessiner.",
+            note: "LE FUTUR N'EST PAS UNE VERSION FINALE."
+          }
+        }
       }
+    };
 
-    }
 
-  },
+    /* =====================================================
+       02. LANGUAGE SWITCHING
+       ===================================================== */
 
-  zh: {
+    let currentLanguage = "en";
+    let activeSection = null;
 
-    navAbout: "关于我",
+    const navButtons = document.querySelectorAll(".nav-link");
+    const languageButtons = document.querySelectorAll(".language-button");
 
-    navThoughts: "关于思考",
+    const panel = document.getElementById("contentPanel");
+    const panelBackdrop = document.getElementById("panelBackdrop");
 
-    navReading: "关于阅读",
+    const panelNumber = document.getElementById("panelNumber");
+    const panelTitle = document.getElementById("panelTitle");
+    const panelDescription = document.getElementById("panelDescription");
+    const panelNote = document.getElementById("panelNote");
+    const panelClose = document.getElementById("panelClose");
 
-    navDesire: "关于渴望",
 
-    topLabel:
+    function setLanguage(language) {
+      if (!translations[language]) return;
 
-      '个人档案<br><span class="accent">持续生成中</span>',
+      currentLanguage = language;
 
-    rightLabel: "一个开放的<br>系统",
+      document.documentElement.lang =
+        language === "zh" ? "zh-CN" : language;
 
-    leftLabel: "未被定义。<br>尚未完成。",
+      languageButtons.forEach(button => {
+        const isActive = button.dataset.lang === language;
 
-    bottomLabel: "形式 / 思想 / 生成",
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
 
-    status: "系统持续演变",
+      navButtons.forEach((button, index) => {
+        button.textContent = translations[language].nav[index];
+      });
 
-    footerTop: "一个私人宇宙",
+      document.querySelector('[data-i18n="footerOne"]').textContent =
+        translations[language].footerOne;
 
-    back: "← 回到起点",
+      document.querySelector('[data-i18n="footerTwo"]').textContent =
+        translations[language].footerTwo;
 
-    sections: {
+      panelClose.textContent = translations[language].close;
 
-      about: {
-
-        index: "档案 / 001",
-
-        title: "关于我",
-
-        description:
-
-          "关于身份、经历与自我认知的片段。这不是一幅固定的肖像，而是一个仍在不断形成中的自我。"
-
-      },
-
-      thoughts: {
-
-        index: "档案 / 002",
-
-        title: "关于思考",
-
-        description:
-
-          "关于设计、图像、城市与文化的观察，以及那些悄然影响我们观看世界的结构。"
-
-      },
-
-      reading: {
-
-        index: "档案 / 003",
-
-        title: "关于阅读",
-
-        description:
-
-          "书籍、文章、视觉参考与那些在合上书页之后，仍然留在脑海里的想法。"
-
-      },
-
-      desire: {
-
-        index: "档案 / 004",
-
-        title: "关于渴望",
-
-        description:
-
-          "尚未完成的野心、仍有可能的未来，以及那些暂时还无法准确描述的事物。"
-
+      if (activeSection) {
+        renderPanel(activeSection);
       }
-
     }
 
-  },
 
-  fr: {
-
-    navAbout: "À propos de moi",
-
-    navThoughts: "Mes réflexions",
-
-    navReading: "Mes lectures",
-
-    navDesire: "Mes aspirations",
-
-    topLabel:
-
-      'ARCHIVE PERSONNELLE<br><span class="accent">EN COURS DE CRÉATION</span>',
-
-    rightLabel: "UN SYSTÈME<br>OUVERT",
-
-    leftLabel: "NON FIXÉE.<br>INACHEVÉE.",
-
-    bottomLabel: "FORME / PENSÉE / DEVENIR",
-
-    status: "SYSTÈME EN ÉVOLUTION",
-
-    footerTop: "UN UNIVERS PERSONNEL",
-
-    back: "← Retour au commencement",
-
-    sections: {
-
-      about: {
-
-        index: "ARCHIVE / 001",
-
-        title: "À propos de moi",
-
-        description:
-
-          "Des fragments d'identité, d'expériences et de perceptions. Non pas un portrait figé, mais un être en formation continue."
-
-      },
-
-      thoughts: {
-
-        index: "ARCHIVE / 002",
-
-        title: "Mes réflexions",
-
-        description:
-
-          "Des notes sur le design, les images, les villes et la culture, ainsi que sur les structures discrètes qui façonnent notre regard."
-
-      },
-
-      reading: {
-
-        index: "ARCHIVE / 003",
-
-        title: "Mes lectures",
-
-        description:
-
-          "Des livres, des essais, des références visuelles et des idées qui persistent bien après la dernière page."
-
-      },
-
-      desire: {
-
-        index: "ARCHIVE / 004",
-
-        title: "Mes aspirations",
-
-        description:
-
-          "Des ambitions inachevées, des futurs possibles et des choses que je ne sais pas encore décrire avec précision."
-
-      }
-
-    }
-
-  }
-
-};
-
-let currentLanguage = "en";
-
-let activeSection = null;
-
-function setLanguage(language) {
-
-  currentLanguage = language;
-
-  document.documentElement.lang =
-
-    language === "zh" ? "zh-CN" : language;
-
-  document.querySelectorAll("[data-i18n]").forEach(element => {
-
-    const key = element.dataset.i18n;
-
-    const value = translations[language][key];
-
-    if (value !== undefined) {
-
-      element.innerHTML = value;
-
-    }
-
-  });
-
-  document.querySelectorAll("[data-lang]").forEach(button => {
-
-    button.classList.toggle(
-
-      "active",
-
-      button.dataset.lang === language
-
-    );
-
-  });
-
-  if (activeSection) {
-
-    openSection(activeSection);
-
-  }
-
-}
-
-document.querySelectorAll("[data-lang]").forEach(button => {
-
-  button.addEventListener("click", () => {
-
-    setLanguage(button.dataset.lang);
-
-  });
-
-});
-
-/* ========================================
-
-   TYPOGRAPHIC INTERACTION
-
-======================================== */
-
-const words = document.querySelectorAll(".word");
-
-const letters = [];
-
-const reducedMotion = window.matchMedia(
-
-  "(prefers-reduced-motion: reduce)"
-
-).matches;
-
-words.forEach(word => {
-
-  [...word.dataset.word].forEach((character, index) => {
-
-    const span = document.createElement("span");
-
-    span.className = "letter";
-
-    span.textContent = character;
-
-    const seed =
-
-      (index + 1) * 1.73 +
-
-      word.dataset.word.length * .41;
-
-    const rotation = Math.sin(seed) * 2.2;
-
-    const driftX = Math.sin(seed * 1.4) * 1.3;
-
-    const driftY = Math.cos(seed * 1.8) * 1.1;
-
-    span.style.transform =
-
-      `translate(${driftX}px, ${driftY}px) rotate(${rotation}deg)`;
-
-    word.appendChild(span);
-
-    letters.push({
-
-      element: span,
-
-      rotation,
-
-      driftX,
-
-      driftY,
-
-      phase: seed
-
+    languageButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        setLanguage(button.dataset.lang);
+      });
     });
 
-  });
 
-});
+    /* =====================================================
+       03. NAVIGATION PANELS
+       ===================================================== */
 
-let mouseX = -1000;
+    function renderPanel(sectionKey) {
+      const section =
+        translations[currentLanguage].sections[sectionKey];
 
-let mouseY = -1000;
+      if (!section) return;
 
-let smoothMouseX = -1000;
-
-let smoothMouseY = -1000;
-
-window.addEventListener("pointermove", event => {
-
-  mouseX = event.clientX;
-
-  mouseY = event.clientY;
-
-}, { passive: true });
-
-window.addEventListener("pointerleave", () => {
-
-  mouseX = -1000;
-
-  mouseY = -1000;
-
-});
-
-function animateLetters(time) {
-
-  smoothMouseX += (mouseX - smoothMouseX) * .08;
-
-  smoothMouseY += (mouseY - smoothMouseY) * .08;
-
-  letters.forEach(letter => {
-
-    const rect = letter.element.getBoundingClientRect();
-
-    const centerX = rect.left + rect.width / 2;
-
-    const centerY = rect.top + rect.height / 2;
-
-    const dx = centerX - smoothMouseX;
-
-    const dy = centerY - smoothMouseY;
-
-    const distance = Math.sqrt(dx * dx + dy * dy);
-
-    let pushX = 0;
-
-    let pushY = 0;
-
-    let pushRotation = 0;
-
-    if (!reducedMotion && distance < 150) {
-
-      const force = (150 - distance) / 150;
-
-      pushX = dx / (distance || 1) * force * 5;
-
-      pushY = dy / (distance || 1) * force * 4;
-
-      pushRotation = dx / 150 * force * 2.2;
-
+      panelNumber.textContent = section.number;
+      panelTitle.textContent = section.title;
+      panelDescription.textContent = section.description;
+      panelNote.textContent = section.note;
     }
 
-    const breathingX = reducedMotion
 
-      ? 0
+    function openPanel(sectionKey) {
+      activeSection = sectionKey;
 
-      : Math.sin(time * .00045 + letter.phase) * .6;
+      renderPanel(sectionKey);
 
-    const breathingY = reducedMotion
+      panel.classList.add("open");
+      panelBackdrop.classList.add("open");
 
-      ? 0
+      panel.setAttribute("aria-hidden", "false");
 
-      : Math.cos(time * .0004 + letter.phase) * .5;
+      navButtons.forEach(button => {
+        const active = button.dataset.section === sectionKey;
 
-    letter.element.style.transform = `
+        button.setAttribute("aria-expanded", String(active));
+      });
 
-      translate(
+      document.body.style.overflow = "hidden";
+    }
 
-        ${letter.driftX + pushX + breathingX}px,
 
-        ${letter.driftY + pushY + breathingY}px
+    function closePanel() {
+      activeSection = null;
 
-      )
+      panel.classList.remove("open");
+      panelBackdrop.classList.remove("open");
 
-      rotate(${letter.rotation + pushRotation}deg)
+      panel.setAttribute("aria-hidden", "true");
 
-    `;
+      navButtons.forEach(button => {
+        button.setAttribute("aria-expanded", "false");
+      });
 
-  });
+      document.body.style.overflow = "";
+    }
 
-  requestAnimationFrame(animateLetters);
 
-}
+    navButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        const sectionKey = button.dataset.section;
 
-requestAnimationFrame(animateLetters);
-
-/* ========================================
-
-   RESTRAINED COSMIC BACKGROUND
-
-======================================== */
-
-const canvas = document.getElementById("space");
-
-const ctx = canvas.getContext("2d");
-
-let width = 0;
-
-let height = 0;
-
-let dpr = 1;
-
-let paths = [];
-
-let stars = [];
-
-function randomGenerator(seed) {
-
-  let state = seed >>> 0;
-
-  return function() {
-
-    state = (state * 1664525 + 1013904223) >>> 0;
-
-    return state / 4294967296;
-
-  };
-
-}
-
-function buildSpace() {
-
-  const random = randomGenerator(20000907);
-
-  paths = [];
-
-  stars = [];
-
-  /* Fewer lines, with longer quiet intervals */
-
-  const lineCount = Math.max(
-
-    18,
-
-    Math.min(34, Math.floor(width / 42))
-
-  );
-
-  for (let i = 0; i < lineCount; i++) {
-
-    const startX = random() * width;
-
-    const startY = random() * height;
-
-    const length = width * (.18 + random() * .45);
-
-    const direction = random() > .5 ? 1 : -1;
-
-    const bend = (random() - .5) * height * .22;
-
-    paths.push({
-
-      x: startX,
-
-      y: startY,
-
-      length,
-
-      direction,
-
-      bend,
-
-      opacity: .045 + random() * .13,
-
-      lineWidth: .35 + random() * .3,
-
-      phase: random() * Math.PI * 2,
-
-      drift: (random() - .5) * 3,
-
-      curve: random() > .5
-
+        if (activeSection === sectionKey) {
+          closePanel();
+        } else {
+          openPanel(sectionKey);
+        }
+      });
     });
 
-  }
 
-  /* Sparse, dim points */
+    panelClose.addEventListener("click", closePanel);
+    panelBackdrop.addEventListener("click", closePanel);
 
-  const starCount = Math.floor(width * height / 13000);
-
-  for (let i = 0; i < starCount; i++) {
-
-    stars.push({
-
-      x: random() * width,
-
-      y: random() * height,
-
-      radius: .15 + random() * .45,
-
-      opacity: .08 + random() * .28
-
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closePanel();
+      }
     });
 
-  }
 
-}
+    /* =====================================================
+       04. SUBTLE LETTER INTERACTION
+       ===================================================== */
 
-function resizeSpace() {
+    const titleLetters =
+      document.querySelectorAll(".title-letter");
 
-  width = window.innerWidth;
+    const prefersReducedMotion =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  height = window.innerHeight;
+    if (!prefersReducedMotion && window.matchMedia("(hover: hover)").matches) {
+      titleLetters.forEach((letter, index) => {
+        letter.addEventListener("pointermove", event => {
+          const rect = letter.getBoundingClientRect();
 
-  dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const x =
+            (event.clientX - rect.left) / rect.width - 0.5;
 
-  canvas.width = Math.round(width * dpr);
+          const y =
+            (event.clientY - rect.top) / rect.height - 0.5;
 
-  canvas.height = Math.round(height * dpr);
+          letter.style.transform =
+            `translate(${x * 3}px, ${y * 2}px)`;
+        });
 
-  canvas.style.width = width + "px";
+        letter.addEventListener("pointerleave", () => {
+          letter.style.transform = "";
+        });
+      });
+    }
 
-  canvas.style.height = height + "px";
 
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    /* =====================================================
+       05. COSMIC BACKGROUND
+       Sparse continuous lines and restrained light points.
+       ===================================================== */
 
-  buildSpace();
+    const spaceCanvas = document.getElementById("space");
+    const spaceContext = spaceCanvas.getContext("2d");
 
-  drawSpace(0);
+    let width = 0;
+    let height = 0;
+    let pixelRatio = 1;
 
-}
+    let stars = [];
+    let paths = [];
 
-function drawSpace(time) {
+    let pointerX = 0;
+    let pointerY = 0;
 
-  ctx.clearRect(0, 0, width, height);
+    let targetPointerX = 0;
+    let targetPointerY = 0;
 
-  /* Quiet points in the distance */
 
-  stars.forEach(star => {
+    function seededRandom(seed) {
+      let value = seed >>> 0;
 
-    ctx.beginPath();
+      return function () {
+        value = (value * 1664525 + 1013904223) >>> 0;
+        return value / 4294967296;
+      };
+    }
 
-    ctx.arc(
 
-      star.x,
+    function resizeSpace() {
+      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
-      star.y,
+      width = window.innerWidth;
+      height = window.innerHeight;
 
-      star.radius,
+      spaceCanvas.width = Math.round(width * pixelRatio);
+      spaceCanvas.height = Math.round(height * pixelRatio);
 
-      0,
+      spaceCanvas.style.width = width + "px";
+      spaceCanvas.style.height = height + "px";
 
-      Math.PI * 2
-
-    );
-
-    ctx.fillStyle =
-
-      `rgba(230,232,235,${star.opacity})`;
-
-    ctx.fill();
-
-  });
-
-  /* A small number of fine, continuous spatial traces */
-
-  paths.forEach(path => {
-
-    const movement = reducedMotion
-
-      ? 0
-
-      : Math.sin(time * .00013 + path.phase) * path.drift;
-
-    const x1 = path.x;
-
-    const y1 = path.y + movement;
-
-    const x2 = path.x + path.direction * path.length;
-
-    const y2 = path.y + path.bend + movement;
-
-    ctx.save();
-
-    ctx.beginPath();
-
-    ctx.moveTo(x1, y1);
-
-    if (path.curve) {
-
-      const controlX =
-
-        (x1 + x2) / 2 + Math.sin(path.phase) * 30;
-
-      const controlY =
-
-        (y1 + y2) / 2 + path.bend * .25;
-
-      ctx.quadraticCurveTo(
-
-        controlX,
-
-        controlY,
-
-        x2,
-
-        y2
-
+      spaceContext.setTransform(
+        pixelRatio, 0, 0, pixelRatio, 0, 0
       );
 
-    } else {
-
-      ctx.lineTo(x2, y2);
-
+      createSpace();
+      drawSpace();
     }
 
-    ctx.strokeStyle =
 
-      `rgba(225,228,233,${path.opacity})`;
+    function createSpace() {
+      const random = seededRandom(20261105);
 
-    ctx.lineWidth = path.lineWidth;
+      stars = [];
+      paths = [];
 
-    ctx.stroke();
+      const starCount = Math.min(
+        85,
+        Math.max(35, Math.floor(width * height / 16000))
+      );
 
-    ctx.restore();
+      for (let i = 0; i < starCount; i++) {
+        stars.push({
+          x: random() * width,
+          y: random() * height,
+          r: random() * 0.8 + 0.2,
+          alpha: random() * 0.32 + 0.08
+        });
+      }
 
-  });
+      /*
+        A small number of continuous trajectories.
+        These are curves, not dotted or dashed lines.
+      */
 
-  /* Very subtle cursor atmosphere */
+      const pathCount = width < 620 ? 5 : 8;
 
-  if (!reducedMotion && mouseX > 0 && mouseY > 0) {
+      for (let i = 0; i < pathCount; i++) {
+        const startX = random() * width;
+        const startY = random() * height;
 
-    const radius = 180;
+        const reach = width * (0.16 + random() * 0.28);
+        const rise = height * (0.06 + random() * 0.14);
 
-    const glow = ctx.createRadialGradient(
+        paths.push({
+          x1: startX,
+          y1: startY,
 
-      mouseX,
+          c1x: startX + reach * 0.25,
+          c1y: startY - rise,
+
+          c2x: startX + reach * 0.65,
+          c2y: startY + rise * 0.3,
 
-      mouseY,
+          x2: startX + reach,
+          y2: startY + rise * 0.55,
 
-      0,
+          alpha: 0.045 + random() * 0.055
+        });
+      }
+    }
 
-      mouseX,
 
-      mouseY,
+    function drawSpace() {
+      spaceContext.clearRect(0, 0, width, height);
 
-      radius
+      const shiftX = pointerX * 5;
+      const shiftY = pointerY * 4;
 
-    );
+      /*
+        Continuous silver-white trajectories.
+      */
 
-    glow.addColorStop(
+      paths.forEach(path => {
+        spaceContext.beginPath();
 
-      0,
+        spaceContext.moveTo(
+          path.x1 + shiftX,
+          path.y1 + shiftY
+        );
 
-      "rgba(65,108,73,.025)"
+        spaceContext.bezierCurveTo(
+          path.c1x + shiftX,
+          path.c1y + shiftY,
+          path.c2x + shiftX,
+          path.c2y + shiftY,
+          path.x2 + shiftX,
+          path.y2 + shiftY
+        );
 
-    );
+        spaceContext.strokeStyle =
+          `rgba(190, 198, 200, ${path.alpha})`;
 
-    glow.addColorStop(
+        spaceContext.lineWidth = 0.65;
+        spaceContext.stroke();
+      });
 
-      1,
 
-      "rgba(65,108,73,0)"
+      /*
+        Sparse, subtle points.
+      */
 
-    );
+      stars.forEach(star => {
+        spaceContext.beginPath();
 
-    ctx.fillStyle = glow;
+        spaceContext.arc(
+          star.x + shiftX * 0.3,
+          star.y + shiftY * 0.3,
+          star.r,
+          0,
+          Math.PI * 2
+        );
 
-    ctx.fillRect(
+        spaceContext.fillStyle =
+          `rgba(220, 224, 224, ${star.alpha})`;
 
-      mouseX - radius,
+        spaceContext.fill();
+      });
 
-      mouseY - radius,
 
-      radius * 2,
+      /*
+        A few understated reference points.
+      */
 
-      radius * 2
+      if (width > 600) {
+        const marks = [
+          [width * 0.19, height * 0.31],
+          [width * 0.78, height * 0.68],
+          [width * 0.68, height * 0.24]
+        ];
 
-    );
+        marks.forEach((point, index) => {
+          spaceContext.beginPath();
 
-  }
+          spaceContext.arc(
+            point[0],
+            point[1],
+            index === 1 ? 1.3 : 0.8,
+            0,
+            Math.PI * 2
+          );
 
-}
+          spaceContext.fillStyle =
+            index === 1
+              ? "rgba(73, 32, 42, 0.65)"
+              : "rgba(180, 190, 190, 0.32)";
 
-function animateSpace(time) {
+          spaceContext.fill();
+        });
+      }
+    }
 
-  drawSpace(time);
 
-  if (!reducedMotion) {
+    window.addEventListener("pointermove", event => {
+      if (prefersReducedMotion) return;
 
-    requestAnimationFrame(animateSpace);
+      targetPointerX =
+        (event.clientX / window.innerWidth - 0.5) * 2;
 
-  }
+      targetPointerY =
+        (event.clientY / window.innerHeight - 0.5) * 2;
+    });
 
-}
 
-window.addEventListener("resize", resizeSpace);
+    function animateSpace() {
+      if (!prefersReducedMotion) {
+        pointerX += (targetPointerX - pointerX) * 0.025;
+        pointerY += (targetPointerY - pointerY) * 0.025;
 
-resizeSpace();
+        drawSpace();
+        requestAnimationFrame(animateSpace);
+      }
+    }
 
-if (!reducedMotion) {
 
-  requestAnimationFrame(animateSpace);
+    window.addEventListener("resize", resizeSpace);
 
-}
+    resizeSpace();
 
-/* ========================================
+    if (!prefersReducedMotion) {
+      requestAnimationFrame(animateSpace);
+    }
 
-   SOFT FILM GRAIN
 
-======================================== */
+    /* =====================================================
+       06. SOFT FILM GRAIN
+       Grain is separate from the continuous background lines.
+       ===================================================== */
 
-const grainCanvas = document.getElementById("grain");
+    const grainCanvas = document.getElementById("grain");
+    const grainContext = grainCanvas.getContext("2d");
 
-const grainCtx = grainCanvas.getContext("2d");
+    let grainTimer = null;
 
-function resizeGrain() {
 
-  grainCanvas.width = Math.max(
+    function resizeGrain() {
+      const grainScale = 0.35;
 
-    1,
+      grainCanvas.width = Math.max(
+        1,
+        Math.floor(window.innerWidth * grainScale)
+      );
 
-    Math.ceil(window.innerWidth / 3)
+      grainCanvas.height = Math.max(
+        1,
+        Math.floor(window.innerHeight * grainScale)
+      );
 
-  );
+      grainCanvas.style.width = "100%";
+      grainCanvas.style.height = "100%";
 
-  grainCanvas.height = Math.max(
+      drawGrain();
+    }
 
-    1,
 
-    Math.ceil(window.innerHeight / 3)
+    function drawGrain() {
+      const imageData = grainContext.createImageData(
+        grainCanvas.width,
+        grainCanvas.height
+      );
 
-  );
+      const data = imageData.data;
 
-  grainCanvas.style.width = window.innerWidth + "px";
+      for (let i = 0; i < data.length; i += 4) {
+        const value = Math.random() * 255;
 
-  grainCanvas.style.height = window.innerHeight + "px";
+        data[i] = value;
+        data[i + 1] = value;
+        data[i + 2] = value;
 
-}
+        /*
+          Very low alpha creates a soft texture,
+          not visible dots or dashed lines.
+        */
 
-function drawGrain() {
+        data[i + 3] = Math.random() * 18;
+      }
 
-  const imageData = grainCtx.createImageData(
+      grainContext.putImageData(imageData, 0, 0);
+    }
 
-    grainCanvas.width,
 
-    grainCanvas.height
+    function startGrain() {
+      if (grainTimer) {
+        clearInterval(grainTimer);
+      }
 
-  );
+      if (!prefersReducedMotion) {
+        grainTimer = setInterval(drawGrain, 220);
+      }
+    }
 
-  const data = imageData.data;
 
-  for (let i = 0; i < data.length; i += 4) {
+    window.addEventListener("resize", resizeGrain);
 
-    const value = Math.random() * 255;
+    resizeGrain();
+    startGrain();
 
-    data[i] = value;
 
-    data[i + 1] = value;
+    /* =====================================================
+       07. INITIALIZATION
+       ===================================================== */
 
-    data[i + 2] = value;
+    document.getElementById("yearLabel").textContent =
+      "© " + new Date().getFullYear();
 
-    /* Transparent noise: texture rather than dotted lines */
+    setLanguage("en");
 
-    data[i + 3] = Math.random() * 20;
-
-  }
-
-  grainCtx.putImageData(imageData, 0, 0);
-
-}
-
-resizeGrain();
-
-drawGrain();
-
-let grainTimer;
-
-function animateGrain() {
-
-  drawGrain();
-
-  if (!reducedMotion) {
-
-    grainTimer = setTimeout(() => {
-
-      requestAnimationFrame(animateGrain);
-
-    }, 240);
-
-  }
-
-}
-
-if (!reducedMotion) {
-
-  animateGrain();
-
-}
-
-window.addEventListener("resize", () => {
-
-  resizeGrain();
-
-  drawGrain();
-
-});
-
-/* ========================================
-
-   NAVIGATION
-
-======================================== */
-
-const overlay = document.getElementById("overlay");
-
-const panelIndex = document.getElementById("panelIndex");
-
-const panelTitle = document.getElementById("panelTitle");
-
-const panelDescription = document.getElementById("panelDescription");
-
-function openSection(section) {
-
-  const content = translations[currentLanguage].sections[section];
-
-  if (!content) return;
-
-  activeSection = section;
-
-  panelIndex.textContent = content.index;
-
-  panelTitle.textContent = content.title;
-
-  panelDescription.textContent = content.description;
-
-  overlay.classList.add("open");
-
-  overlay.setAttribute("aria-hidden", "false");
-
-  document.querySelectorAll("nav a").forEach(link => {
-
-    link.classList.toggle(
-
-      "active",
-
-      link.dataset.section === section
-
-    );
-
-  });
-
-  history.replaceState(null, "", "#" + section);
-
-}
-
-function closeSection() {
-
-  activeSection = null;
-
-  overlay.classList.remove("open");
-
-  overlay.setAttribute("aria-hidden", "true");
-
-  document.querySelectorAll("nav a").forEach(link => {
-
-    link.classList.remove("active");
-
-  });
-
-  history.replaceState(
-
-    null,
-
-    "",
-
-    window.location.pathname + window.location.search
-
-  );
-
-}
-
-document.querySelectorAll("nav a").forEach(link => {
-
-  link.addEventListener("click", event => {
-
-    event.preventDefault();
-
-    openSection(link.dataset.section);
-
-  });
-
-});
-
-document.getElementById("homeButton").addEventListener(
-
-  "click",
-
-  closeSection
-
-);
-
-document.getElementById("closePanel").addEventListener(
-
-  "click",
-
-  closeSection
-
-);
-
-document.addEventListener("keydown", event => {
-
-  if (event.key === "Escape") {
-
-    closeSection();
-
-  }
-
-});
-
-overlay.addEventListener("click", event => {
-
-  if (event.target === overlay) {
-
-    closeSection();
-
-  }
-
-});
-
-/* ========================================
-
-   INITIALIZATION
-
-======================================== */
-
-document.getElementById("year").textContent =
-
-  new Date().getFullYear();
-
-setLanguage("en");
-
-</script>
+  </script>
 
 </body>
-
 </html>
