@@ -18,17 +18,17 @@
 
   --black: #070709;
 
-  --black-soft: #0d0d10;
-
   --white: #efefed;
 
   --silver: #85858d;
 
-  --silver-dim: #414149;
-
   --wine: #a02d49;
 
   --wine-light: #d14a67;
+
+  --green: #70ff91;
+
+  --green-bright: #c5ffd3;
 
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
@@ -116,11 +116,11 @@ a:focus-visible {
 
 }
 
-/* =================================
+/* =====================================
 
-   BACKGROUND UNIVERSE
+   BACKGROUND: DIGITAL UNIVERSE
 
-================================= */
+===================================== */
 
 #universe {
 
@@ -156,9 +156,9 @@ a:focus-visible {
 
       ellipse at 50% 48%,
 
-      rgba(43, 43, 52, 0.15) 0%,
+      rgba(43, 43, 52, 0.15),
 
-      rgba(7, 7, 9, 0) 58%
+      transparent 58%
 
     ),
 
@@ -166,7 +166,7 @@ a:focus-visible {
 
       ellipse at 82% 75%,
 
-      rgba(91, 23, 43, 0.07) 0%,
+      rgba(91, 23, 43, 0.07),
 
       transparent 42%
 
@@ -188,11 +188,11 @@ a:focus-visible {
 
 }
 
-/* =================================
+/* =====================================
 
    HEADER
 
-================================= */
+===================================== */
 
 .header {
 
@@ -414,11 +414,11 @@ a:focus-visible {
 
 }
 
-/* =================================
+/* =====================================
 
    HOMEPAGE
 
-================================= */
+===================================== */
 
 .home {
 
@@ -431,12 +431,6 @@ a:focus-visible {
   height: 100%;
 
   min-height: 500px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
 
   overflow: hidden;
 
@@ -464,7 +458,139 @@ a:focus-visible {
 
 }
 
-/* Fine coordinate marks */
+.composition {
+
+  position: absolute;
+
+  top: 48%;
+
+  left: 50%;
+
+  width: min(100%, 1250px);
+
+  height: min(64vh, 570px);
+
+  transform: translate(-50%, -50%);
+
+}
+
+.axis {
+
+  position: absolute;
+
+  top: 17%;
+
+  left: 50%;
+
+  width: 1px;
+
+  height: 65%;
+
+  background: linear-gradient(
+
+    to bottom,
+
+    transparent,
+
+    rgba(180, 180, 190, 0.12),
+
+    transparent
+
+  );
+
+  pointer-events: none;
+
+}
+
+.hero-kicker {
+
+  position: absolute;
+
+  top: 5%;
+
+  left: 13%;
+
+  color: #888890;
+
+  font: 9px/1.8 var(--mono);
+
+  letter-spacing: 0.16em;
+
+  text-transform: uppercase;
+
+  animation: fadeIn 1.3s ease both;
+
+}
+
+.hero-kicker span {
+
+  color: var(--wine-light);
+
+}
+
+.hero-subnote {
+
+  position: absolute;
+
+  right: 10%;
+
+  top: 13%;
+
+  max-width: 135px;
+
+  color: #66666f;
+
+  font: 9px/1.9 var(--mono);
+
+  letter-spacing: 0.05em;
+
+  text-align: right;
+
+  animation: fadeIn 1.8s ease both;
+
+}
+
+.hero-subnote strong {
+
+  display: block;
+
+  color: #b7b7bd;
+
+  font-weight: 400;
+
+}
+
+.side-note {
+
+  position: absolute;
+
+  top: 49%;
+
+  color: #55555e;
+
+  font: 8px/1.8 var(--mono);
+
+  letter-spacing: 0.1em;
+
+  writing-mode: vertical-rl;
+
+  pointer-events: none;
+
+}
+
+.side-note.left {
+
+  left: 4%;
+
+  transform: rotate(180deg);
+
+}
+
+.side-note.right {
+
+  right: 4%;
+
+}
 
 .coordinates {
 
@@ -542,83 +668,35 @@ a:focus-visible {
 
 }
 
-/* Main composition */
+@keyframes fadeIn {
 
-.composition {
+  from {
 
-  position: absolute;
+    opacity: 0;
 
-  top: 48%;
+    transform: translateY(6px);
 
-  left: 50%;
+  }
 
-  width: min(100%, 1250px);
+  to {
 
-  height: min(64vh, 570px);
+    opacity: 1;
 
-  transform: translate(-50%, -50%);
+    transform: translateY(0);
 
-}
-
-.hero-kicker {
-
-  position: absolute;
-
-  top: 5%;
-
-  left: 13%;
-
-  color: #888890;
-
-  font: 9px/1.8 var(--mono);
-
-  letter-spacing: 0.16em;
-
-  text-transform: uppercase;
-
-  animation: fadeIn 1.3s ease both;
+  }
 
 }
 
-.hero-kicker span {
+/* =====================================
 
-  color: var(--wine-light);
+   THEME: STILL BECOMING
 
-}
+   Small green code characters.
 
-.hero-subnote {
+   Each letter moves independently.
 
-  position: absolute;
-
-  right: 10%;
-
-  top: 13%;
-
-  max-width: 135px;
-
-  color: #66666f;
-
-  font: 9px/1.9 var(--mono);
-
-  letter-spacing: 0.05em;
-
-  text-align: right;
-
-  animation: fadeIn 1.8s ease both;
-
-}
-
-.hero-subnote strong {
-
-  display: block;
-
-  color: #b7b7bd;
-
-  font-weight: 400;
-
-}
-
-/* Each character is an independent element */
+===================================== */
 
 .letter-field {
 
@@ -636,81 +714,57 @@ a:focus-visible {
 
   display: inline-block;
 
-  color: var(--white);
-
-  font-family: var(--serif);
-
-  font-weight: 400;
-
-  line-height: 0.8;
-
-  letter-spacing: -0.09em;
-
   user-select: none;
 
   will-change: transform;
 
   transform-origin: center;
 
-  transition:
-
-    color 0.4s ease,
-
-    text-shadow 0.4s ease;
-
-  animation: letterAppear 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation: letterAppear 1.1s ease both;
 
 }
 
-.letter:hover {
+/* Only the theme letters are green. */
 
-  color: var(--wine-light);
+.code-letter {
 
-  text-shadow: 0 0 35px rgba(209, 74, 103, 0.24);
-
-}
-
-.letter.serif-outline {
-
-  color: transparent;
-
-  -webkit-text-stroke: 1px rgba(215, 215, 220, 0.66);
-
-}
-
-.letter.serif-outline:hover {
-
-  color: var(--wine-light);
-
-  -webkit-text-stroke-color: var(--wine-light);
-
-}
-
-.letter.wine {
-
-  color: var(--wine-light);
-
-}
-
-.letter.tiny {
+  color: var(--green);
 
   font-family: var(--mono);
 
-  font-size: 10px;
+  font-size: 12px;
 
   font-weight: 400;
 
-  letter-spacing: 0.08em;
+  line-height: 1;
 
-  color: #777780;
+  letter-spacing: 0.02em;
 
-  line-height: 1.5;
+  text-shadow:
+
+    0 0 5px rgba(75, 255, 120, 0.3),
+
+    0 0 14px rgba(75, 255, 120, 0.1);
+
+  transition:
+
+    color 0.3s ease,
+
+    text-shadow 0.3s ease;
+
+  cursor: default;
 
 }
 
-.letter.tiny.wine {
+.code-letter:hover {
 
-  color: var(--wine-light);
+  color: var(--green-bright);
+
+  text-shadow:
+
+    0 0 8px rgba(100, 255, 140, 0.8),
+
+    0 0 22px rgba(100, 255, 140, 0.4);
 
 }
 
@@ -720,7 +774,7 @@ a:focus-visible {
 
     opacity: 0;
 
-    filter: blur(8px);
+    filter: blur(5px);
 
   }
 
@@ -734,7 +788,35 @@ a:focus-visible {
 
 }
 
-/* Thin graphic connections */
+/* Original small annotations keep their original colors. */
+
+.letter.tiny {
+
+  color: #777780;
+
+  font-family: var(--mono);
+
+  font-size: 10px;
+
+  font-weight: 400;
+
+  letter-spacing: 0.08em;
+
+  line-height: 1.5;
+
+  text-shadow: none;
+
+  pointer-events: none;
+
+}
+
+.letter.tiny.wine {
+
+  color: var(--wine-light);
+
+}
+
+/* Fine technical connections */
 
 .graphic-line {
 
@@ -776,73 +858,29 @@ a:focus-visible {
 
 }
 
-/* Subtle center axis */
+@media (prefers-reduced-motion: reduce) {
 
-.axis {
+  *,
 
-  position: absolute;
+  *::before,
 
-  top: 17%;
+  *::after {
 
-  left: 50%;
+    animation-duration: 0.01ms !important;
 
-  width: 1px;
+    animation-iteration-count: 1 !important;
 
-  height: 65%;
+    transition-duration: 0.01ms !important;
 
-  background: linear-gradient(
-
-    to bottom,
-
-    transparent,
-
-    rgba(180, 180, 190, 0.12),
-
-    transparent
-
-  );
-
-  pointer-events: none;
+  }
 
 }
 
-/* Side annotations */
+/* =====================================
 
-.side-note {
+   FULL-SCREEN SECTION VIEWS
 
-  position: absolute;
-
-  top: 49%;
-
-  color: #55555e;
-
-  font: 8px/1.8 var(--mono);
-
-  letter-spacing: 0.1em;
-
-  writing-mode: vertical-rl;
-
-}
-
-.side-note.left {
-
-  left: 4%;
-
-  transform: rotate(180deg);
-
-}
-
-.side-note.right {
-
-  right: 4%;
-
-}
-
-/* =================================
-
-   SECTION OVERLAY
-
-================================= */
+===================================== */
 
 .section-screen {
 
@@ -1022,7 +1060,7 @@ a:focus-visible {
 
 }
 
-.back-home span {
+.back-home span:first-child {
 
   color: var(--wine-light);
 
@@ -1036,17 +1074,17 @@ a:focus-visible {
 
 }
 
-.back-home:hover span {
+.back-home:hover span:first-child {
 
   transform: translateX(-4px);
 
 }
 
-/* =================================
+/* =====================================
 
    RESPONSIVE
 
-================================= */
+===================================== */
 
 @media (min-width: 1500px) {
 
@@ -1250,6 +1288,12 @@ a:focus-visible {
 
   }
 
+  .code-letter {
+
+    font-size: 11px;
+
+  }
+
   .section-screen {
 
     padding: 145px 25px 35px;
@@ -1312,24 +1356,6 @@ a:focus-visible {
 
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-
-  *::before,
-
-  *::after {
-
-    animation-duration: 0.01ms !important;
-
-    animation-iteration-count: 1 !important;
-
-    transition-duration: 0.01ms !important;
-
-  }
-
-}
-
 </style>
 
 </head>
@@ -1340,7 +1366,7 @@ a:focus-visible {
 
 <div class="ambient" aria-hidden="true"></div>
 
-<!-- HEADER -->
+<!-- TOP NAVIGATION -->
 
 <header class="header">
 
@@ -1356,25 +1382,33 @@ a:focus-visible {
 
     <nav class="nav" aria-label="Main navigation">
 
-      <a href="#about-me" class="nav-link" data-section="about" data-i18n="navAbout">
+      <a href="#about" class="nav-link"
+
+         data-section="about" data-i18n="navAbout">
 
         ABOUT ME
 
       </a>
 
-      <a href="#what-i-think" class="nav-link" data-section="think" data-i18n="navThink">
+      <a href="#think" class="nav-link"
+
+         data-section="think" data-i18n="navThink">
 
         WHAT I THINK
 
       </a>
 
-      <a href="#what-i-read" class="nav-link" data-section="read" data-i18n="navRead">
+      <a href="#read" class="nav-link"
+
+         data-section="read" data-i18n="navRead">
 
         WHAT I READ
 
       </a>
 
-      <a href="#what-i-want" class="nav-link" data-section="want" data-i18n="navWant">
+      <a href="#want" class="nav-link"
+
+         data-section="want" data-i18n="navWant">
 
         WHAT I WANT
 
@@ -1396,7 +1430,7 @@ a:focus-visible {
 
 </header>
 
-<!-- HOMEPAGE: ONE SCREEN -->
+<!-- SINGLE-SCREEN HOMEPAGE -->
 
 <main class="home" id="home">
 
@@ -1432,9 +1466,7 @@ a:focus-visible {
 
       </div>
 
-      <div class="letter-field" id="letterField" aria-label="Still Becoming">
-
-      </div>
+      <div class="letter-field" id="letterField"></div>
 
     </div>
 
@@ -1458,25 +1490,15 @@ a:focus-visible {
 
 </main>
 
-<!-- FULL-SCREEN SECTIONS -->
+<!-- FULL-SCREEN NAVIGATION PANELS -->
 
-<section
-
-  class="section-screen"
-
-  id="sectionScreen"
-
-  aria-hidden="true"
-
-  aria-label="Archive section"
-
->
+<section class="section-screen" id="sectionScreen" aria-hidden="true">
 
   <div class="section-inner">
 
     <div class="section-topline">
 
-      <span id="sectionCategory">ARCHIVE / 001</span>
+      <span id="sectionCategory">ARCHIVE / IDENTITY</span>
 
       <span id="sectionNumber">01 — 04</span>
 
@@ -1488,11 +1510,7 @@ a:focus-visible {
 
     </h1>
 
-    <p class="section-description" id="sectionDescription">
-
-      A space for personal stories, experiences, and reflections.
-
-    </p>
+    <p class="section-description" id="sectionDescription"></p>
 
     <div class="section-bottom">
 
@@ -1518,11 +1536,11 @@ a:focus-visible {
 
 <script>
 
-/* =================================
+/* =====================================
 
-   01. TRANSLATIONS
+   01. THREE-LANGUAGE CONTENT
 
-================================= */
+===================================== */
 
 const translations = {
 
@@ -1832,7 +1850,7 @@ function applyLanguage(language) {
 
   });
 
-  const titles = {
+  const pageTitles = {
 
     en: "STILL BECOMING — A Living Archive",
 
@@ -1842,13 +1860,13 @@ function applyLanguage(language) {
 
   };
 
-  document.title = titles[language];
+  document.title = pageTitles[language];
 
-  const currentSection = document.querySelector(".nav-link.active");
+  const activeLink = document.querySelector(".nav-link.active");
 
-  if (currentSection) {
+  if (activeLink) {
 
-    openSection(currentSection.dataset.section, false);
+    renderSection(activeLink.dataset.section);
 
   }
 
@@ -1890,65 +1908,73 @@ try {
 
 }
 
-applyLanguage(currentLanguage);
+/* =====================================
 
-/* =================================
+   02. VERTICAL GREEN LETTER STREAMS
 
-   02. INDEPENDENT LETTERS
+===================================== */
 
-================================= */
+/*
+
+  Each character has its own coordinates,
+
+  rotation angle, animation phase and speed.
+
+  Coordinates are percentages of the central
+
+  composition, so the layout adapts to screens.
+
+*/
+
+const letterData = [
+
+  // STILL: left-side vertical stream
+
+  { char: "S", x: 28, y: 19, rotate: -12, delay: 0.10 },
+
+  { char: "T", x: 29, y: 25, rotate: 8, delay: 0.16 },
+
+  { char: "I", x: 27, y: 31, rotate: -5, delay: 0.22 },
+
+  { char: "L", x: 30, y: 37, rotate: 13, delay: 0.28 },
+
+  { char: "L", x: 28, y: 43, rotate: -9, delay: 0.34 },
+
+  // BECOMING: right-side vertical stream
+
+  { char: "B", x: 69, y: 36, rotate: 10, delay: 0.42 },
+
+  { char: "E", x: 71, y: 42, rotate: -8, delay: 0.48 },
+
+  { char: "C", x: 68, y: 48, rotate: 12, delay: 0.54 },
+
+  { char: "O", x: 70, y: 54, rotate: -13, delay: 0.60 },
+
+  { char: "M", x: 67, y: 60, rotate: 6, delay: 0.66 },
+
+  { char: "I", x: 70, y: 66, rotate: -7, delay: 0.72 },
+
+  { char: "N", x: 68, y: 72, rotate: 11, delay: 0.78 },
+
+  { char: "G", x: 71, y: 78, rotate: -10, delay: 0.84 }
+
+];
+
+/* These annotations retain their original colors. */
+
+const floatingNotes = [
+
+  { text: "01001001", x: 17, y: 74, size: 0.75, wine: false },
+
+  { text: "I AM HERE", x: 78, y: 25, size: 0.8, wine: false },
+
+  { text: "001", x: 87, y: 69, size: 0.8, wine: true }
+
+];
 
 const letterField = document.getElementById("letterField");
 
 const composition = document.getElementById("composition");
-
-const letterData = [
-
-  // STILL
-
-  { char: "S", x: 16, y: 25, size: 12.5, rotate: -9, delay: 0.1 },
-
-  { char: "T", x: 29, y: 16, size: 10.2, rotate: 5, delay: 0.18 },
-
-  { char: "I", x: 39, y: 26, size: 9.3, rotate: -3, delay: 0.25 },
-
-  { char: "L", x: 47, y: 12, size: 11.7, rotate: 8, delay: 0.32 },
-
-  { char: "L", x: 56, y: 22, size: 9.8, rotate: -6, delay: 0.4 },
-
-  // BECOMING
-
-  { char: "B", x: 10, y: 47, size: 9.8, rotate: 6, delay: 0.48 },
-
-  { char: "E", x: 22, y: 57, size: 11.6, rotate: -7, delay: 0.56 },
-
-  { char: "C", x: 34, y: 43, size: 12.8, rotate: 4, delay: 0.64 },
-
-  { char: "O", x: 46, y: 56, size: 10.4, rotate: -5, delay: 0.72 },
-
-  { char: "M", x: 57, y: 42, size: 13.1, rotate: 7, delay: 0.8 },
-
-  { char: "I", x: 69, y: 54, size: 8.8, rotate: -8, delay: 0.88 },
-
-  { char: "N", x: 77, y: 42, size: 11.5, rotate: 4, delay: 0.96 },
-
-  { char: "G", x: 86, y: 54, size: 10.4, rotate: -4, delay: 1.04 }
-
-];
-
-const floatingNotes = [
-
-  { text: "STILL", x: 7, y: 38, size: 10, wine: false },
-
-  { text: "BECOMING", x: 68, y: 28, size: 10, wine: true },
-
-  { text: "01001001", x: 17, y: 74, size: 0.75, wine: false },
-
-  { text: "I AM HERE", x: 71, y: 76, size: 0.8, wine: false },
-
-  { text: "001", x: 90, y: 34, size: 0.8, wine: true }
-
-];
 
 const letterElements = [];
 
@@ -1964,33 +1990,21 @@ function buildLetters() {
 
     const element = document.createElement("span");
 
-    element.className = "letter";
+    element.className = "letter code-letter";
 
     element.textContent = item.char;
 
     element.setAttribute("aria-hidden", "true");
 
-    if ([1, 4, 7, 10, 12].includes(index)) {
-
-      element.classList.add("serif-outline");
-
-    }
-
-    if ([2, 5, 9].includes(index)) {
-
-      element.classList.add("wine");
-
-    }
-
     const x = isMobile
 
-      ? 9 + item.x * 0.82
+      ? 12 + (item.x - 12) * 0.85
 
       : item.x;
 
     const y = isMobile
 
-      ? 17 + item.y * 0.8
+      ? 14 + (item.y - 14) * 0.88
 
       : item.y;
 
@@ -1998,17 +2012,13 @@ function buildLetters() {
 
     element.style.top = y + "%";
 
-    element.style.fontSize =
-
-      (isMobile ? item.size * 0.67 : item.size) + "vw";
+    element.style.fontSize = isMobile ? "11px" : "12px";
 
     element.style.animationDelay = item.delay + "s";
 
-    const baseRotation = item.rotate;
-
     element.style.transform =
 
-      "translate(-50%, -50%) rotate(" + baseRotation + "deg)";
+      "translate(-50%, -50%) rotate(" + item.rotate + "deg)";
 
     letterField.appendChild(element);
 
@@ -2020,13 +2030,13 @@ function buildLetters() {
 
       y,
 
-      baseRotation,
+      baseRotation: item.rotate,
 
       phase: Math.random() * Math.PI * 2,
 
-      speed: 0.15 + Math.random() * 0.24,
+      speed: 0.18 + Math.random() * 0.32,
 
-      amplitude: 1.2 + Math.random() * 3.8,
+      amplitude: 2 + Math.random() * 5,
 
       index
 
@@ -2050,7 +2060,9 @@ function buildLetters() {
 
     element.style.fontSize = item.size + "vw";
 
-    element.style.animationDelay = (0.9 + index * 0.12) + "s";
+    element.style.animationDelay =
+
+      (0.9 + index * 0.12) + "s";
 
     letterField.appendChild(element);
 
@@ -2078,11 +2090,11 @@ function buildLetters() {
 
 }
 
-/* =================================
+/* =====================================
 
-   03. MOUSE-RESPONSIVE LETTERS
+   03. LETTER MOVEMENT + MOUSE INTERACTION
 
-================================= */
+===================================== */
 
 const pointer = {
 
@@ -2100,11 +2112,7 @@ let letterFrame = null;
 
 function animateLetters() {
 
-  if (
-
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
-  ) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
     letterFrame = null;
 
@@ -2118,11 +2126,31 @@ function animateLetters() {
 
   letterElements.forEach((item) => {
 
-    const { element, x, y, baseRotation, phase, speed, amplitude } = item;
+    const {
 
-    const floatX = Math.sin(motion * speed + phase) * amplitude;
+      element,
 
-    const floatY = Math.cos(motion * speed * 0.8 + phase) * amplitude;
+      x,
+
+      y,
+
+      baseRotation,
+
+      phase,
+
+      speed,
+
+      amplitude
+
+    } = item;
+
+    const floatX =
+
+      Math.sin(motion * speed + phase) * amplitude;
+
+    const floatY =
+
+      Math.cos(motion * speed * 0.8 + phase) * amplitude;
 
     let mouseX = 0;
 
@@ -2152,7 +2180,7 @@ function animateLetters() {
 
         mouseY = (dy / distance) * strength;
 
-        mouseRotate = (dx / distance) * 1.8;
+        mouseRotate = (dx / distance) * 8;
 
       }
 
@@ -2168,7 +2196,15 @@ function animateLetters() {
 
       ") rotate(" +
 
-      (baseRotation + Math.sin(motion * speed + phase) * 1.3 + mouseRotate) +
+      (
+
+        baseRotation +
+
+        Math.sin(motion * speed + phase) * 2.5 +
+
+        mouseRotate
+
+      ) +
 
       "deg)";
 
@@ -2178,29 +2214,9 @@ function animateLetters() {
 
 }
 
-composition.addEventListener("pointermove", (event) => {
-
-  pointer.x = event.clientX;
-
-  pointer.y = event.clientY;
-
-  pointer.active = true;
-
-});
-
-composition.addEventListener("pointerleave", () => {
-
-  pointer.active = false;
-
-});
-
 function startLetterAnimation() {
 
-  if (
-
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
-  ) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 
     if (letterFrame !== null) {
 
@@ -2222,11 +2238,11 @@ function startLetterAnimation() {
 
 }
 
-/* =================================
+/* =====================================
 
-   04. GRAPHIC LINES
+   04. TECHNICAL CONNECTION LINES
 
-================================= */
+===================================== */
 
 function buildGraphicLines() {
 
@@ -2344,14 +2360,6 @@ function buildGraphicLines() {
 
   });
 
-  // Keep the letterforms above the technical graphics.
-
-  letterField.querySelectorAll(".letter").forEach((element) => {
-
-    element.style.zIndex = "2";
-
-  });
-
   letterField.querySelectorAll(
 
     ".graphic-line, .graphic-node"
@@ -2362,13 +2370,19 @@ function buildGraphicLines() {
 
   });
 
+  letterField.querySelectorAll(".letter").forEach((element) => {
+
+    element.style.zIndex = "2";
+
+  });
+
 }
 
-/* =================================
+/* =====================================
 
-   05. INTERACTIVE UNIVERSE CANVAS
+   05. ANIMATED STAR FIELD
 
-================================= */
+===================================== */
 
 const canvas = document.getElementById("universe");
 
@@ -2466,7 +2480,7 @@ function drawUniverse(time) {
 
   });
 
-  // Connect nearby stars with fine, silver threads.
+  // Fine silver threads between nearby stars.
 
   for (let i = 0; i < stars.length; i++) {
 
@@ -2508,7 +2522,7 @@ function drawUniverse(time) {
 
   }
 
-  // Mouse creates a local field of interaction.
+  // Cursor creates a subtle wine-red connection field.
 
   if (pointer.active && !prefersReducedMotion.matches) {
 
@@ -2544,6 +2558,8 @@ function drawUniverse(time) {
 
   }
 
+  // Individual stars.
+
   stars.forEach((star) => {
 
     const twinkle = prefersReducedMotion.matches
@@ -2554,19 +2570,7 @@ function drawUniverse(time) {
 
     ctx.beginPath();
 
-    ctx.arc(
-
-      star.x,
-
-      star.y,
-
-      star.radius,
-
-      0,
-
-      Math.PI * 2
-
-    );
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
 
     ctx.fillStyle = star.wine
 
@@ -2578,7 +2582,7 @@ function drawUniverse(time) {
 
   });
 
-  // Cursor halo.
+  // Very subtle cursor halo.
 
   if (pointer.active && !prefersReducedMotion.matches) {
 
@@ -2664,6 +2668,12 @@ function startUniverse() {
 
 }
 
+/* =====================================
+
+   06. MOUSE TRACKING
+
+===================================== */
+
 window.addEventListener("pointermove", (event) => {
 
   pointer.x = event.clientX;
@@ -2680,33 +2690,11 @@ document.addEventListener("pointerleave", () => {
 
 });
 
-window.addEventListener("resize", () => {
+/* =====================================
 
-  resizeUniverse();
+   07. SECTION NAVIGATION
 
-  buildLetters();
-
-  buildGraphicLines();
-
-});
-
-if (prefersReducedMotion.addEventListener) {
-
-  prefersReducedMotion.addEventListener("change", () => {
-
-    startUniverse();
-
-    startLetterAnimation();
-
-  });
-
-}
-
-/* =================================
-
-   06. NAVIGATION / FULL-SCREEN VIEWS
-
-================================= */
+===================================== */
 
 const home = document.getElementById("home");
 
@@ -2720,7 +2708,7 @@ const sectionTitle = document.getElementById("sectionTitle");
 
 const sectionDescription = document.getElementById("sectionDescription");
 
-function openSection(sectionKey, updateHash = true) {
+function renderSection(sectionKey) {
 
   const section = translations[currentLanguage].sections[sectionKey];
 
@@ -2734,6 +2722,12 @@ function openSection(sectionKey, updateHash = true) {
 
   sectionDescription.textContent = section.description;
 
+}
+
+function openSection(sectionKey, updateHash = true) {
+
+  renderSection(sectionKey);
+
   home.classList.add("is-hidden");
 
   sectionScreen.classList.add("is-open");
@@ -2746,13 +2740,29 @@ function openSection(sectionKey, updateHash = true) {
 
     link.classList.toggle("active", active);
 
-    link.setAttribute("aria-current", active ? "page" : "false");
+    if (active) {
+
+      link.setAttribute("aria-current", "page");
+
+    } else {
+
+      link.removeAttribute("aria-current");
+
+    }
 
   });
 
   if (updateHash) {
 
-    history.pushState({ section: sectionKey }, "", "#" + sectionKey);
+    history.pushState(
+
+      { section: sectionKey },
+
+      "",
+
+      "#" + sectionKey
+
+    );
 
   }
 
@@ -2776,7 +2786,15 @@ function goHome(updateHash = true) {
 
   if (updateHash) {
 
-    history.pushState({}, "", window.location.pathname + window.location.search);
+    history.pushState(
+
+      {},
+
+      "",
+
+      window.location.pathname + window.location.search
+
+    );
 
   }
 
@@ -2838,11 +2856,11 @@ document.addEventListener("keydown", (event) => {
 
 });
 
-/* =================================
+/* =====================================
 
-   07. INITIALIZE
+   08. INITIALIZE
 
-================================= */
+===================================== */
 
 buildLetters();
 
@@ -2853,6 +2871,30 @@ resizeUniverse();
 startUniverse();
 
 startLetterAnimation();
+
+if (prefersReducedMotion.addEventListener) {
+
+  prefersReducedMotion.addEventListener("change", () => {
+
+    startUniverse();
+
+    startLetterAnimation();
+
+  });
+
+}
+
+window.addEventListener("resize", () => {
+
+  resizeUniverse();
+
+  buildLetters();
+
+  buildGraphicLines();
+
+});
+
+applyLanguage(currentLanguage);
 
 </script>
 
