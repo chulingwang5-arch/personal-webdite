@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>A Living Archive — Personal Website</title>
+
+  <meta
+    name="description"
+    content="A personal archive of thoughts, readings, desires and becoming."
+  >
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #f5f4ef;
+      --text: #181818;
+      --accent: #c7ff35;
+      --line: #b8b7af;
+      --muted: #66665f;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Space Grotesk", Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 0 5.2%;
+    }
+
+    /* HEADER */
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 78px;
+      border-bottom: 1px solid var(--line);
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .logo span {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border: 1px solid var(--text);
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .status {
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+    }
+
+    .language-switch {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .language-switch button {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 6px 7px;
+      cursor: pointer;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .language-switch button:hover,
+    .language-switch button.active {
+      background: var(--accent);
+      border-color: var(--text);
+    }
+
+    /* HERO */
+
+    .hero {
+      padding: 62px 0 58px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      background: var(--text);
+    }
+
+    .hero-title {
+      font-size: clamp(62px, 11.3vw, 158px);
+      font-weight: 600;
+      line-height: 0.83;
+      letter-spacing: -0.095em;
+      text-transform: uppercase;
+    }
+
+    .hero-title .outline {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--text);
+    }
+
+    .hero-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: end;
+      margin-top: 48px;
+    }
+
+    .hero-description {
+      max-width: 390px;
+      font-size: clamp(15px, 1.6vw, 19px);
+      line-height: 1.6;
+    }
+
+    .hero-description strong {
+      font-weight: 600;
+      background: var(--accent);
+      padding: 0 3px;
+    }
+
+    .hero-note {
+      justify-self: end;
+      max-width: 250px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      line-height: 1.8;
+      text-align: right;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* NAVIGATION CARDS */
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 20px;
+      padding: 25px 0 16px;
+    }
+
+    .section-heading h2 {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .section-heading p {
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--text);
+      border-left: 1px solid var(--text);
+    }
+
+    .nav-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 245px;
+      padding: 25px;
+      border-right: 1px solid var(--text);
+      border-bottom: 1px solid var(--text);
+      transition: background 0.25s ease, color 0.25s ease;
+      overflow: hidden;
+    }
+
+    .nav-card:hover {
+      background: var(--accent);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-number {
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+    }
+
+    .card-arrow {
+      font-size: 25px;
+      transition: transform 0.25s ease;
+    }
+
+    .nav-card:hover .card-arrow {
+      transform: translate(4px, -4px);
+    }
+
+    .nav-card h3 {
+      max-width: 520px;
+      margin-top: 38px;
+      font-size: clamp(30px, 4.4vw, 59px);
+      line-height: 0.98;
+      font-weight: 600;
+      letter-spacing: -0.075em;
+    }
+
+    .card-description {
+      max-width: 360px;
+      margin-top: 18px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .nav-card:hover .card-description {
+      color: var(--text);
+    }
+
+    /* FOOTER */
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 25px;
+      padding: 34px 0 30px;
+    }
+
+    .footer-title {
+      font-size: clamp(24px, 4vw, 42px);
+      line-height: 0.95;
+      letter-spacing: -0.07em;
+      font-weight: 600;
+    }
+
+    .footer-meta {
+      font-family: "DM Mono", monospace;
+      font-size: 10px;
+      line-height: 1.9;
+      text-align: right;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 650px) {
+      .page {
+        padding: 0 20px;
+      }
+
+      header {
+        min-height: 68px;
+      }
+
+      .status {
+        display: none;
+      }
+
+      .header-right {
+        gap: 8px;
+      }
+
+      .hero {
+        padding: 52px 0 40px;
+      }
+
+      .hero-title {
+        font-size: clamp(57px, 15vw, 95px);
+      }
+
+      .hero-bottom {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin-top: 32px;
+      }
+
+      .hero-note {
+        justify-self: start;
+        text-align: left;
+      }
+
+      .nav-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-card {
+        min-height: 205px;
+        padding: 21px;
+      }
+
+      .nav-card h3 {
+        font-size: clamp(35px, 10vw, 53px);
+      }
+
+      footer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-meta {
+        text-align: left;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <header>
+      <a class="logo" href="#" aria-label="Home">
+        <span></span>
+        A Living Archive
+      </a>
+
+      <div class="header-right">
+        <span class="status" data-i18n="status">An ongoing collection</span>
+
+        <div class="language-switch" aria-label="Select language">
+          <button type="button" data-lang="zh" aria-pressed="false">中</button>
+          <button type="button" data-lang="en" class="active" aria-pressed="true">EN</button>
+          <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow" data-i18n="eyebrow">
+          A personal space / 2026—∞
+        </div>
+
+        <h1 class="hero-title">
+          <span data-i18n="titleLine1">STILL</span><br>
+          <span class="outline" data-i18n="titleLine2">BECOMING</span>
+        </h1>
+
+        <div class="hero-bottom">
+          <p class="hero-description" data-i18n="intro">
+            A space to collect what I <strong>think, read,</strong>
+            and want to become. Not a finished portrait, but a life
+            in progress.
+          </p>
+
+          <p class="hero-note" data-i18n="heroNote">
+            Personal archive<br>
+            Thoughts / Readings / Desires<br>
+            Always in progress
+          </p>
+        </div>
+      </section>
+
+      <section id="explore">
+        <div class="section-heading">
+          <h2 data-i18n="exploreTitle">Explore the archive</h2>
+          <p data-i18n="exploreNote">Four ways of looking inward ↘</p>
+        </div>
+
+        <div class="nav-grid">
+
+          <a class="nav-card" href="#about-me">
+            <div class="card-top">
+              <span class="card-number">01 / SELF</span>
+              <span class="card-arrow" aria-hidden="true">↗</span>
+            </div>
+
+            <div>
+              <h3 data-i18n="card1Title">About me</h3>
+              <p class="card-description" data-i18n="card1Desc">
+                The person I am, the paths I've taken, and the things
+                that have shaped me.
+              </p>
+            </div>
+          </a>
+
+          <a class="nav-card" href="#what-i-think">
+            <div class="card-top">
+              <span class="card-number">02 / THOUGHTS</span>
+              <span class="card-arrow" aria-hidden="true">↗</span>
+            </div>
+
+            <div>
+              <h3 data-i18n="card2Title">About what I think</h3>
+              <p class="card-description" data-i18n="card2Desc">
+                Ideas, questions, observations, and thoughts still
+                finding their shape.
+              </p>
+            </div>
+          </a>
+
+          <a class="nav-card" href="#what-i-read">
+            <div class="card-top">
+              <span class="card-number">03 / READINGS</span>
+              <span class="card-arrow" aria-hidden="true">↗</span>
+            </div>
+
+            <div>
+              <h3 data-i18n="card3Title">About what I read</h3>
+              <p class="card-description" data-i18n="card3Desc">
+                Books, essays, images, and other things worth keeping
+                close.
+              </p>
+            </div>
+          </a>
+
+          <a class="nav-card" href="#what-i-want">
+            <div class="card-top">
+              <span class="card-number">04 / POSSIBILITIES</span>
+              <span class="card-arrow" aria-hidden="true">↗</span>
+            </div>
+
+            <div>
+              <h3 data-i18n="card4Title">About what I want</h3>
+              <p class="card-description" data-i18n="card4Desc">
+                Desires, directions, possibilities, and the future
+                I am imagining.
+              </p>
+            </div>
+          </a>
+
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-title" data-i18n="footerTitle">
+        A life, in fragments.
+      </div>
+
+      <div class="footer-meta" data-i18n="footerMeta">
+        Made of moments & questions<br>
+        © 2026 — Ongoing
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        status: "An ongoing collection",
+        eyebrow: "A personal space / 2026—∞",
+        titleLine1: "STILL",
+        titleLine2: "BECOMING",
+        intro: 'A space to collect what I <strong>think, read,</strong> and want to become. Not a finished portrait, but a life in progress.',
+        heroNote: "Personal archive<br>Thoughts / Readings / Desires<br>Always in progress",
+        exploreTitle: "Explore the archive",
+        exploreNote: "Four ways of looking inward ↘",
+        card1Title: "About me",
+        card1Desc: "The person I am, the paths I've taken, and the things that have shaped me.",
+        card2Title: "About what I think",
+        card2Desc: "Ideas, questions, observations, and thoughts still finding their shape.",
+        card3Title: "About what I read",
+        card3Desc: "Books, essays, images, and other things worth keeping close.",
+        card4Title: "About what I want",
+        card4Desc: "Desires, directions, possibilities, and the future I am imagining.",
+        footerTitle: "A life, in fragments.",
+        footerMeta: "Made of moments & questions<br>© 2026 — Ongoing"
+      },
+
+      zh: {
+        status: "一份持续生长的记录",
+        eyebrow: "一个私人空间 / 2026—∞",
+        titleLine1: "持续",
+        titleLine2: "成为",
+        intro: '这里收藏我<strong>思考过的、读过的，</strong>以及我想成为的样子。这不是一幅完成的自画像，而是一段仍在继续的人生。',
+        heroNote: "个人档案<br>思考 / 阅读 / 渴望<br>持续更新中",
+        exploreTitle: "探索这份个人档案",
+        exploreNote: "四种向内探索的方式 ↘",
+        card1Title: "关于我",
+        card1Desc: "我是谁，我走过怎样的路，又有哪些经历塑造了今天的我。",
+        card2Title: "关于我的思考",
+        card2Desc: "那些想法、问题、观察，以及仍在慢慢成形的观点。",
+        card3Title: "关于我的阅读",
+        card3Desc: "值得收藏的书籍、文章、图像，以及它们带给我的启发。",
+        card4Title: "关于我想要的",
+        card4Desc: "我的愿望、方向、可能性，以及我正在想象的未来。",
+        footerTitle: "由片段组成的人生。",
+        footerMeta: "收藏时刻，也收藏问题<br>© 2026 — 持续更新"
+      },
+
+      fr: {
+        status: "Une collection en devenir",
+        eyebrow: "Un espace personnel / 2026—∞",
+        titleLine1: "ENCORE",
+        titleLine2: "EN DEVENIR",
+        intro: 'Un espace pour rassembler ce que je <strong>pense, lis</strong> et aspire à devenir. Non pas un portrait achevé, mais une vie en mouvement.',
+        heroNote: "Archive personnelle<br>Pensées / Lectures / Désirs<br>Toujours en évolution",
+        exploreTitle: "Explorer les archives",
+        exploreNote: "Quatre façons de regarder en soi ↘",
+        card1Title: "À propos de moi",
+        card1Desc: "Qui je suis, le chemin parcouru et ce qui a façonné la personne que je deviens.",
+        card2Title: "À propos de mes pensées",
+        card2Desc: "Des idées, des questions, des observations et des réflexions encore en formation.",
+        card3Title: "À propos de mes lectures",
+        card3Desc: "Des livres, des essais, des images et d'autres choses à garder précieusement.",
+        card4Title: "À propos de mes désirs",
+        card4Desc: "Mes envies, mes directions, mes possibilités et le futur que j'imagine.",
+        footerTitle: "Une vie en fragments.",
+        footerMeta: "Des instants et des questions<br>© 2026 — En cours"
+      }
+    };
+
+    function setLanguage(lang) {
+      const dictionary = translations[lang];
+
+      if (!dictionary) return;
+
+      document.documentElement.lang =
+        lang === "zh" ? "zh-CN" : lang;
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+
+        if (dictionary[key] !== undefined) {
+          element.innerHTML = dictionary[key];
+        }
+      });
+
+      document.querySelectorAll("[data-lang]").forEach((button) => {
+        const isActive = button.dataset.lang === lang;
+
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+
+      try {
+        localStorage.setItem("preferred-language", lang);
+      } catch (error) {
+        // The page still works if browser storage is unavailable.
+      }
+    }
+
+    document.querySelectorAll("[data-lang]").forEach((button) => {
+      button.addEventListener("click", () => {
+        setLanguage(button.dataset.lang);
+      });
+    });
+
+    let initialLanguage = "en";
+
+    try {
+      const savedLanguage = localStorage.getItem("preferred-language");
+
+      if (savedLanguage && translations[savedLanguage]) {
+        initialLanguage = savedLanguage;
+      }
+    } catch (error) {
+      // Use English if browser storage is unavailable.
+    }
+
+    setLanguage(initialLanguage);
+  </script>
+</body>
+</html>
