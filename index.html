@@ -1,833 +1,1403 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta name="theme-color" content="#070709">
 
 <title>STILL BECOMING — A Living Archive</title>
 
 <style>
+
 :root {
+
   --black: #070709;
+
   --black-soft: #0d0d10;
+
   --white: #efefed;
+
   --silver: #85858d;
+
   --silver-dim: #414149;
+
   --wine: #a02d49;
+
   --wine-light: #d14a67;
+
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+
   --sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
   --serif: "Bodoni 72", Didot, "Times New Roman", serif;
+
 }
 
 * {
+
   box-sizing: border-box;
+
   margin: 0;
+
   padding: 0;
+
 }
 
 html,
+
 body {
+
   width: 100%;
+
   height: 100%;
+
   overflow: hidden;
+
   background: var(--black);
+
   color: var(--white);
+
   font-family: var(--sans);
+
   -webkit-font-smoothing: antialiased;
+
 }
 
 body {
+
   position: relative;
+
 }
 
 button,
+
 a {
+
   color: inherit;
+
   font: inherit;
+
 }
 
 button {
+
   background: none;
+
   border: 0;
+
 }
 
 a {
+
   text-decoration: none;
+
 }
 
 button:focus-visible,
+
 a:focus-visible {
+
   outline: 1px solid var(--wine-light);
+
   outline-offset: 5px;
+
 }
 
 ::selection {
+
   color: white;
+
   background: var(--wine);
+
 }
 
 /* =================================
+
    BACKGROUND UNIVERSE
+
 ================================= */
 
 #universe {
+
   position: fixed;
+
   inset: 0;
+
   width: 100%;
+
   height: 100%;
+
   z-index: 0;
+
   pointer-events: none;
+
 }
 
 .ambient {
+
   position: fixed;
+
   inset: 0;
+
   z-index: 1;
+
   pointer-events: none;
+
   overflow: hidden;
+
   background:
+
     radial-gradient(
+
       ellipse at 50% 48%,
+
       rgba(43, 43, 52, 0.15) 0%,
+
       rgba(7, 7, 9, 0) 58%
+
     ),
+
     radial-gradient(
+
       ellipse at 82% 75%,
+
       rgba(91, 23, 43, 0.07) 0%,
+
       transparent 42%
+
     );
+
 }
 
 .ambient::after {
+
   content: "";
+
   position: absolute;
+
   inset: 0;
+
   opacity: 0.12;
+
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+
 }
 
 /* =================================
+
    HEADER
+
 ================================= */
 
 .header {
+
   position: fixed;
+
   z-index: 20;
+
   top: 0;
+
   left: 0;
+
   width: 100%;
+
   min-height: 86px;
+
   padding: 0 clamp(22px, 4.2vw, 66px);
+
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
   gap: 28px;
+
   border-bottom: 1px solid rgba(220, 220, 230, 0.11);
+
   background: rgba(7, 7, 9, 0.72);
+
   backdrop-filter: blur(16px);
+
   -webkit-backdrop-filter: blur(16px);
+
 }
 
 .brand {
+
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   flex-shrink: 0;
+
   cursor: pointer;
+
 }
 
 .brand-symbol {
+
   position: relative;
+
   width: 10px;
+
   height: 10px;
+
   border-radius: 50%;
+
   background: var(--wine-light);
+
   box-shadow: 0 0 15px rgba(209, 74, 103, 0.35);
+
 }
 
 .brand-symbol::after {
+
   content: "";
+
   position: absolute;
+
   inset: -5px;
+
   border: 1px solid rgba(209, 74, 103, 0.4);
+
   border-radius: 50%;
+
 }
 
 .brand-name {
+
   color: #d8d8da;
+
   font-size: 10px;
+
   font-weight: 500;
+
   letter-spacing: 0.16em;
+
   text-transform: uppercase;
+
   white-space: nowrap;
+
 }
 
 .header-right {
+
   display: flex;
+
   align-items: center;
+
   justify-content: flex-end;
+
   gap: clamp(22px, 4vw, 62px);
+
 }
 
 .nav {
+
   display: flex;
+
   align-items: center;
+
   gap: clamp(16px, 2.7vw, 40px);
+
 }
 
 .nav-link {
+
   position: relative;
+
   padding: 12px 0;
+
   color: #77777f;
+
   font-size: 10px;
+
   letter-spacing: 0.07em;
+
   white-space: nowrap;
+
   transition: color 0.3s ease;
+
 }
 
 .nav-link::after {
+
   content: "";
+
   position: absolute;
+
   bottom: 5px;
+
   left: 0;
+
   width: 100%;
+
   height: 1px;
+
   background: var(--wine-light);
+
   transform: scaleX(0);
+
   transform-origin: right;
+
   transition: transform 0.35s ease;
+
 }
 
 .nav-link:hover,
+
 .nav-link.active {
+
   color: var(--white);
+
 }
 
 .nav-link:hover::after,
+
 .nav-link.active::after {
+
   transform: scaleX(1);
+
   transform-origin: left;
+
 }
 
 .languages {
+
   display: flex;
+
   align-items: center;
+
   gap: 10px;
+
   flex-shrink: 0;
+
 }
 
 .language {
+
   cursor: pointer;
+
   color: #62626a;
+
   font-size: 10px;
+
   letter-spacing: 0.04em;
+
   transition: color 0.25s ease;
+
 }
 
 .language + .language::before {
+
   content: "/";
+
   margin-right: 10px;
+
   color: #393940;
+
 }
 
 .language:hover,
+
 .language.active {
+
   color: var(--wine-light);
+
 }
 
 /* =================================
+
    HOMEPAGE
+
 ================================= */
 
 .home {
+
   position: relative;
+
   z-index: 2;
+
   width: 100%;
+
   height: 100%;
+
   min-height: 500px;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   overflow: hidden;
+
   transition: opacity 0.4s ease;
+
 }
 
 .home.is-hidden {
+
   opacity: 0;
+
   pointer-events: none;
+
 }
 
 .hero {
+
   position: relative;
+
   width: min(100%, 1600px);
+
   height: 100%;
+
   margin: auto;
+
 }
 
 /* Fine coordinate marks */
 
 .coordinates {
+
   position: absolute;
+
   left: clamp(22px, 4.2vw, 66px);
+
   bottom: 38px;
+
   color: #575760;
+
   font: 9px/1.8 var(--mono);
+
   letter-spacing: 0.08em;
+
 }
 
 .coordinates span {
+
   color: var(--wine-light);
+
 }
 
 .system-status {
+
   position: absolute;
+
   right: clamp(22px, 4.2vw, 66px);
+
   bottom: 38px;
+
   display: flex;
+
   align-items: center;
+
   gap: 9px;
+
   color: #777780;
+
   font: 9px var(--mono);
+
   letter-spacing: 0.08em;
+
 }
 
 .status-dot {
+
   width: 5px;
+
   height: 5px;
+
   border-radius: 50%;
+
   background: var(--wine-light);
+
   box-shadow: 0 0 10px rgba(209, 74, 103, 0.7);
+
   animation: pulse 3s ease-in-out infinite;
+
 }
 
 @keyframes pulse {
+
   0%, 100% {
+
     opacity: 0.5;
+
   }
 
   50% {
+
     opacity: 1;
+
   }
+
 }
 
 /* Main composition */
 
 .composition {
+
   position: absolute;
+
   top: 48%;
+
   left: 50%;
+
   width: min(100%, 1250px);
+
   height: min(64vh, 570px);
+
   transform: translate(-50%, -50%);
+
 }
 
 .hero-kicker {
+
   position: absolute;
+
   top: 5%;
+
   left: 13%;
+
   color: #888890;
+
   font: 9px/1.8 var(--mono);
+
   letter-spacing: 0.16em;
+
   text-transform: uppercase;
+
   animation: fadeIn 1.3s ease both;
+
 }
 
 .hero-kicker span {
+
   color: var(--wine-light);
+
 }
 
 .hero-subnote {
+
   position: absolute;
+
   right: 10%;
+
   top: 13%;
+
   max-width: 135px;
+
   color: #66666f;
+
   font: 9px/1.9 var(--mono);
+
   letter-spacing: 0.05em;
+
   text-align: right;
+
   animation: fadeIn 1.8s ease both;
+
 }
 
 .hero-subnote strong {
+
   display: block;
+
   color: #b7b7bd;
+
   font-weight: 400;
+
 }
 
 /* Each character is an independent element */
 
 .letter-field {
+
   position: absolute;
+
   inset: 0;
+
   perspective: 900px;
+
 }
 
 .letter {
+
   position: absolute;
+
   display: inline-block;
+
   color: var(--white);
+
   font-family: var(--serif);
+
   font-weight: 400;
+
   line-height: 0.8;
+
   letter-spacing: -0.09em;
+
   user-select: none;
+
   will-change: transform;
+
   transform-origin: center;
+
   transition:
+
     color 0.4s ease,
+
     text-shadow 0.4s ease;
+
   animation: letterAppear 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+
 }
 
 .letter:hover {
+
   color: var(--wine-light);
+
   text-shadow: 0 0 35px rgba(209, 74, 103, 0.24);
+
 }
 
 .letter.serif-outline {
+
   color: transparent;
+
   -webkit-text-stroke: 1px rgba(215, 215, 220, 0.66);
+
 }
 
 .letter.serif-outline:hover {
+
   color: var(--wine-light);
+
   -webkit-text-stroke-color: var(--wine-light);
+
 }
 
 .letter.wine {
+
   color: var(--wine-light);
+
 }
 
 .letter.tiny {
+
   font-family: var(--mono);
+
   font-size: 10px;
+
   font-weight: 400;
+
   letter-spacing: 0.08em;
+
   color: #777780;
+
   line-height: 1.5;
+
 }
 
 .letter.tiny.wine {
+
   color: var(--wine-light);
+
 }
 
 @keyframes letterAppear {
+
   from {
+
     opacity: 0;
+
     filter: blur(8px);
+
   }
 
   to {
+
     opacity: 1;
+
     filter: blur(0);
+
   }
+
 }
 
 /* Thin graphic connections */
 
 .graphic-line {
+
   position: absolute;
+
   height: 1px;
+
   transform-origin: left center;
+
   background: linear-gradient(
+
     90deg,
+
     rgba(185, 185, 195, 0.45),
+
     rgba(185, 185, 195, 0.02)
+
   );
+
   pointer-events: none;
+
 }
 
 .graphic-node {
+
   position: absolute;
+
   width: 4px;
+
   height: 4px;
+
   border-radius: 50%;
+
   background: var(--wine-light);
+
   box-shadow: 0 0 14px rgba(209, 74, 103, 0.45);
+
   pointer-events: none;
+
 }
 
 /* Subtle center axis */
 
 .axis {
+
   position: absolute;
+
   top: 17%;
+
   left: 50%;
+
   width: 1px;
+
   height: 65%;
+
   background: linear-gradient(
+
     to bottom,
+
     transparent,
+
     rgba(180, 180, 190, 0.12),
+
     transparent
+
   );
+
   pointer-events: none;
+
 }
 
 /* Side annotations */
 
 .side-note {
+
   position: absolute;
+
   top: 49%;
+
   color: #55555e;
+
   font: 8px/1.8 var(--mono);
+
   letter-spacing: 0.1em;
+
   writing-mode: vertical-rl;
+
 }
 
 .side-note.left {
+
   left: 4%;
+
   transform: rotate(180deg);
+
 }
 
 .side-note.right {
+
   right: 4%;
+
 }
 
 /* =================================
+
    SECTION OVERLAY
+
 ================================= */
 
 .section-screen {
+
   position: fixed;
+
   inset: 0;
+
   z-index: 10;
+
   display: flex;
+
   align-items: center;
+
   justify-content: center;
+
   padding: 110px clamp(25px, 9vw, 150px) 70px;
+
   background:
+
     radial-gradient(
+
       ellipse at 70% 40%,
+
       rgba(44, 44, 53, 0.18),
+
       transparent 55%
+
     ),
+
     rgba(7, 7, 9, 0.97);
+
   opacity: 0;
+
   visibility: hidden;
+
   transform: translateY(12px);
+
   transition:
+
     opacity 0.4s ease,
+
     transform 0.4s ease,
+
     visibility 0.4s ease;
+
   overflow-y: auto;
+
 }
 
 .section-screen.is-open {
+
   opacity: 1;
+
   visibility: visible;
+
   transform: translateY(0);
+
 }
 
 .section-inner {
+
   width: 100%;
+
   max-width: 1000px;
+
   margin: auto;
+
 }
 
 .section-topline {
+
   display: flex;
+
   justify-content: space-between;
+
   gap: 20px;
+
   padding-bottom: 22px;
+
   border-bottom: 1px solid rgba(220, 220, 230, 0.16);
+
   color: #767680;
+
   font: 9px var(--mono);
+
   letter-spacing: 0.12em;
+
   text-transform: uppercase;
+
 }
 
 .section-topline span:last-child {
+
   color: var(--wine-light);
+
 }
 
 .section-title {
+
   margin: clamp(50px, 10vh, 100px) 0 30px;
+
   max-width: 900px;
+
   font: 400 clamp(48px, 9vw, 120px)/0.98 var(--serif);
+
   letter-spacing: -0.055em;
+
   overflow-wrap: anywhere;
+
 }
 
 .section-title em {
+
   color: var(--wine-light);
+
   font-weight: 400;
+
 }
 
 .section-description {
+
   max-width: 480px;
+
   color: #92929a;
+
   font-size: 13px;
+
   line-height: 2;
+
 }
 
 .section-bottom {
+
   margin-top: clamp(60px, 10vh, 100px);
+
   padding-top: 20px;
+
   border-top: 1px solid rgba(220, 220, 230, 0.13);
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
+
   gap: 20px;
+
 }
 
 .section-index {
+
   color: #686872;
+
   font: 9px var(--mono);
+
   letter-spacing: 0.1em;
+
 }
 
 .back-home {
+
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   color: #bdbdc4;
+
   font-size: 10px;
+
   letter-spacing: 0.1em;
+
   cursor: pointer;
+
   transition: color 0.3s ease;
+
 }
 
 .back-home span {
+
   color: var(--wine-light);
+
   transition: transform 0.3s ease;
+
 }
 
 .back-home:hover {
+
   color: white;
+
 }
 
 .back-home:hover span {
+
   transform: translateX(-4px);
+
 }
 
 /* =================================
+
    RESPONSIVE
+
 ================================= */
 
 @media (min-width: 1500px) {
+
   .composition {
+
     transform: translate(-50%, -50%) scale(1.08);
+
   }
+
 }
 
 @media (max-width: 1000px) {
+
   .header {
+
     gap: 18px;
+
   }
 
   .header-right {
+
     gap: 22px;
+
   }
 
   .nav {
+
     gap: 17px;
+
   }
 
   .nav-link {
+
     font-size: 9px;
+
   }
 
   .composition {
+
     width: 100%;
+
   }
 
   .hero-kicker {
+
     left: 9%;
+
   }
 
   .hero-subnote {
+
     right: 8%;
+
   }
+
 }
 
 @media (max-width: 700px) {
+
   .header {
+
     min-height: 112px;
+
     padding-top: 19px;
+
     padding-bottom: 17px;
+
     flex-direction: column;
+
     align-items: stretch;
+
     justify-content: center;
+
     gap: 17px;
+
   }
 
   .brand {
+
     align-self: flex-start;
+
   }
 
   .header-right {
+
     width: 100%;
+
     gap: 12px;
+
     justify-content: space-between;
+
     align-items: center;
+
   }
 
   .nav {
+
     display: grid;
+
     grid-template-columns: repeat(2, auto);
+
     gap: 9px 18px;
+
   }
 
   .nav-link {
+
     padding: 2px 0;
+
     font-size: 9px;
+
   }
 
   .nav-link::after {
+
     bottom: -3px;
+
   }
 
   .languages {
+
     gap: 6px;
+
   }
 
   .language {
+
     font-size: 9px;
+
   }
 
   .language + .language::before {
+
     margin-right: 6px;
+
   }
 
   .composition {
+
     top: 47%;
+
     height: 53vh;
+
     min-height: 340px;
+
     max-height: 500px;
+
   }
 
   .hero-kicker {
+
     top: 0;
+
     left: 8%;
+
     font-size: 8px;
+
   }
 
   .hero-subnote {
+
     top: 8%;
+
     right: 8%;
+
     font-size: 8px;
+
   }
 
   .side-note {
+
     font-size: 7px;
+
   }
 
   .side-note.left {
+
     left: 2%;
+
   }
 
   .side-note.right {
+
     right: 2%;
+
   }
 
   .coordinates {
+
     bottom: 24px;
+
     font-size: 8px;
+
   }
 
   .system-status {
+
     bottom: 24px;
+
     font-size: 8px;
+
   }
 
   .section-screen {
+
     padding: 145px 25px 35px;
+
     align-items: flex-start;
+
   }
 
   .section-title {
+
     margin-top: 65px;
+
   }
 
   .section-description {
+
     font-size: 12px;
+
   }
 
   .section-topline {
+
     font-size: 8px;
+
   }
+
 }
 
 @media (max-width: 390px) {
+
   .brand-name {
+
     font-size: 9px;
+
   }
 
   .nav {
+
     gap: 9px 12px;
+
   }
 
   .nav-link {
+
     font-size: 8px;
+
   }
 
   .hero-subnote {
+
     max-width: 95px;
+
   }
 
   .system-status {
+
     font-size: 7px;
+
   }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
+
   *::before,
+
   *::after {
+
     animation-duration: 0.01ms !important;
+
     animation-iteration-count: 1 !important;
+
     transition-duration: 0.01ms !important;
+
   }
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <canvas id="universe" aria-hidden="true"></canvas>
+
 <div class="ambient" aria-hidden="true"></div>
 
 <!-- HEADER -->
+
 <header class="header">
 
   <a href="#home" class="brand" id="brandHome">
+
     <span class="brand-symbol"></span>
+
     <span class="brand-name">A Living Archive</span>
+
   </a>
 
   <div class="header-right">
 
     <nav class="nav" aria-label="Main navigation">
+
       <a href="#about-me" class="nav-link" data-section="about" data-i18n="navAbout">
+
         ABOUT ME
+
       </a>
 
       <a href="#what-i-think" class="nav-link" data-section="think" data-i18n="navThink">
+
         WHAT I THINK
+
       </a>
 
       <a href="#what-i-read" class="nav-link" data-section="read" data-i18n="navRead">
+
         WHAT I READ
+
       </a>
 
       <a href="#what-i-want" class="nav-link" data-section="want" data-i18n="navWant">
+
         WHAT I WANT
+
       </a>
+
     </nav>
 
     <div class="languages" aria-label="Language selection">
+
       <button class="language" data-lang="zh" aria-label="中文">中</button>
+
       <button class="language active" data-lang="en" aria-label="English">EN</button>
+
       <button class="language" data-lang="fr" aria-label="Français">FR</button>
+
     </div>
 
   </div>
+
 </header>
 
 <!-- HOMEPAGE: ONE SCREEN -->
+
 <main class="home" id="home">
 
   <section class="hero" aria-label="Still Becoming">
@@ -837,268 +1407,439 @@ a:focus-visible {
       <div class="axis"></div>
 
       <div class="hero-kicker" data-i18n="kicker">
+
         PERSONAL ARCHIVE <span> / 001</span>
+
       </div>
 
       <div class="hero-subnote">
+
         <strong data-i18n="subnoteTitle">AN OPEN SYSTEM</strong>
+
         <span data-i18n="subnoteText">IDENTITY IN PROGRESS</span>
+
       </div>
 
       <div class="side-note left" data-i18n="sideLeft">
+
         OBSERVE / CONNECT / BECOME
+
       </div>
 
       <div class="side-note right" data-i18n="sideRight">
+
         VERSION 001 — ONGOING
+
       </div>
 
       <div class="letter-field" id="letterField" aria-label="Still Becoming">
+
       </div>
 
     </div>
 
     <div class="coordinates">
+
       <span>FIG. 001</span><br>
+
       <span data-i18n="coordinates">A STUDY OF BEING</span>
+
     </div>
 
     <div class="system-status">
+
       <span class="status-dot"></span>
+
       <span data-i18n="status">SYSTEM / EVOLVING</span>
+
     </div>
 
   </section>
+
 </main>
 
 <!-- FULL-SCREEN SECTIONS -->
+
 <section
+
   class="section-screen"
+
   id="sectionScreen"
+
   aria-hidden="true"
+
   aria-label="Archive section"
+
 >
+
   <div class="section-inner">
 
     <div class="section-topline">
+
       <span id="sectionCategory">ARCHIVE / 001</span>
+
       <span id="sectionNumber">01 — 04</span>
+
     </div>
 
     <h1 class="section-title" id="sectionTitle">
+
       About <em>me.</em>
+
     </h1>
 
     <p class="section-description" id="sectionDescription">
+
       A space for personal stories, experiences, and reflections.
+
     </p>
 
     <div class="section-bottom">
+
       <span class="section-index" data-i18n="sectionFooter">
+
         A LIVING ARCHIVE / CONTINUOUSLY EVOLVING
+
       </span>
 
       <button class="back-home" id="backHome">
+
         <span>←</span>
+
         <span data-i18n="backHome">RETURN TO THE UNIVERSE</span>
+
       </button>
+
     </div>
 
   </div>
+
 </section>
 
 <script>
+
 /* =================================
+
    01. TRANSLATIONS
+
 ================================= */
 
 const translations = {
+
   en: {
+
     navAbout: "ABOUT ME",
+
     navThink: "WHAT I THINK",
+
     navRead: "WHAT I READ",
+
     navWant: "WHAT I WANT",
 
     kicker: 'PERSONAL ARCHIVE <span> / 001</span>',
+
     subnoteTitle: "AN OPEN SYSTEM",
+
     subnoteText: "IDENTITY IN PROGRESS",
+
     sideLeft: "OBSERVE / CONNECT / BECOME",
+
     sideRight: "VERSION 001 — ONGOING",
+
     coordinates: "A STUDY OF BEING",
+
     status: "SYSTEM / EVOLVING",
 
     sectionFooter: "A LIVING ARCHIVE / CONTINUOUSLY EVOLVING",
+
     backHome: "RETURN TO THE UNIVERSE",
 
     sections: {
+
       about: {
+
         category: "ARCHIVE / IDENTITY",
+
         number: "01 — 04",
+
         title: "About <em>me.</em>",
+
         description:
+
           "The person behind the work. A collection of experiences, turning points, fragments of memory, and versions of myself that continue to change."
+
       },
 
       think: {
+
         category: "ARCHIVE / THOUGHT",
+
         number: "02 — 04",
+
         title: "What I <em>think.</em>",
+
         description:
+
           "Notes on design, visual culture, identity, society, and the questions that remain unresolved. A place for thoughts to take shape."
+
       },
 
       read: {
+
         category: "ARCHIVE / READING",
+
         number: "03 — 04",
+
         title: "What I <em>read.</em>",
+
         description:
+
           "Books, essays, quotations, references, and fragments of ideas worth keeping. A personal index of things that have left a trace."
+
       },
 
       want: {
+
         category: "ARCHIVE / BECOMING",
+
         number: "04 — 04",
+
         title: "What I <em>want.</em>",
+
         description:
+
           "Future directions, personal ambitions, places to go, and possibilities that have not yet taken form."
+
       }
+
     }
+
   },
 
   zh: {
+
     navAbout: "关于我",
+
     navThink: "关于我的思考",
+
     navRead: "关于我的阅读",
+
     navWant: "关于我想要的",
 
     kicker: '个人档案 <span> / 001</span>',
+
     subnoteTitle: "一个开放的系统",
+
     subnoteText: "身份持续生成中",
+
     sideLeft: "观察 / 连接 / 成为",
+
     sideRight: "版本 001 — 持续更新",
+
     coordinates: "关于存在的观察",
+
     status: "系统 / 演化中",
 
     sectionFooter: "一份持续生长的个人档案",
+
     backHome: "返回数字宇宙",
 
     sections: {
+
       about: {
+
         category: "档案 / 身份",
+
         number: "01 — 04",
+
         title: "关于<em>我。</em>",
+
         description:
+
           "作品背后的人。关于我的经历、人生转折、记忆碎片，以及那些仍在不断变化的自我。"
+
       },
 
       think: {
+
         category: "档案 / 思考",
+
         number: "02 — 04",
+
         title: "关于我的<em>思考。</em>",
+
         description:
+
           "关于设计、视觉文化、身份与社会的观察，以及那些尚未得到答案的问题。让想法在这里逐渐成形。"
+
       },
 
       read: {
+
         category: "档案 / 阅读",
+
         number: "03 — 04",
+
         title: "关于我的<em>阅读。</em>",
+
         description:
+
           "书籍、文章、摘录、参考资料与值得留下的思想片段。记录那些曾经触动我、并留下痕迹的事物。"
+
       },
 
       want: {
+
         category: "档案 / 未来",
+
         number: "04 — 04",
+
         title: "关于我<em>想要的。</em>",
+
         description:
+
           "未来的方向、个人的愿望、想去的地方，以及那些尚未成形的可能性。"
+
       }
+
     }
+
   },
 
   fr: {
+
     navAbout: "À PROPOS",
+
     navThink: "MES PENSÉES",
+
     navRead: "MES LECTURES",
+
     navWant: "MES ENVIES",
 
     kicker: 'ARCHIVE PERSONNELLE <span> / 001</span>',
+
     subnoteTitle: "UN SYSTÈME OUVERT",
+
     subnoteText: "IDENTITÉ EN ÉVOLUTION",
+
     sideLeft: "OBSERVER / RELIER / DEVENIR",
+
     sideRight: "VERSION 001 — EN COURS",
+
     coordinates: "UNE ÉTUDE DE L'ÊTRE",
+
     status: "SYSTÈME / EN ÉVOLUTION",
 
     sectionFooter: "UNE ARCHIVE PERSONNELLE EN ÉVOLUTION",
+
     backHome: "RETOURNER À L'UNIVERS",
 
     sections: {
+
       about: {
+
         category: "ARCHIVE / IDENTITÉ",
+
         number: "01 — 04",
+
         title: "À propos de <em>moi.</em>",
+
         description:
+
           "La personne derrière le travail. Des expériences, des tournants, des fragments de mémoire et des versions de moi qui continuent d'évoluer."
+
       },
 
       think: {
+
         category: "ARCHIVE / PENSÉE",
+
         number: "02 — 04",
+
         title: "Ce que je <em>pense.</em>",
+
         description:
+
           "Des notes sur le design, la culture visuelle, l'identité, la société et les questions qui restent ouvertes. Un espace où les idées prennent forme."
+
       },
 
       read: {
+
         category: "ARCHIVE / LECTURE",
+
         number: "03 — 04",
+
         title: "Ce que je <em>lis.</em>",
+
         description:
+
           "Des livres, des essais, des citations, des références et des fragments d'idées à conserver. Un index personnel de ce qui laisse une trace."
+
       },
 
       want: {
+
         category: "ARCHIVE / DEVENIR",
+
         number: "04 — 04",
+
         title: "Ce que je <em>veux.</em>",
+
         description:
+
           "Des directions futures, des ambitions personnelles, des lieux à découvrir et des possibilités qui n'ont pas encore pris forme."
+
       }
+
     }
+
   }
+
 };
 
 let currentLanguage = "en";
 
 function applyLanguage(language) {
+
   if (!translations[language]) return;
 
   currentLanguage = language;
+
   document.documentElement.lang = language;
 
   const dictionary = translations[language];
 
   document.querySelectorAll("[data-i18n]").forEach((element) => {
+
     const key = element.dataset.i18n;
 
     if (dictionary[key] !== undefined) {
+
       element.innerHTML = dictionary[key];
+
     }
+
   });
 
   document.querySelectorAll(".language").forEach((button) => {
+
     const active = button.dataset.lang === language;
 
     button.classList.toggle("active", active);
+
     button.setAttribute("aria-pressed", String(active));
+
   });
 
   const titles = {
+
     en: "STILL BECOMING — A Living Archive",
+
     zh: "持续生成中 — 一份个人档案",
+
     fr: "STILL BECOMING — Archive personnelle"
+
   };
 
   document.title = titles[language];
@@ -1106,102 +1847,159 @@ function applyLanguage(language) {
   const currentSection = document.querySelector(".nav-link.active");
 
   if (currentSection) {
+
     openSection(currentSection.dataset.section, false);
+
   }
 
   try {
+
     localStorage.setItem("archive-language", language);
+
   } catch (error) {
+
     // Language switching still works without local storage.
+
   }
+
 }
 
 document.querySelectorAll(".language").forEach((button) => {
+
   button.addEventListener("click", () => {
+
     applyLanguage(button.dataset.lang);
+
   });
+
 });
 
 try {
+
   const savedLanguage = localStorage.getItem("archive-language");
 
   if (savedLanguage && translations[savedLanguage]) {
+
     currentLanguage = savedLanguage;
+
   }
+
 } catch (error) {
+
   // Default to English.
+
 }
 
 applyLanguage(currentLanguage);
 
 /* =================================
+
    02. INDEPENDENT LETTERS
+
 ================================= */
 
 const letterField = document.getElementById("letterField");
+
 const composition = document.getElementById("composition");
 
 const letterData = [
+
   // STILL
+
   { char: "S", x: 16, y: 25, size: 12.5, rotate: -9, delay: 0.1 },
+
   { char: "T", x: 29, y: 16, size: 10.2, rotate: 5, delay: 0.18 },
+
   { char: "I", x: 39, y: 26, size: 9.3, rotate: -3, delay: 0.25 },
+
   { char: "L", x: 47, y: 12, size: 11.7, rotate: 8, delay: 0.32 },
+
   { char: "L", x: 56, y: 22, size: 9.8, rotate: -6, delay: 0.4 },
 
   // BECOMING
+
   { char: "B", x: 10, y: 47, size: 9.8, rotate: 6, delay: 0.48 },
+
   { char: "E", x: 22, y: 57, size: 11.6, rotate: -7, delay: 0.56 },
+
   { char: "C", x: 34, y: 43, size: 12.8, rotate: 4, delay: 0.64 },
+
   { char: "O", x: 46, y: 56, size: 10.4, rotate: -5, delay: 0.72 },
+
   { char: "M", x: 57, y: 42, size: 13.1, rotate: 7, delay: 0.8 },
+
   { char: "I", x: 69, y: 54, size: 8.8, rotate: -8, delay: 0.88 },
+
   { char: "N", x: 77, y: 42, size: 11.5, rotate: 4, delay: 0.96 },
+
   { char: "G", x: 86, y: 54, size: 10.4, rotate: -4, delay: 1.04 }
+
 ];
 
 const floatingNotes = [
+
   { text: "STILL", x: 7, y: 38, size: 10, wine: false },
+
   { text: "BECOMING", x: 68, y: 28, size: 10, wine: true },
+
   { text: "01001001", x: 17, y: 74, size: 0.75, wine: false },
+
   { text: "I AM HERE", x: 71, y: 76, size: 0.8, wine: false },
+
   { text: "001", x: 90, y: 34, size: 0.8, wine: true }
+
 ];
 
 const letterElements = [];
 
 function buildLetters() {
+
   letterField.innerHTML = "";
+
   letterElements.length = 0;
 
   const isMobile = window.innerWidth <= 700;
 
   letterData.forEach((item, index) => {
+
     const element = document.createElement("span");
 
     element.className = "letter";
+
     element.textContent = item.char;
+
     element.setAttribute("aria-hidden", "true");
 
     if ([1, 4, 7, 10, 12].includes(index)) {
+
       element.classList.add("serif-outline");
+
     }
 
     if ([2, 5, 9].includes(index)) {
+
       element.classList.add("wine");
+
     }
 
     const x = isMobile
+
       ? 9 + item.x * 0.82
+
       : item.x;
 
     const y = isMobile
+
       ? 17 + item.y * 0.8
+
       : item.y;
 
     element.style.left = x + "%";
+
     element.style.top = y + "%";
+
     element.style.fontSize =
+
       (isMobile ? item.size * 0.67 : item.size) + "vw";
 
     element.style.animationDelay = item.delay + "s";
@@ -1209,68 +2007,109 @@ function buildLetters() {
     const baseRotation = item.rotate;
 
     element.style.transform =
+
       "translate(-50%, -50%) rotate(" + baseRotation + "deg)";
 
     letterField.appendChild(element);
 
     letterElements.push({
+
       element,
+
       x,
+
       y,
+
       baseRotation,
+
       phase: Math.random() * Math.PI * 2,
+
       speed: 0.15 + Math.random() * 0.24,
+
       amplitude: 1.2 + Math.random() * 3.8,
+
       index
+
     });
+
   });
 
   floatingNotes.forEach((item, index) => {
+
     const element = document.createElement("span");
 
     element.className =
+
       "letter tiny" + (item.wine ? " wine" : "");
 
     element.textContent = item.text;
+
     element.style.left = item.x + "%";
+
     element.style.top = item.y + "%";
+
     element.style.fontSize = item.size + "vw";
+
     element.style.animationDelay = (0.9 + index * 0.12) + "s";
 
     letterField.appendChild(element);
 
     letterElements.push({
+
       element,
+
       x: item.x,
+
       y: item.y,
+
       baseRotation: 0,
+
       phase: Math.random() * Math.PI * 2,
+
       speed: 0.13 + Math.random() * 0.2,
+
       amplitude: 1.5 + Math.random() * 2.5,
+
       index: letterElements.length
+
     });
+
   });
+
 }
 
 /* =================================
+
    03. MOUSE-RESPONSIVE LETTERS
+
 ================================= */
 
 const pointer = {
+
   x: -1000,
+
   y: -1000,
+
   active: false
+
 };
 
 let motion = 0;
+
 let letterFrame = null;
 
 function animateLetters() {
+
   if (
+
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
   ) {
+
     letterFrame = null;
+
     return;
+
   }
 
   motion += 0.009;
@@ -1278,472 +2117,745 @@ function animateLetters() {
   const rect = composition.getBoundingClientRect();
 
   letterElements.forEach((item) => {
+
     const { element, x, y, baseRotation, phase, speed, amplitude } = item;
 
     const floatX = Math.sin(motion * speed + phase) * amplitude;
+
     const floatY = Math.cos(motion * speed * 0.8 + phase) * amplitude;
 
     let mouseX = 0;
+
     let mouseY = 0;
+
     let mouseRotate = 0;
 
     if (pointer.active) {
+
       const letterX = rect.left + rect.width * x / 100;
+
       const letterY = rect.top + rect.height * y / 100;
 
       const dx = letterX - pointer.x;
+
       const dy = letterY - pointer.y;
+
       const distance = Math.sqrt(dx * dx + dy * dy);
+
       const radius = 190;
 
       if (distance < radius && distance > 0) {
+
         const strength = (1 - distance / radius) * 12;
 
         mouseX = (dx / distance) * strength;
+
         mouseY = (dy / distance) * strength;
 
         mouseRotate = (dx / distance) * 1.8;
+
       }
+
     }
 
     element.style.transform =
+
       "translate(" +
+
       "calc(-50% + " + (floatX + mouseX) + "px), " +
+
       "calc(-50% + " + (floatY + mouseY) + "px)" +
+
       ") rotate(" +
+
       (baseRotation + Math.sin(motion * speed + phase) * 1.3 + mouseRotate) +
+
       "deg)";
+
   });
 
   letterFrame = requestAnimationFrame(animateLetters);
+
 }
 
 composition.addEventListener("pointermove", (event) => {
+
   pointer.x = event.clientX;
+
   pointer.y = event.clientY;
+
   pointer.active = true;
+
 });
 
 composition.addEventListener("pointerleave", () => {
+
   pointer.active = false;
+
 });
 
 function startLetterAnimation() {
+
   if (
+
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
   ) {
+
     if (letterFrame !== null) {
+
       cancelAnimationFrame(letterFrame);
+
       letterFrame = null;
+
     }
 
     return;
+
   }
 
   if (letterFrame === null) {
+
     letterFrame = requestAnimationFrame(animateLetters);
+
   }
+
 }
 
 /* =================================
+
    04. GRAPHIC LINES
+
 ================================= */
 
 function buildGraphicLines() {
+
   letterField.querySelectorAll(
+
     ".graphic-line, .graphic-node"
+
   ).forEach((element) => element.remove());
 
   const points = [
+
     [12, 32],
+
     [30, 22],
+
     [42, 31],
+
     [58, 19],
+
     [75, 33],
+
     [86, 46],
+
     [67, 63],
+
     [49, 69],
+
     [30, 62],
+
     [17, 78]
+
   ];
 
   const connections = [
+
     [0, 1],
+
     [1, 2],
+
     [2, 3],
+
     [3, 4],
+
     [4, 5],
+
     [5, 6],
+
     [6, 7],
+
     [7, 8],
+
     [8, 9],
+
     [1, 8],
+
     [2, 7],
+
     [3, 6]
+
   ];
 
   connections.forEach(([a, b], index) => {
+
     const [x1, y1] = points[a];
+
     const [x2, y2] = points[b];
 
     const dx = x2 - x1;
+
     const dy = y2 - y1;
+
     const length = Math.sqrt(dx * dx + dy * dy);
+
     const angle = Math.atan2(dy, dx) * 180 / Math.PI;
 
     const line = document.createElement("div");
 
     line.className = "graphic-line";
+
     line.style.left = x1 + "%";
+
     line.style.top = y1 + "%";
+
     line.style.width = length + "%";
+
     line.style.transform = "rotate(" + angle + "deg)";
+
     line.style.opacity = index % 3 === 0 ? "0.75" : "0.4";
 
     letterField.appendChild(line);
+
   });
 
   points.forEach(([x, y], index) => {
+
     const node = document.createElement("div");
 
     node.className = "graphic-node";
+
     node.style.left = x + "%";
+
     node.style.top = y + "%";
 
     if (index % 3 !== 0) {
+
       node.style.opacity = "0.45";
+
       node.style.background = "#92929b";
+
       node.style.boxShadow = "none";
+
     }
 
     letterField.appendChild(node);
+
   });
 
   // Keep the letterforms above the technical graphics.
+
   letterField.querySelectorAll(".letter").forEach((element) => {
+
     element.style.zIndex = "2";
+
   });
 
   letterField.querySelectorAll(
+
     ".graphic-line, .graphic-node"
+
   ).forEach((element) => {
+
     element.style.zIndex = "0";
+
   });
+
 }
 
 /* =================================
+
    05. INTERACTIVE UNIVERSE CANVAS
+
 ================================= */
 
 const canvas = document.getElementById("universe");
+
 const ctx = canvas.getContext("2d");
 
 let width = 0;
+
 let height = 0;
+
 let stars = [];
+
 let universeFrame = null;
+
 let lastDraw = 0;
 
 const prefersReducedMotion = window.matchMedia(
+
   "(prefers-reduced-motion: reduce)"
+
 );
 
 function resizeUniverse() {
+
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   width = window.innerWidth;
+
   height = window.innerHeight;
 
   canvas.width = Math.round(width * dpr);
+
   canvas.height = Math.round(height * dpr);
 
   canvas.style.width = width + "px";
+
   canvas.style.height = height + "px";
 
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   const count = Math.min(
+
     150,
+
     Math.max(55, Math.floor(width * height / 8500))
+
   );
 
   stars = Array.from({ length: count }, () => ({
+
     x: Math.random() * width,
+
     y: Math.random() * height,
+
     radius: Math.random() * 1.1 + 0.25,
+
     opacity: Math.random() * 0.5 + 0.12,
+
     speed: Math.random() * 0.12 + 0.02,
+
     phase: Math.random() * Math.PI * 2,
+
     wine: Math.random() > 0.91
+
   }));
 
   drawUniverse(0);
+
 }
 
 function drawUniverse(time) {
+
   ctx.clearRect(0, 0, width, height);
 
   const elapsed = time / 1000;
+
   const maxDistance = width < 600 ? 95 : 135;
 
   stars.forEach((star) => {
+
     if (!prefersReducedMotion.matches) {
+
       star.y -= star.speed * 0.12;
+
       star.x += Math.sin(elapsed * 0.2 + star.phase) * 0.04;
 
       if (star.y < -2) {
+
         star.y = height + 2;
+
         star.x = Math.random() * width;
+
       }
+
     }
+
   });
 
   // Connect nearby stars with fine, silver threads.
+
   for (let i = 0; i < stars.length; i++) {
+
     for (let j = i + 1; j < stars.length; j++) {
+
       const a = stars[i];
+
       const b = stars[j];
 
       const dx = a.x - b.x;
+
       const dy = a.y - b.y;
+
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < maxDistance) {
+
         const opacity =
+
           (1 - distance / maxDistance) * 0.16;
 
         ctx.beginPath();
+
         ctx.moveTo(a.x, a.y);
+
         ctx.lineTo(b.x, b.y);
 
         ctx.strokeStyle =
+
           "rgba(164, 164, 178, " + opacity + ")";
 
         ctx.lineWidth = 0.5;
+
         ctx.stroke();
+
       }
+
     }
+
   }
 
   // Mouse creates a local field of interaction.
+
   if (pointer.active && !prefersReducedMotion.matches) {
+
     stars.forEach((star) => {
+
       const dx = star.x - pointer.x;
+
       const dy = star.y - pointer.y;
+
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < 145) {
+
         const opacity = (1 - distance / 145) * 0.35;
 
         ctx.beginPath();
+
         ctx.moveTo(star.x, star.y);
+
         ctx.lineTo(pointer.x, pointer.y);
 
         ctx.strokeStyle =
+
           "rgba(178, 72, 100, " + opacity + ")";
 
         ctx.lineWidth = 0.55;
+
         ctx.stroke();
+
       }
+
     });
+
   }
 
   stars.forEach((star) => {
+
     const twinkle = prefersReducedMotion.matches
+
       ? 1
+
       : 0.65 + Math.sin(elapsed * 0.7 + star.phase) * 0.25;
 
     ctx.beginPath();
 
     ctx.arc(
+
       star.x,
+
       star.y,
+
       star.radius,
+
       0,
+
       Math.PI * 2
+
     );
 
     ctx.fillStyle = star.wine
+
       ? "rgba(196, 65, 96, " + star.opacity * twinkle + ")"
+
       : "rgba(206, 206, 218, " + star.opacity * twinkle + ")";
 
     ctx.fill();
+
   });
 
   // Cursor halo.
+
   if (pointer.active && !prefersReducedMotion.matches) {
+
     const gradient = ctx.createRadialGradient(
+
       pointer.x,
+
       pointer.y,
+
       0,
+
       pointer.x,
+
       pointer.y,
+
       100
+
     );
 
     gradient.addColorStop(0, "rgba(120, 31, 50, 0.065)");
+
     gradient.addColorStop(1, "rgba(120, 31, 50, 0)");
 
     ctx.beginPath();
+
     ctx.arc(pointer.x, pointer.y, 100, 0, Math.PI * 2);
+
     ctx.fillStyle = gradient;
+
     ctx.fill();
+
   }
+
 }
 
 function animateUniverse(time) {
+
   if (prefersReducedMotion.matches) {
+
     drawUniverse(0);
+
     universeFrame = null;
+
     return;
+
   }
 
   if (time - lastDraw > 33) {
+
     drawUniverse(time);
+
     lastDraw = time;
+
   }
 
   universeFrame = requestAnimationFrame(animateUniverse);
+
 }
 
 function startUniverse() {
+
   if (prefersReducedMotion.matches) {
+
     if (universeFrame !== null) {
+
       cancelAnimationFrame(universeFrame);
+
       universeFrame = null;
+
     }
 
     drawUniverse(0);
+
     return;
+
   }
 
   if (universeFrame === null) {
+
     universeFrame = requestAnimationFrame(animateUniverse);
+
   }
+
 }
 
 window.addEventListener("pointermove", (event) => {
+
   pointer.x = event.clientX;
+
   pointer.y = event.clientY;
+
   pointer.active = true;
+
 });
 
 document.addEventListener("pointerleave", () => {
+
   pointer.active = false;
+
 });
 
 window.addEventListener("resize", () => {
+
   resizeUniverse();
+
   buildLetters();
+
   buildGraphicLines();
+
 });
 
 if (prefersReducedMotion.addEventListener) {
+
   prefersReducedMotion.addEventListener("change", () => {
+
     startUniverse();
+
     startLetterAnimation();
+
   });
+
 }
 
 /* =================================
+
    06. NAVIGATION / FULL-SCREEN VIEWS
+
 ================================= */
 
 const home = document.getElementById("home");
+
 const sectionScreen = document.getElementById("sectionScreen");
+
 const sectionCategory = document.getElementById("sectionCategory");
+
 const sectionNumber = document.getElementById("sectionNumber");
+
 const sectionTitle = document.getElementById("sectionTitle");
+
 const sectionDescription = document.getElementById("sectionDescription");
 
 function openSection(sectionKey, updateHash = true) {
+
   const section = translations[currentLanguage].sections[sectionKey];
 
   if (!section) return;
 
   sectionCategory.textContent = section.category;
+
   sectionNumber.textContent = section.number;
+
   sectionTitle.innerHTML = section.title;
+
   sectionDescription.textContent = section.description;
 
   home.classList.add("is-hidden");
+
   sectionScreen.classList.add("is-open");
 
   sectionScreen.setAttribute("aria-hidden", "false");
 
   document.querySelectorAll(".nav-link").forEach((link) => {
+
     const active = link.dataset.section === sectionKey;
 
     link.classList.toggle("active", active);
+
     link.setAttribute("aria-current", active ? "page" : "false");
+
   });
 
   if (updateHash) {
+
     history.pushState({ section: sectionKey }, "", "#" + sectionKey);
+
   }
+
 }
 
 function goHome(updateHash = true) {
+
   sectionScreen.classList.remove("is-open");
+
   sectionScreen.setAttribute("aria-hidden", "true");
 
   home.classList.remove("is-hidden");
 
   document.querySelectorAll(".nav-link").forEach((link) => {
+
     link.classList.remove("active");
+
     link.removeAttribute("aria-current");
+
   });
 
   if (updateHash) {
+
     history.pushState({}, "", window.location.pathname + window.location.search);
+
   }
+
 }
 
 document.querySelectorAll(".nav-link").forEach((link) => {
+
   link.addEventListener("click", (event) => {
+
     event.preventDefault();
+
     openSection(link.dataset.section);
+
   });
+
 });
 
 document.getElementById("brandHome").addEventListener("click", (event) => {
+
   event.preventDefault();
+
   goHome();
+
 });
 
 document.getElementById("backHome").addEventListener("click", () => {
+
   goHome();
+
 });
 
 window.addEventListener("popstate", () => {
+
   const hash = window.location.hash.replace("#", "");
 
   const matchingLink = [...document.querySelectorAll(".nav-link")]
+
     .find((link) => link.dataset.section === hash);
 
   if (matchingLink) {
+
     openSection(matchingLink.dataset.section, false);
+
   } else {
+
     goHome(false);
+
   }
+
 });
 
 document.addEventListener("keydown", (event) => {
+
   if (event.key === "Escape") {
+
     goHome();
+
   }
+
 });
 
 /* =================================
+
    07. INITIALIZE
+
 ================================= */
 
 buildLetters();
+
 buildGraphicLines();
+
 resizeUniverse();
+
 startUniverse();
+
 startLetterAnimation();
 
 </script>
+
 </body>
+
 </html>
