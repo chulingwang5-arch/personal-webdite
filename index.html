@@ -9,11 +9,18 @@
 <style>
 :root {
   --black: #050506;
-  --white: #efefec;
-  --silver: #8b8b91;
-  --dim: #45454b;
-  --green: #a2ff9c;
-  --wine: #a23b50;
+  --white: #e8e8e5;
+  --silver: #85858b;
+  --muted: #55555b;
+
+  /* Dark green with a restrained phosphorescent quality */
+  --green: #416c49;
+  --green-light: #608a64;
+  --green-glow: rgba(78, 139, 83, .12);
+
+  /* Near-black burgundy */
+  --wine: #431c27;
+
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --sans: Arial, Helvetica, sans-serif;
 }
@@ -24,9 +31,9 @@
 
 html,
 body {
-  margin: 0;
   width: 100%;
-  min-height: 100%;
+  height: 100%;
+  margin: 0;
   background: var(--black);
   color: var(--white);
   font-family: var(--mono);
@@ -38,15 +45,16 @@ body {
 
 button,
 a {
-  color: inherit;
   font: inherit;
 }
 
 button {
+  color: inherit;
   cursor: pointer;
 }
 
 a {
+  color: inherit;
   text-decoration: none;
 }
 
@@ -55,25 +63,26 @@ a {
   color: var(--black);
 }
 
-/* ---------- BACKGROUND ---------- */
+/* ========================================
+   BACKGROUND
+======================================== */
 
-#space {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-}
-
+#space,
 #grain {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 2;
-  opacity: .12;
   pointer-events: none;
+}
+
+#space {
+  z-index: 0;
+}
+
+#grain {
+  z-index: 2;
+  opacity: .075;
   mix-blend-mode: screen;
 }
 
@@ -82,59 +91,94 @@ a {
   inset: 0;
   z-index: 1;
   pointer-events: none;
+
   background:
     radial-gradient(
       ellipse at 50% 48%,
-      transparent 10%,
-      rgba(5,5,6,.12) 60%,
-      rgba(5,5,6,.75) 100%
+      rgba(5, 5, 6, 0) 0%,
+      rgba(5, 5, 6, .12) 48%,
+      rgba(5, 5, 6, .62) 100%
     );
 }
 
-/* ---------- HEADER ---------- */
+/* A subtle blurred atmosphere behind the composition */
+
+.atmosphere {
+  position: fixed;
+  inset: -10%;
+  z-index: 1;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 34% 43%,
+      rgba(38, 58, 43, .055),
+      transparent 39%
+    ),
+    radial-gradient(
+      ellipse at 76% 63%,
+      rgba(46, 37, 45, .045),
+      transparent 35%
+    );
+
+  filter: blur(45px);
+}
+
+/* ========================================
+   HEADER
+======================================== */
 
 header {
   position: fixed;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
+
   padding: 29px 4.1vw;
+
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  z-index: 10;
+  gap: 25px;
+
   font-size: 10px;
-  letter-spacing: .12em;
+  letter-spacing: .10em;
   text-transform: uppercase;
 }
 
 .brand {
   justify-self: start;
-  color: var(--white);
-  background: none;
-  border: none;
+
   padding: 0;
+  border: 0;
+  background: transparent;
+
   font-size: 10px;
-  letter-spacing: .13em;
+  letter-spacing: .11em;
   white-space: nowrap;
 }
 
 .brand span {
-  color: var(--silver);
-  margin-left: 8px;
+  margin-left: 7px;
+  color: var(--muted);
 }
 
 nav {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: clamp(15px, 2.5vw, 38px);
+  justify-content: center;
+  gap: clamp(15px, 2.3vw, 34px);
+
+  white-space: nowrap;
 }
 
 nav a {
   position: relative;
-  color: #a2a2a7;
-  white-space: nowrap;
+  padding: 5px 0;
+
+  color: #929297;
+
   transition: color .25s ease;
 }
 
@@ -143,9 +187,11 @@ nav a::after {
   position: absolute;
   left: 0;
   right: 100%;
-  bottom: -7px;
+  bottom: -3px;
+
   height: 1px;
   background: var(--green);
+
   transition: right .3s ease;
 }
 
@@ -160,64 +206,78 @@ nav a.active::after {
 }
 
 .languages {
-  justify-self: end;
   display: flex;
-  gap: 11px;
+  justify-self: end;
+  gap: 12px;
 }
 
 .languages button {
-  background: none;
+  padding: 3px 0;
   border: 0;
-  padding: 4px 0;
+  background: none;
+
+  color: #606067;
   font-size: 10px;
-  color: #66666c;
 }
 
 .languages button.active,
 .languages button:hover {
-  color: var(--green);
+  color: var(--green-light);
 }
 
-/* ---------- MAIN COMPOSITION ---------- */
+/* ========================================
+   MAIN COMPOSITION
+======================================== */
 
 main {
   position: relative;
-  width: 100%;
-  height: 100svh;
-  min-height: 520px;
-  overflow: hidden;
   z-index: 3;
+
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  min-height: 500px;
+
+  overflow: hidden;
 }
 
 .composition {
   position: absolute;
+
+  left: 50%;
+  top: 49%;
+
   width: min(82vw, 1120px);
   height: min(66vh, 590px);
   min-height: 390px;
-  left: 50%;
-  top: 49%;
+
   transform: translate(-50%, -50%);
 }
 
-/* Golden-ratio registration line */
+/* Golden-ratio reference */
 
 .registration {
   position: absolute;
+
   left: 61.8%;
   top: 0;
-  height: 100%;
+
   width: 1px;
-  background: rgba(255,255,255,.11);
+  height: 100%;
+
+  background: rgba(230, 230, 235, .055);
 }
 
 .registration::before,
 .registration::after {
   content: "";
   position: absolute;
-  left: -3px;
-  width: 7px;
+  left: -2px;
+
+  width: 5px;
   height: 1px;
-  background: rgba(255,255,255,.38);
+
+  background: rgba(230, 230, 235, .22);
 }
 
 .registration::before {
@@ -228,126 +288,205 @@ main {
   top: 61.8%;
 }
 
-/* Fine registration marks */
+/* Sparse registration marks */
 
 .cross {
   position: absolute;
-  width: 11px;
-  height: 11px;
-  opacity: .6;
+  width: 9px;
+  height: 9px;
+  opacity: .42;
 }
 
 .cross::before,
 .cross::after {
   content: "";
   position: absolute;
-  background: rgba(255,255,255,.5);
+  background: rgba(220, 220, 225, .34);
 }
 
 .cross::before {
-  left: 5px;
-  top: 0;
+  left: 4px;
   width: 1px;
-  height: 11px;
+  height: 9px;
 }
 
 .cross::after {
-  top: 5px;
-  left: 0;
-  width: 11px;
+  top: 4px;
+  width: 9px;
   height: 1px;
 }
 
-.cross.one {
-  left: 29.5%;
-  top: 25%;
+.cross-a {
+  left: 19%;
+  top: 26%;
 }
 
-.cross.two {
+.cross-b {
   left: 77%;
-  top: 72%;
+  top: 71%;
+  transform: scale(.7);
 }
 
-.cross.three {
-  left: 15%;
-  top: 76%;
-  transform: scale(.65);
-}
-
-/* ---------- TITLE ---------- */
+/* ========================================
+   TITLE
+======================================== */
 
 .title-field {
   position: absolute;
   inset: 0;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr;
 }
 
+/*
+  Both words are forced into horizontal rows.
+  Their size is close to the navigation font size.
+*/
+
 .word {
-  position: absolute;
-  height: 100px;
+  position: relative;
+
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
+  justify-content: flex-start;
+
+  width: max-content;
+  max-width: none;
+  height: auto;
+
   white-space: nowrap;
+  writing-mode: horizontal-tb;
+  overflow: visible;
 }
 
 .word-one {
-  left: 17%;
-  top: 28%;
+  grid-row: 1;
+  align-self: center;
+  justify-self: start;
+
+  margin-left: 25%;
+  margin-top: 2%;
 }
 
 .word-two {
-  left: 34%;
-  top: 51%;
+  grid-row: 2;
+  align-self: start;
+  justify-self: start;
+
+  margin-left: 39%;
+  margin-top: -1%;
 }
 
 .letter {
   display: inline-block;
+  flex: 0 0 auto;
+
   position: relative;
-  color: var(--green);
-  font-family: var(--sans);
-  font-size: clamp(47px, 7.3vw, 104px);
-  line-height: .9;
+
+  white-space: pre;
+  writing-mode: horizontal-tb;
+
+  font-family: var(--mono);
+  font-size: clamp(10px, .8vw, 12px);
   font-weight: 400;
-  letter-spacing: -.085em;
-  transform-origin: center center;
+  line-height: 1;
+
+  letter-spacing: .025em;
+
+  color: var(--green);
+
+  text-shadow:
+    0 0 5px rgba(78, 139, 83, .10);
+
+  transform-origin: center;
   will-change: transform;
-  transition: color .25s ease;
+
+  pointer-events: auto;
   user-select: none;
+
+  transition:
+    color .3s ease,
+    text-shadow .3s ease;
 }
 
 .letter:hover {
-  color: #e4ffe1;
-  text-shadow: 0 0 20px rgba(162,255,156,.3);
+  color: var(--green-light);
+
+  text-shadow:
+    0 0 5px rgba(78, 139, 83, .20),
+    0 0 11px rgba(78, 139, 83, .09);
 }
 
-.word-one .letter:nth-child(1) { margin-right: .04em; }
-.word-one .letter:nth-child(2) { margin-right: .01em; }
-.word-one .letter:nth-child(3) { margin-right: .11em; }
-.word-one .letter:nth-child(4) { margin-right: -.015em; }
-.word-one .letter:nth-child(5) { margin-right: 0; }
+/* Irregular spacing: controlled rather than chaotic */
 
-.word-two .letter:nth-child(1) { margin-right: .08em; }
-.word-two .letter:nth-child(2) { margin-right: -.025em; }
-.word-two .letter:nth-child(3) { margin-right: .035em; }
-.word-two .letter:nth-child(4) { margin-right: .12em; }
-.word-two .letter:nth-child(5) { margin-right: -.025em; }
-.word-two .letter:nth-child(6) { margin-right: .06em; }
-.word-two .letter:nth-child(7) { margin-right: -.02em; }
-.word-two .letter:nth-child(8) { margin-right: 0; }
+.word-one .letter:nth-child(1) {
+  margin-right: .06em;
+}
 
-/* Small labels */
+.word-one .letter:nth-child(2) {
+  margin-right: .025em;
+}
+
+.word-one .letter:nth-child(3) {
+  margin-right: .20em;
+}
+
+.word-one .letter:nth-child(4) {
+  margin-right: -.025em;
+}
+
+.word-one .letter:nth-child(5) {
+  margin-right: 0;
+}
+
+.word-two .letter:nth-child(1) {
+  margin-right: .12em;
+}
+
+.word-two .letter:nth-child(2) {
+  margin-right: -.025em;
+}
+
+.word-two .letter:nth-child(3) {
+  margin-right: .04em;
+}
+
+.word-two .letter:nth-child(4) {
+  margin-right: .19em;
+}
+
+.word-two .letter:nth-child(5) {
+  margin-right: -.025em;
+}
+
+.word-two .letter:nth-child(6) {
+  margin-right: .08em;
+}
+
+.word-two .letter:nth-child(7) {
+  margin-right: -.015em;
+}
+
+/* Editorial notes */
 
 .label {
   position: absolute;
+
+  color: var(--silver);
+
   font-size: 9px;
   line-height: 1.8;
-  color: var(--silver);
-  letter-spacing: .13em;
+  letter-spacing: .12em;
   text-transform: uppercase;
 }
 
 .label-top {
-  left: 17.3%;
-  top: 18%;
+  left: 25.2%;
+  top: 27%;
 }
 
 .label-right {
@@ -358,35 +497,41 @@ main {
 
 .label-left {
   left: 0;
-  top: 62%;
+  top: 63%;
 }
 
 .label-bottom {
   right: 0;
-  bottom: 10%;
+  bottom: 9%;
   text-align: right;
 }
 
-.label .accent {
+.accent {
   color: var(--wine);
 }
 
-/* ---------- FOOTER ---------- */
+/* ========================================
+   FOOTER
+======================================== */
 
 footer {
   position: fixed;
   z-index: 10;
+
   left: 4.1vw;
   right: 4.1vw;
-  bottom: 27px;
+  bottom: 25px;
+
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: flex-end;
+
   color: #77777d;
+
   font-size: 9px;
+  line-height: 1.9;
   letter-spacing: .1em;
   text-transform: uppercase;
-  line-height: 1.9;
 }
 
 .footer-right {
@@ -395,34 +540,39 @@ footer {
 
 .status-dot {
   display: inline-block;
+
   width: 5px;
   height: 5px;
   margin-right: 7px;
+
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 9px rgba(162,255,156,.4);
-  animation: blink 2.4s infinite;
+  background: var(--wine);
+  box-shadow: 0 0 5px rgba(67, 28, 39, .25);
 }
 
-@keyframes blink {
-  0%, 100% { opacity: .9; }
-  50% { opacity: .3; }
-}
-
-/* ---------- SECTION OVERLAY ---------- */
+/* ========================================
+   SECTION PANELS
+======================================== */
 
 .overlay {
   position: fixed;
+  z-index: 30;
   inset: 0;
-  z-index: 20;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 30px;
-  background: rgba(5,5,6,.96);
+
+  background: rgba(5, 5, 6, .97);
+
   opacity: 0;
   visibility: hidden;
-  transition: opacity .35s ease, visibility .35s ease;
+
+  transition:
+    opacity .3s ease,
+    visibility .3s ease;
 }
 
 .overlay.open {
@@ -431,67 +581,75 @@ footer {
 }
 
 .panel {
-  position: relative;
   width: min(680px, 100%);
-  border-top: 1px solid rgba(255,255,255,.25);
-  padding-top: 22px;
+
+  padding-top: 23px;
+
+  border-top: 1px solid rgba(255, 255, 255, .23);
 }
 
 .panel-index {
+  margin-bottom: 34px;
+
   color: var(--wine);
+
   font-size: 10px;
-  letter-spacing: .15em;
-  margin-bottom: 35px;
+  letter-spacing: .14em;
 }
 
 .panel h1 {
   margin: 0 0 24px;
+
   font-family: var(--sans);
-  font-size: clamp(35px, 7vw, 68px);
+  font-size: clamp(36px, 7vw, 68px);
   font-weight: 400;
-  letter-spacing: -.06em;
+  letter-spacing: -.055em;
 }
 
 .panel p {
-  max-width: 460px;
-  color: #99999f;
+  max-width: 480px;
+
+  color: #a0a0a5;
+
   font-family: var(--sans);
   font-size: 15px;
   line-height: 1.9;
 }
 
 .close-panel {
-  margin-top: 32px;
+  margin-top: 30px;
   padding: 10px 0;
-  border: none;
-  border-bottom: 1px solid #777;
+
+  border: 0;
+  border-bottom: 1px solid #55555b;
+
   background: none;
+
   color: var(--white);
+
   font-size: 10px;
   letter-spacing: .12em;
   text-transform: uppercase;
 }
 
 .close-panel:hover {
-  color: var(--green);
+  color: var(--green-light);
   border-color: var(--green);
 }
 
-/* ---------- MOBILE ---------- */
+/* ========================================
+   RESPONSIVE
+======================================== */
 
-@media (max-width: 760px) {
-  body {
-    overflow: hidden;
-  }
-
+@media (max-width: 900px) {
   header {
-    padding: 22px 6vw;
     grid-template-columns: 1fr auto;
-    row-gap: 23px;
+    row-gap: 22px;
   }
 
   .brand {
-    font-size: 9px;
+    grid-column: 1;
+    grid-row: 1;
   }
 
   .languages {
@@ -502,36 +660,60 @@ footer {
   nav {
     grid-column: 1 / -1;
     grid-row: 2;
+
+    width: 100%;
     justify-content: space-between;
     gap: 10px;
-    width: 100%;
-    font-size: 8px;
+
+    font-size: 9px;
   }
 
   .composition {
     width: 92vw;
-    height: 54vh;
-    min-height: 320px;
-    top: 51%;
-  }
-
-  .word {
-    height: 70px;
+    height: 55vh;
   }
 
   .word-one {
-    left: 3%;
-    top: 30%;
+    margin-left: 20%;
   }
 
   .word-two {
-    left: 16%;
-    top: 49%;
+    margin-left: 35%;
+  }
+
+  .label {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 520px) {
+  header {
+    padding: 21px 5vw;
+  }
+
+  nav {
+    font-size: 7px;
+    letter-spacing: .02em;
+  }
+
+  .composition {
+    width: 96vw;
+    height: 52vh;
+    min-height: 300px;
+  }
+
+  .word-one {
+    margin-left: 16%;
+    margin-top: 5%;
+  }
+
+  .word-two {
+    margin-left: 26%;
+    margin-top: 2%;
   }
 
   .letter {
-    font-size: clamp(36px, 10.2vw, 72px);
-    letter-spacing: -.08em;
+    font-size: 10px;
   }
 
   .label {
@@ -539,18 +721,18 @@ footer {
   }
 
   .label-top {
-    left: 3%;
-    top: 18%;
+    left: 16%;
+    top: 24%;
   }
 
   .label-right {
     right: 2%;
-    top: 37%;
+    top: 40%;
   }
 
   .label-left {
     left: 2%;
-    top: 65%;
+    top: 67%;
   }
 
   .label-bottom {
@@ -559,32 +741,10 @@ footer {
   }
 
   footer {
-    left: 6vw;
-    right: 6vw;
-    bottom: 18px;
+    left: 5vw;
+    right: 5vw;
+    bottom: 15px;
     font-size: 7px;
-  }
-}
-
-@media (max-width: 390px) {
-  nav {
-    font-size: 7px;
-  }
-
-  .word-one {
-    left: 1%;
-  }
-
-  .word-two {
-    left: 9%;
-  }
-
-  .letter {
-    font-size: 9.5vw;
-  }
-
-  .label-right {
-    right: 0;
   }
 }
 
@@ -592,8 +752,8 @@ footer {
   *,
   *::before,
   *::after {
-    animation-duration: .01ms !important;
-    transition-duration: .01ms !important;
+    animation: none !important;
+    transition: none !important;
   }
 }
 </style>
@@ -603,10 +763,12 @@ footer {
 
 <canvas id="space" aria-hidden="true"></canvas>
 <canvas id="grain" aria-hidden="true"></canvas>
-<div class="vignette" aria-hidden="true"></div>
+
+<div class="atmosphere"></div>
+<div class="vignette"></div>
 
 <header>
-  <button class="brand" id="homeButton" aria-label="Return home">
+  <button class="brand" id="homeButton">
     A LIVING ARCHIVE <span>/ 001</span>
   </button>
 
@@ -625,12 +787,11 @@ footer {
 </header>
 
 <main id="home">
-  <section class="composition" aria-label="Still Becoming">
+  <section class="composition">
 
     <div class="registration"></div>
-    <div class="cross one"></div>
-    <div class="cross two"></div>
-    <div class="cross three"></div>
+    <div class="cross cross-a"></div>
+    <div class="cross cross-b"></div>
 
     <div class="label label-top" data-i18n="topLabel">
       PERSONAL ARCHIVE<br>
@@ -649,7 +810,7 @@ footer {
       FORM / THOUGHT / BECOMING
     </div>
 
-    <div class="title-field" id="titleField">
+    <div class="title-field">
       <div class="word word-one" data-word="STILL"></div>
       <div class="word word-two" data-word="BECOMING"></div>
     </div>
@@ -657,7 +818,7 @@ footer {
 </main>
 
 <footer>
-  <div class="footer-left">
+  <div>
     <span class="status-dot"></span>
     <span data-i18n="status">SYSTEM EVOLVING</span><br>
     <span>26°N / 114°E</span>
@@ -665,7 +826,7 @@ footer {
 
   <div class="footer-right">
     <span data-i18n="footerTop">A PERSONAL UNIVERSE</span><br>
-    <span>© <span id="year"></span> — STILL IN PROCESS</span>
+    © <span id="year"></span> — STILL IN PROCESS
   </div>
 </footer>
 
@@ -681,9 +842,9 @@ footer {
 </section>
 
 <script>
-/* =====================================================
-   1. LANGUAGE SYSTEM
-===================================================== */
+/* ========================================
+   LANGUAGE CONTENT
+======================================== */
 
 const translations = {
   en: {
@@ -691,33 +852,44 @@ const translations = {
     navThoughts: "About what I think",
     navReading: "About what I read",
     navDesire: "About what I want",
-    topLabel: 'PERSONAL ARCHIVE<br><span class="accent">A WORK IN PROGRESS</span>',
+
+    topLabel:
+      'PERSONAL ARCHIVE<br><span class="accent">A WORK IN PROGRESS</span>',
+
     rightLabel: "AN OPEN<br>SYSTEM",
     leftLabel: "NOT FIXED.<br>NOT FINISHED.",
     bottomLabel: "FORM / THOUGHT / BECOMING",
     status: "SYSTEM EVOLVING",
     footerTop: "A PERSONAL UNIVERSE",
     back: "← Back to the beginning",
+
     sections: {
       about: {
         index: "ARCHIVE / 001",
         title: "About me",
-        description: "A collection of fragments, experiences and identities. Not a fixed portrait, but a self in continuous formation."
+        description:
+          "A collection of fragments, experiences and identities. Not a fixed portrait, but a self in continuous formation."
       },
+
       thoughts: {
         index: "ARCHIVE / 002",
         title: "About what I think",
-        description: "Notes on design, images, cities, culture and the quiet structures that shape the way we see the world."
+        description:
+          "Notes on design, images, cities, culture and the quiet structures that shape the way we see the world."
       },
+
       reading: {
         index: "ARCHIVE / 003",
         title: "About what I read",
-        description: "Books, essays, visual references and ideas that stay with me long after the last page."
+        description:
+          "Books, essays, visual references and ideas that stay with me long after the last page."
       },
+
       desire: {
         index: "ARCHIVE / 004",
         title: "About what I want",
-        description: "Unfinished ambitions, possible futures and things I have not yet found the words to describe."
+        description:
+          "Unfinished ambitions, possible futures and things I have not yet found the words to describe."
       }
     }
   },
@@ -727,33 +899,44 @@ const translations = {
     navThoughts: "关于思考",
     navReading: "关于阅读",
     navDesire: "关于渴望",
-    topLabel: '个人档案<br><span class="accent">持续生成中</span>',
+
+    topLabel:
+      '个人档案<br><span class="accent">持续生成中</span>',
+
     rightLabel: "一个开放的<br>系统",
     leftLabel: "未被定义。<br>尚未完成。",
     bottomLabel: "形式 / 思想 / 生成",
     status: "系统持续演变",
     footerTop: "一个私人宇宙",
     back: "← 回到起点",
+
     sections: {
       about: {
         index: "档案 / 001",
         title: "关于我",
-        description: "关于身份、经历与自我认知的片段。这不是一幅固定的肖像，而是一个仍在不断形成中的自我。"
+        description:
+          "关于身份、经历与自我认知的片段。这不是一幅固定的肖像，而是一个仍在不断形成中的自我。"
       },
+
       thoughts: {
         index: "档案 / 002",
         title: "关于思考",
-        description: "关于设计、图像、城市与文化的观察，以及那些悄然影响我们观看世界的结构。"
+        description:
+          "关于设计、图像、城市与文化的观察，以及那些悄然影响我们观看世界的结构。"
       },
+
       reading: {
         index: "档案 / 003",
         title: "关于阅读",
-        description: "书籍、文章、视觉参考与那些在合上书页之后，仍然留在脑海里的想法。"
+        description:
+          "书籍、文章、视觉参考与那些在合上书页之后，仍然留在脑海里的想法。"
       },
+
       desire: {
         index: "档案 / 004",
         title: "关于渴望",
-        description: "尚未完成的野心、仍有可能的未来，以及那些暂时还无法准确描述的事物。"
+        description:
+          "尚未完成的野心、仍有可能的未来，以及那些暂时还无法准确描述的事物。"
       }
     }
   },
@@ -763,39 +946,51 @@ const translations = {
     navThoughts: "Mes réflexions",
     navReading: "Mes lectures",
     navDesire: "Mes aspirations",
-    topLabel: 'ARCHIVE PERSONNELLE<br><span class="accent">EN COURS DE CRÉATION</span>',
+
+    topLabel:
+      'ARCHIVE PERSONNELLE<br><span class="accent">EN COURS DE CRÉATION</span>',
+
     rightLabel: "UN SYSTÈME<br>OUVERT",
     leftLabel: "NON FIXÉE.<br>INACHEVÉE.",
     bottomLabel: "FORME / PENSÉE / DEVENIR",
     status: "SYSTÈME EN ÉVOLUTION",
     footerTop: "UN UNIVERS PERSONNEL",
     back: "← Retour au commencement",
+
     sections: {
       about: {
         index: "ARCHIVE / 001",
         title: "À propos de moi",
-        description: "Des fragments d'identité, d'expériences et de perceptions. Non pas un portrait figé, mais un être en formation continue."
+        description:
+          "Des fragments d'identité, d'expériences et de perceptions. Non pas un portrait figé, mais un être en formation continue."
       },
+
       thoughts: {
         index: "ARCHIVE / 002",
         title: "Mes réflexions",
-        description: "Des notes sur le design, les images, les villes et la culture, ainsi que sur les structures discrètes qui façonnent notre regard."
+        description:
+          "Des notes sur le design, les images, les villes et la culture, ainsi que sur les structures discrètes qui façonnent notre regard."
       },
+
       reading: {
         index: "ARCHIVE / 003",
         title: "Mes lectures",
-        description: "Des livres, des essais, des références visuelles et des idées qui persistent bien après la dernière page."
+        description:
+          "Des livres, des essais, des références visuelles et des idées qui persistent bien après la dernière page."
       },
+
       desire: {
         index: "ARCHIVE / 004",
         title: "Mes aspirations",
-        description: "Des ambitions inachevées, des futurs possibles et des choses que je ne sais pas encore décrire avec précision."
+        description:
+          "Des ambitions inachevées, des futurs possibles et des choses que je ne sais pas encore décrire avec précision."
       }
     }
   }
 };
 
 let currentLanguage = "en";
+let activeSection = null;
 
 function setLanguage(language) {
   currentLanguage = language;
@@ -830,34 +1025,31 @@ document.querySelectorAll("[data-lang]").forEach(button => {
   });
 });
 
-/* =====================================================
-   2. GENERATIVE LETTERS
-===================================================== */
+/* ========================================
+   TYPOGRAPHIC INTERACTION
+======================================== */
 
 const words = document.querySelectorAll(".word");
 const letters = [];
+
 const reducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
 ).matches;
 
 words.forEach(word => {
-  const text = word.dataset.word;
-
-  [...text].forEach((character, index) => {
+  [...word.dataset.word].forEach((character, index) => {
     const span = document.createElement("span");
+
     span.className = "letter";
     span.textContent = character;
 
-    const seed = (index + 1) * 1.73 +
-                 text.length * 0.41;
+    const seed =
+      (index + 1) * 1.73 +
+      word.dataset.word.length * .41;
 
-    const rotation = Math.sin(seed) * 3.2;
-    const driftX = Math.sin(seed * 1.4) * 2.5;
-    const driftY = Math.cos(seed * 1.8) * 2.4;
-
-    span.dataset.rotation = rotation;
-    span.dataset.driftX = driftX;
-    span.dataset.driftY = driftY;
+    const rotation = Math.sin(seed) * 2.2;
+    const driftX = Math.sin(seed * 1.4) * 1.3;
+    const driftY = Math.cos(seed * 1.8) * 1.1;
 
     span.style.transform =
       `translate(${driftX}px, ${driftY}px) rotate(${rotation}deg)`;
@@ -869,9 +1061,7 @@ words.forEach(word => {
       rotation,
       driftX,
       driftY,
-      phase: seed,
-      x: 0,
-      y: 0
+      phase: seed
     });
   });
 });
@@ -891,11 +1081,9 @@ window.addEventListener("pointerleave", () => {
   mouseY = -1000;
 });
 
-let animationFrame;
-
 function animateLetters(time) {
-  smoothMouseX += (mouseX - smoothMouseX) * 0.08;
-  smoothMouseY += (mouseY - smoothMouseY) * 0.08;
+  smoothMouseX += (mouseX - smoothMouseX) * .08;
+  smoothMouseY += (mouseY - smoothMouseY) * .08;
 
   letters.forEach(letter => {
     const rect = letter.element.getBoundingClientRect();
@@ -911,20 +1099,21 @@ function animateLetters(time) {
     let pushY = 0;
     let pushRotation = 0;
 
-    if (!reducedMotion && distance < 180) {
-      const force = (180 - distance) / 180;
-      pushX = (dx / (distance || 1)) * force * 13;
-      pushY = (dy / (distance || 1)) * force * 11;
-      pushRotation = (dx / 180) * force * 5;
+    if (!reducedMotion && distance < 150) {
+      const force = (150 - distance) / 150;
+
+      pushX = dx / (distance || 1) * force * 5;
+      pushY = dy / (distance || 1) * force * 4;
+      pushRotation = dx / 150 * force * 2.2;
     }
 
     const breathingX = reducedMotion
       ? 0
-      : Math.sin(time * 0.0005 + letter.phase) * 1.4;
+      : Math.sin(time * .00045 + letter.phase) * .6;
 
     const breathingY = reducedMotion
       ? 0
-      : Math.cos(time * 0.0004 + letter.phase) * 1.2;
+      : Math.cos(time * .0004 + letter.phase) * .5;
 
     letter.element.style.transform = `
       translate(
@@ -935,16 +1124,14 @@ function animateLetters(time) {
     `;
   });
 
-  animationFrame = requestAnimationFrame(animateLetters);
+  requestAnimationFrame(animateLetters);
 }
 
-animateLetters(0);
+requestAnimationFrame(animateLetters);
 
-/* =====================================================
-   3. ABSTRACT SPATIAL FIELD
-   Layered cartography, interrupted trajectories,
-   architectural vectors and gestural line systems.
-===================================================== */
+/* ========================================
+   RESTRAINED COSMIC BACKGROUND
+======================================== */
 
 const canvas = document.getElementById("space");
 const ctx = canvas.getContext("2d");
@@ -955,70 +1142,59 @@ let dpr = 1;
 let paths = [];
 let stars = [];
 
-function seededRandom(seed) {
-  let value = seed >>> 0;
+function randomGenerator(seed) {
+  let state = seed >>> 0;
 
   return function() {
-    value = (value * 1664525 + 1013904223) >>> 0;
-    return value / 4294967296;
+    state = (state * 1664525 + 1013904223) >>> 0;
+    return state / 4294967296;
   };
 }
 
 function buildSpace() {
-  const random = seededRandom(20000907);
+  const random = randomGenerator(20000907);
 
   paths = [];
   stars = [];
 
+  /* Fewer lines, with longer quiet intervals */
   const lineCount = Math.max(
-    40,
-    Math.min(95, Math.floor(width / 14))
+    18,
+    Math.min(34, Math.floor(width / 42))
   );
 
   for (let i = 0; i < lineCount; i++) {
-    const side = random() > .5 ? -1 : 1;
-
     const startX = random() * width;
     const startY = random() * height;
 
-    const length = width * (.12 + random() * .6);
-    const bend = (random() - .5) * height * .55;
+    const length = width * (.18 + random() * .45);
+    const direction = random() > .5 ? 1 : -1;
 
-    const segments = [];
-    const steps = 4 + Math.floor(random() * 8);
-
-    for (let j = 0; j <= steps; j++) {
-      const t = j / steps;
-
-      segments.push({
-        x: startX + side * length * t,
-        y: startY + bend * t +
-           Math.sin(t * Math.PI * (1 + random())) *
-           height * .035
-      });
-    }
+    const bend = (random() - .5) * height * .22;
 
     paths.push({
-      segments,
-      opacity: .06 + random() * .31,
-      width: random() > .8 ? 1.15 : .55 + random() * .35,
-      dash: random() > .45
-        ? []
-        : [random() * 5 + 2, random() * 12 + 4],
-      offset: random() * 30,
-      drift: (random() - .5) * 8,
-      phase: random() * Math.PI * 2
+      x: startX,
+      y: startY,
+      length,
+      direction,
+      bend,
+      opacity: .045 + random() * .13,
+      lineWidth: .35 + random() * .3,
+      phase: random() * Math.PI * 2,
+      drift: (random() - .5) * 3,
+      curve: random() > .5
     });
   }
 
-  const starCount = Math.floor(width * height / 8000);
+  /* Sparse, dim points */
+  const starCount = Math.floor(width * height / 13000);
 
   for (let i = 0; i < starCount; i++) {
     stars.push({
       x: random() * width,
       y: random() * height,
-      radius: random() > .92 ? 1.2 : random() * .7 + .15,
-      opacity: random() * .65
+      radius: .15 + random() * .45,
+      opacity: .08 + random() * .28
     });
   }
 }
@@ -1026,6 +1202,7 @@ function buildSpace() {
 function resizeSpace() {
   width = window.innerWidth;
   height = window.innerHeight;
+
   dpr = Math.min(window.devicePixelRatio || 1, 2);
 
   canvas.width = Math.round(width * dpr);
@@ -1043,135 +1220,92 @@ function resizeSpace() {
 function drawSpace(time) {
   ctx.clearRect(0, 0, width, height);
 
-  /* Faint cartographic grid fragments */
-  ctx.save();
-  ctx.lineWidth = .45;
-  ctx.strokeStyle = "rgba(210,215,225,.10)";
-
-  const gridStep = 82;
-
-  for (let x = 0; x < width; x += gridStep) {
-    for (let y = 0; y < height; y += gridStep) {
-      const selector = Math.sin(x * .02 + y * .017);
-
-      if (selector > .2) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + 13, y);
-        ctx.stroke();
-      }
-
-      if (selector < -.5) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x, y + 9);
-        ctx.stroke();
-      }
-    }
-  }
-
-  ctx.restore();
-
-  /* Distant stars and registration points */
+  /* Quiet points in the distance */
   stars.forEach(star => {
     ctx.beginPath();
-    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(240,242,247,${star.opacity})`;
+
+    ctx.arc(
+      star.x,
+      star.y,
+      star.radius,
+      0,
+      Math.PI * 2
+    );
+
+    ctx.fillStyle =
+      `rgba(230,232,235,${star.opacity})`;
+
     ctx.fill();
   });
 
-  /* Layered trajectories */
-  paths.forEach((path, index) => {
+  /* A small number of fine, continuous spatial traces */
+  paths.forEach(path => {
     const movement = reducedMotion
       ? 0
-      : Math.sin(time * .00018 + path.phase) * path.drift;
+      : Math.sin(time * .00013 + path.phase) * path.drift;
+
+    const x1 = path.x;
+    const y1 = path.y + movement;
+
+    const x2 = path.x + path.direction * path.length;
+    const y2 = path.y + path.bend + movement;
 
     ctx.save();
+
     ctx.beginPath();
+    ctx.moveTo(x1, y1);
 
-    path.segments.forEach((point, i) => {
-      const x = point.x;
-      const y = point.y + movement;
+    if (path.curve) {
+      const controlX =
+        (x1 + x2) / 2 + Math.sin(path.phase) * 30;
 
-      if (i === 0) {
-        ctx.moveTo(x, y);
-      } else {
-        const previous = path.segments[i - 1];
-        const midX = (previous.x + x) / 2;
-        const midY = (previous.y + y) / 2;
+      const controlY =
+        (y1 + y2) / 2 + path.bend * .25;
 
-        ctx.quadraticCurveTo(
-          previous.x,
-          previous.y + movement,
-          midX,
-          midY
-        );
-      }
-    });
+      ctx.quadraticCurveTo(
+        controlX,
+        controlY,
+        x2,
+        y2
+      );
+    } else {
+      ctx.lineTo(x2, y2);
+    }
 
     ctx.strokeStyle =
-      `rgba(220,224,232,${path.opacity})`;
+      `rgba(225,228,233,${path.opacity})`;
 
-    ctx.lineWidth = path.width;
-    ctx.setLineDash(path.dash);
-    ctx.lineDashOffset = path.offset;
-
+    ctx.lineWidth = path.lineWidth;
     ctx.stroke();
+
     ctx.restore();
-
-    /* Selected paths break into isolated fragments */
-    if (index % 5 === 0) {
-      const point = path.segments[
-        Math.floor(path.segments.length * .58)
-      ];
-
-      ctx.beginPath();
-      ctx.moveTo(point.x - 9, point.y + movement + 3);
-      ctx.lineTo(point.x + 20, point.y + movement - 2);
-
-      ctx.strokeStyle =
-        "rgba(220,224,232,.48)";
-
-      ctx.lineWidth = .65;
-      ctx.stroke();
-    }
   });
 
-  /* Fine diagonal vectors */
-  ctx.save();
-  ctx.lineWidth = .55;
-
-  for (let i = 0; i < 12; i++) {
-    const x = width * ((i * .137 + .09) % 1);
-    const y = height * ((i * .213 + .17) % 1);
-    const length = 25 + (i % 4) * 17;
-
-    ctx.beginPath();
-    ctx.moveTo(x, y);
-    ctx.lineTo(x + length, y - length * .37);
-
-    ctx.strokeStyle = i % 3 === 0
-      ? "rgba(162,255,156,.24)"
-      : "rgba(240,240,245,.25)";
-
-    ctx.setLineDash(i % 2 === 0 ? [2, 5] : []);
-    ctx.stroke();
-  }
-
-  ctx.restore();
-
-  /* Mouse-responsive field: subtle distortion */
+  /* Very subtle cursor atmosphere */
   if (!reducedMotion && mouseX > 0 && mouseY > 0) {
-    const radius = 210;
-    const gradient = ctx.createRadialGradient(
-      mouseX, mouseY, 0,
-      mouseX, mouseY, radius
+    const radius = 180;
+
+    const glow = ctx.createRadialGradient(
+      mouseX,
+      mouseY,
+      0,
+      mouseX,
+      mouseY,
+      radius
     );
 
-    gradient.addColorStop(0, "rgba(162,255,156,.035)");
-    gradient.addColorStop(1, "rgba(162,255,156,0)");
+    glow.addColorStop(
+      0,
+      "rgba(65,108,73,.025)"
+    );
 
-    ctx.fillStyle = gradient;
+    glow.addColorStop(
+      1,
+      "rgba(65,108,73,0)"
+    );
+
+    ctx.fillStyle = glow;
+
     ctx.fillRect(
       mouseX - radius,
       mouseY - radius,
@@ -1197,16 +1331,23 @@ if (!reducedMotion) {
   requestAnimationFrame(animateSpace);
 }
 
-/* =====================================================
-   4. SUBTLE ANALOG GRAIN
-===================================================== */
+/* ========================================
+   SOFT FILM GRAIN
+======================================== */
 
 const grainCanvas = document.getElementById("grain");
 const grainCtx = grainCanvas.getContext("2d");
 
 function resizeGrain() {
-  grainCanvas.width = Math.ceil(window.innerWidth / 3);
-  grainCanvas.height = Math.ceil(window.innerHeight / 3);
+  grainCanvas.width = Math.max(
+    1,
+    Math.ceil(window.innerWidth / 3)
+  );
+
+  grainCanvas.height = Math.max(
+    1,
+    Math.ceil(window.innerHeight / 3)
+  );
 
   grainCanvas.style.width = window.innerWidth + "px";
   grainCanvas.style.height = window.innerHeight + "px";
@@ -1221,45 +1362,51 @@ function drawGrain() {
   const data = imageData.data;
 
   for (let i = 0; i < data.length; i += 4) {
-    const noise = Math.random() * 255;
+    const value = Math.random() * 255;
 
-    data[i] = noise;
-    data[i + 1] = noise;
-    data[i + 2] = noise;
-    data[i + 3] = Math.random() * 24;
+    data[i] = value;
+    data[i + 1] = value;
+    data[i + 2] = value;
+
+    /* Transparent noise: texture rather than dotted lines */
+    data[i + 3] = Math.random() * 20;
   }
 
   grainCtx.putImageData(imageData, 0, 0);
 }
 
 resizeGrain();
+drawGrain();
 
-let grainFrame;
+let grainTimer;
 
 function animateGrain() {
   drawGrain();
 
   if (!reducedMotion) {
-    grainFrame = setTimeout(() => {
+    grainTimer = setTimeout(() => {
       requestAnimationFrame(animateGrain);
-    }, 180);
+    }, 240);
   }
 }
 
-animateGrain();
+if (!reducedMotion) {
+  animateGrain();
+}
 
-window.addEventListener("resize", resizeGrain);
+window.addEventListener("resize", () => {
+  resizeGrain();
+  drawGrain();
+});
 
-/* =====================================================
-   5. NAVIGATION AND SECTION PANELS
-===================================================== */
+/* ========================================
+   NAVIGATION
+======================================== */
 
 const overlay = document.getElementById("overlay");
 const panelIndex = document.getElementById("panelIndex");
 const panelTitle = document.getElementById("panelTitle");
 const panelDescription = document.getElementById("panelDescription");
-
-let activeSection = null;
 
 function openSection(section) {
   const content = translations[currentLanguage].sections[section];
@@ -1331,9 +1478,9 @@ overlay.addEventListener("click", event => {
   }
 });
 
-/* =====================================================
-   6. INITIALIZATION
-===================================================== */
+/* ========================================
+   INITIALIZATION
+======================================== */
 
 document.getElementById("year").textContent =
   new Date().getFullYear();
