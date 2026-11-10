@@ -1,1538 +1,927 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#050506">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#050506">
 
-  <title>Still Becoming — A Living Archive</title>
+<title>Still Becoming — Personal Archive</title>
 
-  <meta
-    name="description"
-    content="A personal living archive of identity, thoughts, reading and becoming."
-  >
+<style>
+:root {
+    --black: #050506;
+    --white: #e8e8e5;
+    --silver: #85858b;
+    --green: #416c49;
+    --green-light: #608a64;
+    --wine: #35151e;
+    --wine-light: #49202a;
+}
 
-  <style>
-    /* =====================================================
-       01. GLOBAL SETTINGS
-       ===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-    :root {
-      --black: #050506;
-      --white: #e8e8e5;
-      --silver: #85858b;
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--black);
+    color: var(--white);
+    font-family: Arial, Helvetica, sans-serif;
+}
 
-      --green: #416c49;
-      --green-light: #608a64;
+button, a {
+    font: inherit;
+}
 
-      --wine: #35151e;
-      --wine-light: #49202a;
+button {
+    color: inherit;
+}
 
-      --line: rgba(210, 215, 220, 0.15);
-      --line-soft: rgba(210, 215, 220, 0.075);
+#space,
+#grain {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
 
-      --ui-size: 10px;
-      --page-padding: 34px;
+#space {
+    z-index: 0;
+}
 
-      --mono:
-        "SFMono-Regular",
-        Consolas,
-        "Liberation Mono",
-        Menlo,
-        monospace;
+#grain {
+    z-index: 1;
+    opacity: 0.13;
+}
 
-      --serif:
-        "Times New Roman",
-        "Noto Serif",
-        serif;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      width: 100%;
-      min-height: 100%;
-      background: var(--black);
-      color: var(--white);
-      font-family: var(--mono);
-      font-size: var(--ui-size);
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-
-    body {
-      position: relative;
-      width: 100%;
-      min-width: 280px;
-      min-height: 100vh;
-      margin: 0;
-      overflow: hidden;
-      background: var(--black);
-    }
-
-    button,
-    a {
-      color: inherit;
-      font: inherit;
-    }
-
-    button {
-      border: 0;
-      border-radius: 0;
-      background: none;
-      cursor: pointer;
-    }
-
-    button:focus-visible,
-    a:focus-visible {
-      outline: 1px solid var(--green-light);
-      outline-offset: 5px;
-    }
-
-    ::selection {
-      color: var(--white);
-      background: var(--wine-light);
-    }
-
-
-    /* =====================================================
-       02. BACKGROUND LAYERS
-       ===================================================== */
-
-    #space,
-    #grain,
-    .atmosphere,
-    .vignette {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
-    #space {
-      z-index: 0;
-      display: block;
-    }
-
-    .atmosphere {
-      z-index: 1;
-      background:
+.atmosphere {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background:
         radial-gradient(
-          ellipse at 52% 46%,
-          rgba(25, 36, 28, 0.12) 0%,
-          rgba(10, 13, 11, 0.07) 28%,
-          transparent 66%
-        );
-    }
-
-    #grain {
-      z-index: 2;
-      opacity: 0.075;
-      mix-blend-mode: screen;
-    }
-
-    .vignette {
-      z-index: 3;
-      background:
+            ellipse at 50% 48%,
+            transparent 20%,
+            rgba(5, 5, 6, 0.35) 70%,
+            rgba(5, 5, 6, 0.85) 100%
+        ),
         radial-gradient(
-          ellipse at center,
-          transparent 32%,
-          rgba(0, 0, 0, 0.23) 100%
+            ellipse at 75% 80%,
+            rgba(53, 21, 30, 0.18),
+            transparent 40%
         );
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 4.5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.brand-name {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.brand-index {
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    color: var(--silver);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-button {
+    position: relative;
+    padding: 8px 0;
+    border: none;
+    background: transparent;
+    color: var(--silver);
+    cursor: pointer;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+}
+
+.nav-button::after {
+    content: "";
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--green-light);
+    transition: width 0.3s ease;
+}
+
+.nav-button:hover,
+.nav-button.active {
+    color: var(--white);
+}
+
+.nav-button:hover::after,
+.nav-button.active::after {
+    width: 100%;
+}
+
+.language-switch {
+    display: flex;
+    gap: 10px;
+}
+
+.language-button {
+    border: none;
+    background: transparent;
+    color: #66666b;
+    cursor: pointer;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+}
+
+.language-button.active,
+.language-button:hover {
+    color: var(--white);
+}
+
+main {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero {
+    position: relative;
+    width: min(760px, 85vw);
+    transform: translateY(-2%);
+}
+
+.hero-line {
+    display: flex;
+    align-items: center;
+    font-size: clamp(48px, 9vw, 104px);
+    line-height: 0.95;
+    font-weight: 400;
+    letter-spacing: -0.075em;
+    color: var(--green);
+    text-transform: uppercase;
+    user-select: none;
+}
+
+.hero-line:first-child {
+    padding-left: 2%;
+}
+
+.hero-line:last-child {
+    justify-content: flex-end;
+    padding-right: 1%;
+    margin-top: 12px;
+}
+
+.hero-line span {
+    display: inline-block;
+    transition:
+        transform 0.4s ease,
+        color 0.4s ease,
+        text-shadow 0.4s ease;
+}
+
+.hero-line span:hover {
+    color: var(--green-light);
+    transform: translateY(-7px);
+    text-shadow: 0 0 22px rgba(96, 138, 100, 0.4);
+}
+
+.hero-caption {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 35px;
+    padding: 0 2%;
+    color: var(--silver);
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+footer {
+    position: fixed;
+    bottom: 28px;
+    left: 4.5%;
+    right: 4.5%;
+    display: flex;
+    justify-content: space-between;
+    color: var(--silver);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    z-index: 5;
+}
+
+.panel-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.panel-backdrop.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.content-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: min(480px, 90vw);
+    height: 100%;
+    padding: 13vh 7% 8%;
+    z-index: 20;
+
+    background: rgba(9, 9, 11, 0.96);
+    border-left: 1px solid rgba(133, 133, 139, 0.18);
+
+    transform: translateX(100%);
+    transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+    backdrop-filter: blur(18px);
+}
+
+.content-panel.open {
+    transform: translateX(0);
+}
+
+.panel-close {
+    position: absolute;
+    top: 32px;
+    right: 35px;
+    border: none;
+    background: transparent;
+    color: var(--silver);
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 200;
+    transition: color 0.3s ease;
+}
+
+.panel-close:hover {
+    color: var(--white);
+}
+
+.panel-index {
+    color: var(--green-light);
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    margin-bottom: 30px;
+}
+
+.panel-title {
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.15;
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin-bottom: 28px;
+}
+
+.panel-description {
+    color: #aaa9aa;
+    font-size: 13px;
+    line-height: 1.9;
+    font-weight: 300;
+}
+
+.panel-rule {
+    width: 42px;
+    height: 1px;
+    margin: 35px 0;
+    background: var(--wine-light);
+}
+
+.panel-note {
+    color: var(--silver);
+    font-size: 10px;
+    line-height: 1.8;
+    letter-spacing: 0.04em;
+}
+
+/* ENTER / EXPLORE */
+
+.panel-explore {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 38px;
+    padding: 12px 0;
+
+    color: var(--green-light);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+
+    border-bottom: 1px solid rgba(96, 138, 100, 0.5);
+
+    transition:
+        color 0.3s ease,
+        border-color 0.3s ease,
+        letter-spacing 0.3s ease;
+}
+
+.panel-explore:hover {
+    color: var(--white);
+    border-color: var(--white);
+    letter-spacing: 0.25em;
+}
+
+@media (max-width: 760px) {
+    header {
+        padding: 24px 6%;
+        align-items: flex-start;
     }
 
-
-    /* =====================================================
-       03. HEADER
-       ===================================================== */
-
-    .site-header {
-      position: fixed;
-      z-index: 20;
-      top: 0;
-      left: 0;
-
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: start;
-
-      width: 100%;
-      padding: var(--page-padding);
-
-      color: var(--silver);
-      font-size: var(--ui-size);
-      line-height: 1.7;
-      letter-spacing: 0.055em;
+    .header-right {
+        gap: 18px;
+        flex-direction: column;
+        align-items: flex-end;
     }
 
-    .brand {
-      justify-self: start;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-
-      color: var(--silver);
-      text-decoration: none;
-      text-transform: uppercase;
+    nav {
+        gap: 13px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        max-width: 250px;
     }
 
-    .brand-name {
-      color: var(--white);
-      letter-spacing: 0.14em;
-    }
-
-    .brand-note {
-      color: rgba(180, 180, 185, 0.48);
-      font-size: 9px;
-      letter-spacing: 0.08em;
-    }
-
-    .main-nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: clamp(14px, 2.1vw, 32px);
-
-      white-space: nowrap;
-    }
-
-    .nav-link {
-      position: relative;
-      padding: 0;
-
-      color: var(--silver);
-      font-size: inherit;
-      line-height: inherit;
-      letter-spacing: inherit;
-
-      transition:
-        color 240ms ease,
-        opacity 240ms ease;
-    }
-
-    .nav-link::after {
-      content: "";
-
-      position: absolute;
-      right: 0;
-      bottom: -5px;
-      left: 0;
-
-      height: 1px;
-      background: var(--wine-light);
-
-      transform: scaleX(0);
-      transform-origin: left center;
-
-      transition: transform 240ms ease;
-    }
-
-    .nav-link:hover,
-    .nav-link[aria-expanded="true"] {
-      color: var(--white);
-    }
-
-    .nav-link:hover::after,
-    .nav-link[aria-expanded="true"]::after {
-      transform: scaleX(1);
+    .nav-button {
+        font-size: 8px;
     }
 
     .language-switch {
-      justify-self: end;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+        gap: 9px;
     }
 
-    .language-button {
-      padding: 0;
-
-      color: rgba(180, 180, 185, 0.52);
-      font-size: inherit;
-      line-height: inherit;
-
-      transition: color 200ms ease;
+    .hero {
+        width: 88vw;
     }
 
-    .language-button:hover,
-    .language-button.active {
-      color: var(--white);
+    .hero-line {
+        font-size: clamp(44px, 12vw, 78px);
     }
 
-    .language-divider {
-      color: rgba(180, 180, 185, 0.22);
+    .hero-caption {
+        font-size: 7px;
     }
 
-
-    /* =====================================================
-       04. HOME COMPOSITION
-       ===================================================== */
-
-    .home {
-      position: relative;
-      z-index: 5;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      width: 100%;
-      height: 100vh;
-      height: 100svh;
-
-      min-height: 400px;
-      padding: 100px var(--page-padding) 90px;
-    }
-
-    .title-composition {
-      position: relative;
-
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-
-      width: min(460px, 72vw);
-      margin: 0 auto;
-
-      transform: translateY(-1vh);
-    }
-
-    /*
-      IMPORTANT:
-      Each word is explicitly a horizontal flex row.
-      writing-mode is explicitly horizontal.
-      white-space prevents letters from wrapping.
-    */
-
-    .title-word {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      width: max-content;
-      max-width: 100%;
-
-      white-space: nowrap;
-      writing-mode: horizontal-tb;
-
-      color: var(--green);
-
-      font-family: var(--mono);
-      font-size: var(--ui-size);
-      font-weight: 400;
-      line-height: 1.6;
-      letter-spacing: 0.02em;
-
-      text-transform: uppercase;
-
-      text-shadow:
-        0 0 5px rgba(65, 108, 73, 0.16);
-
-      will-change: transform;
-    }
-
-    .word-one {
-      align-self: flex-start;
-      margin-left: 24%;
-    }
-
-    .word-two {
-      align-self: flex-start;
-      margin-top: 18px;
-      margin-left: 39%;
-    }
-
-    .title-letter {
-      display: inline-block;
-      flex: 0 0 auto;
-
-      white-space: pre;
-      writing-mode: horizontal-tb;
-
-      transition:
-        color 260ms ease,
-        text-shadow 260ms ease,
-        transform 360ms cubic-bezier(0.2, 0.7, 0.2, 1);
-    }
-
-    .title-letter:hover {
-      color: var(--green-light);
-
-      text-shadow:
-        0 0 5px rgba(96, 138, 100, 0.4),
-        0 0 14px rgba(65, 108, 73, 0.15);
-    }
-
-    .title-letter.gap {
-      width: 0.36em;
-    }
-
-    .word-one .title-letter:nth-child(2) {
-      margin-right: 0.07em;
-    }
-
-    .word-one .title-letter:nth-child(4) {
-      margin-left: 0.05em;
-    }
-
-    .word-two .title-letter:nth-child(3) {
-      margin-right: 0.06em;
-    }
-
-    .word-two .title-letter:nth-child(6) {
-      margin-left: 0.05em;
-    }
-
-    .title-index {
-      position: absolute;
-      top: 50%;
-      left: 4%;
-
-      color: rgba(133, 133, 139, 0.34);
-      font-size: 9px;
-      letter-spacing: 0.08em;
-
-      transform: translateY(-50%);
-    }
-
-    .title-index::after {
-      content: "";
-      display: block;
-
-      width: 16px;
-      height: 1px;
-      margin-top: 8px;
-
-      background: rgba(133, 133, 139, 0.35);
-    }
-
-    .composition-mark {
-      position: absolute;
-      top: -30px;
-      right: 9%;
-
-      width: 4px;
-      height: 4px;
-
-      border-radius: 50%;
-      background: var(--wine-light);
-
-      box-shadow:
-        0 0 8px rgba(73, 32, 42, 0.3);
-    }
-
-
-    /* =====================================================
-       05. FOOTER
-       ===================================================== */
-
-    .site-footer {
-      position: fixed;
-      z-index: 10;
-      right: 0;
-      bottom: 0;
-      left: 0;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-
-      padding: 0 var(--page-padding) 28px;
-
-      color: rgba(133, 133, 139, 0.58);
-      font-size: 9px;
-      line-height: 1.7;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .footer-left,
-    .footer-right {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .footer-right {
-      align-items: flex-end;
-      text-align: right;
-    }
-
-    .footer-accent {
-      color: rgba(73, 32, 42, 0.85);
-    }
-
-
-    /* =====================================================
-       06. CONTENT PANELS
-       ===================================================== */
-
-    .panel-backdrop {
-      position: fixed;
-      z-index: 29;
-      inset: 0;
-
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-
-      opacity: 0;
-      visibility: hidden;
-
-      transition:
-        opacity 280ms ease,
-        visibility 280ms ease;
-    }
-
-    .panel-backdrop.open {
-      opacity: 1;
-      visibility: visible;
+    footer {
+        font-size: 7px;
+        bottom: 20px;
     }
 
     .content-panel {
-      position: fixed;
-      z-index: 30;
-      top: 0;
-      right: 0;
-
-      width: min(500px, 100%);
-      height: 100vh;
-      height: 100dvh;
-
-      padding: 105px 42px 40px;
-
-      overflow-y: auto;
-
-      color: var(--white);
-      background: rgba(8, 8, 9, 0.96);
-
-      border-left: 1px solid var(--line-soft);
-
-      transform: translateX(102%);
-
-      transition:
-        transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+        width: 88vw;
+        padding: 14vh 8% 8%;
     }
+}
 
-    .content-panel.open {
-      transform: translateX(0);
-    }
-
-    .panel-topline {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .panel-number {
-      color: var(--green);
-      font-size: 9px;
-      letter-spacing: 0.12em;
-    }
-
-    .panel-close {
-      color: var(--silver);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-
-      transition: color 200ms ease;
-    }
-
-    .panel-close:hover {
-      color: var(--wine-light);
-    }
-
-    .panel-title {
-      margin: 38px 0 20px;
-
-      color: var(--white);
-      font-family: var(--serif);
-      font-size: clamp(26px, 4vw, 38px);
-      font-weight: 400;
-      line-height: 1.15;
-      letter-spacing: -0.025em;
-    }
-
-    .panel-description {
-      max-width: 340px;
-
-      color: var(--silver);
-      font-family: var(--serif);
-      font-size: 16px;
-      line-height: 1.8;
-    }
-
-    .panel-rule {
-      width: 28px;
-      height: 1px;
-      margin: 34px 0;
-
-      background: var(--wine-light);
-    }
-
-    .panel-note {
-      color: rgba(133, 133, 139, 0.7);
-      font-size: 9px;
-      line-height: 1.9;
-      letter-spacing: 0.05em;
-    }
-
-
-    /* =====================================================
-       07. RESPONSIVE LAYOUT
-       ===================================================== */
-
-    @media (max-width: 900px) {
-      :root {
-        --page-padding: 22px;
-      }
-
-      .site-header {
-        grid-template-columns: auto 1fr auto;
-      }
-
-      .main-nav {
-        gap: 14px;
-      }
-
-      .brand-note {
-        display: none;
-      }
-
-      .title-composition {
-        width: min(400px, 80vw);
-      }
-    }
-
-    @media (max-width: 620px) {
-      :root {
-        --ui-size: 8px;
-        --page-padding: 16px;
-      }
-
-      .site-header {
-        grid-template-columns: 1fr auto;
-        row-gap: 24px;
-      }
-
-      .brand {
-        grid-column: 1;
-        grid-row: 1;
-      }
-
-      .language-switch {
-        grid-column: 2;
-        grid-row: 1;
-      }
-
-      .main-nav {
-        grid-column: 1 / -1;
-        grid-row: 2;
-
-        justify-content: space-between;
-        gap: 10px;
-
-        width: 100%;
-      }
-
-      .nav-link {
-        font-size: var(--ui-size);
-        letter-spacing: -0.035em;
-      }
-
-      .home {
-        padding-top: 120px;
-        padding-bottom: 80px;
-      }
-
-      .title-composition {
-        width: min(330px, 84vw);
-      }
-
-      .word-one {
-        margin-left: 18%;
-      }
-
-      .word-two {
-        margin-top: 15px;
-        margin-left: 32%;
-      }
-
-      .title-index {
-        left: 0;
-        font-size: 8px;
-      }
-
-      .site-footer {
-        padding-bottom: 18px;
-        font-size: 8px;
-      }
-
-      .content-panel {
-        padding: 115px 25px 35px;
-      }
-    }
-
-    @media (max-width: 360px) {
-      :root {
-        --page-padding: 12px;
-      }
-
-      .main-nav {
-        gap: 7px;
-      }
-
-      .nav-link {
-        font-size: 7px;
-      }
-
-      .title-composition {
-        width: 90vw;
-      }
-
-      .word-one {
-        margin-left: 15%;
-      }
-
-      .word-two {
-        margin-left: 28%;
-      }
-    }
-
-
-    /* =====================================================
-       08. REDUCED MOTION
-       ===================================================== */
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
         animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-      }
+        transition-duration: 0.01ms !important;
     }
-  </style>
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Background: stars and continuous traces -->
-  <canvas id="space" aria-hidden="true"></canvas>
-  <div class="atmosphere" aria-hidden="true"></div>
-  <canvas id="grain" aria-hidden="true"></canvas>
-  <div class="vignette" aria-hidden="true"></div>
+<canvas id="space"></canvas>
+<canvas id="grain"></canvas>
+<div class="atmosphere"></div>
 
-
-  <!-- Header -->
-  <header class="site-header">
-
-    <a class="brand" href="./" aria-label="Return to home">
-      <span class="brand-name">A Living Archive</span>
-      <span class="brand-note">Personal Index / 001</span>
-    </a>
-
-    <nav class="main-nav" aria-label="Main navigation">
-
-      <button
-        class="nav-link"
-        data-section="about"
-        aria-expanded="false"
-      >
-        About me
-      </button>
-
-      <button
-        class="nav-link"
-        data-section="thoughts"
-        aria-expanded="false"
-      >
-        About what I think
-      </button>
-
-      <button
-        class="nav-link"
-        data-section="reading"
-        aria-expanded="false"
-      >
-        About what I read
-      </button>
-
-      <button
-        class="nav-link"
-        data-section="wants"
-        aria-expanded="false"
-      >
-        About what I want
-      </button>
-
-    </nav>
-
-    <div class="language-switch" aria-label="Language selection">
-
-      <button class="language-button active" data-lang="en">
-        EN
-      </button>
-
-      <span class="language-divider">/</span>
-
-      <button class="language-button" data-lang="zh">
-        中
-      </button>
-
-      <span class="language-divider">/</span>
-
-      <button class="language-button" data-lang="fr">
-        FR
-      </button>
-
+<header>
+    <div class="brand">
+        <div class="brand-name">A Living Archive</div>
+        <div class="brand-index">Personal Index 001</div>
     </div>
 
-  </header>
+    <div class="header-right">
+        <nav>
+            <button class="nav-button" data-section="about">About me</button>
+            <button class="nav-button" data-section="thoughts">About what I think</button>
+            <button class="nav-button" data-section="reading">About what I read</button>
+            <button class="nav-button" data-section="wants">About what I want</button>
+        </nav>
 
-
-  <!-- Main home composition -->
-  <main class="home" id="home">
-
-    <div class="title-composition">
-
-      <span class="title-index" aria-hidden="true">01—04</span>
-      <span class="composition-mark" aria-hidden="true"></span>
-
-      <div
-        class="title-word word-one"
-        id="titleStill"
-        aria-label="Still"
-      >
-        <span class="title-letter">S</span>
-        <span class="title-letter">T</span>
-        <span class="title-letter">I</span>
-        <span class="title-letter">L</span>
-        <span class="title-letter">L</span>
-      </div>
-
-      <div
-        class="title-word word-two"
-        id="titleBecoming"
-        aria-label="Becoming"
-      >
-        <span class="title-letter">B</span>
-        <span class="title-letter">E</span>
-        <span class="title-letter">C</span>
-        <span class="title-letter">O</span>
-        <span class="title-letter">M</span>
-        <span class="title-letter">I</span>
-        <span class="title-letter">N</span>
-        <span class="title-letter">G</span>
-      </div>
-
+        <div class="language-switch">
+            <button class="language-button active" data-lang="en">EN</button>
+            <button class="language-button" data-lang="zh">中</button>
+            <button class="language-button" data-lang="fr">FR</button>
+        </div>
     </div>
+</header>
 
-  </main>
+<main>
+    <div class="hero">
+        <div class="hero-line" id="still"></div>
+        <div class="hero-line" id="becoming"></div>
 
-
-  <!-- Footer -->
-  <footer class="site-footer">
-
-    <div class="footer-left">
-      <span data-i18n="footerOne">AN ONGOING PROCESS</span>
-      <span class="footer-accent" data-i18n="footerTwo">
-        NOTHING IS FINISHED
-      </span>
+        <div class="hero-caption">
+            <span>Personal Archive</span>
+            <span>In Progress — <span id="year"></span></span>
+        </div>
     </div>
+</main>
 
-    <div class="footer-right">
-      <span>SHENZHEN — EVERYWHERE</span>
-      <span id="yearLabel">© 2026</span>
-    </div>
+<footer>
+    <span>DESIGN · THOUGHT · MEMORY</span>
+    <span>STILL BECOMING</span>
+</footer>
 
-  </footer>
+<div class="panel-backdrop" id="panelBackdrop"></div>
 
+<aside class="content-panel" id="contentPanel" aria-hidden="true">
+    <button class="panel-close" id="panelClose" aria-label="Close">×</button>
 
-  <!-- Panel backdrop -->
-  <div class="panel-backdrop" id="panelBackdrop"></div>
+    <div class="panel-index" id="panelIndex">INDEX 001</div>
 
+    <h1 class="panel-title" id="panelTitle"></h1>
 
-  <!-- Independent content panel -->
-  <aside
-    class="content-panel"
-    id="contentPanel"
-    aria-hidden="true"
-    aria-labelledby="panelTitle"
-  >
-
-    <div class="panel-topline">
-
-      <span class="panel-number" id="panelNumber">
-        INDEX / 01
-      </span>
-
-      <button class="panel-close" id="panelClose">
-        CLOSE ×
-      </button>
-
-    </div>
-
-    <h1 class="panel-title" id="panelTitle">
-      About me
-    </h1>
-
-    <p class="panel-description" id="panelDescription">
-      A person is never a finished portrait.
-      This is a place to collect the fragments
-      that make up a life.
-    </p>
+    <p class="panel-description" id="panelDescription"></p>
 
     <div class="panel-rule"></div>
 
-    <p class="panel-note" id="panelNote">
-      THIS SPACE IS STILL TAKING SHAPE.
-    </p>
+    <p class="panel-note" id="panelNote"></p>
 
-  </aside>
+    <a class="panel-explore" id="panelExplore" href="#">
+        ENTER / EXPLORE ↗
+    </a>
+</aside>
 
+<script>
+/* --------------------------------
+   LANGUAGE CONTENT
+-------------------------------- */
 
-  <script>
-    /* =====================================================
-       01. LANGUAGE CONTENT
-       ===================================================== */
-
-    const translations = {
-      en: {
+const translations = {
+    en: {
         nav: [
-          "About me",
-          "About what I think",
-          "About what I read",
-          "About what I want"
+            "About me",
+            "About what I think",
+            "About what I read",
+            "About what I want"
         ],
-
-        footerOne: "AN ONGOING PROCESS",
-        footerTwo: "NOTHING IS FINISHED",
-
-        close: "CLOSE ×",
-
+        explore: "ENTER / EXPLORE ↗",
         sections: {
-          about: {
-            number: "INDEX / 01",
-            title: "About me",
-            description:
-              "A person is never a finished portrait. This is a place to collect the fragments that make up a life.",
-            note: "IDENTITY IS ALWAYS IN PROGRESS."
-          },
-
-          thoughts: {
-            number: "INDEX / 02",
-            title: "About what I think",
-            description:
-              "Notes from an unfinished mind. Thoughts, questions and observations that may change as I do.",
-            note: "IDEAS ARE ALLOWED TO CHANGE."
-          },
-
-          reading: {
-            number: "INDEX / 03",
-            title: "About what I read",
-            description:
-              "Books, essays, quotations and other things that stay with me long after I close the page.",
-            note: "A RECORD OF WHAT REMAINS."
-          },
-
-          wants: {
-            number: "INDEX / 04",
-            title: "About what I want",
-            description:
-              "Desires, directions and possible futures. Not a fixed destination, but a map that keeps being redrawn.",
-            note: "THE FUTURE IS NOT A FINAL DRAFT."
-          }
+            about: {
+                index: "INDEX 001 / ABOUT ME",
+                title: "About me",
+                description:
+                    "A collection of experiences, identities and fragments that have shaped who I am.",
+                note: "An ongoing record of becoming."
+            },
+            thoughts: {
+                index: "INDEX 002 / THOUGHTS",
+                title: "About what I think",
+                description:
+                    "Notes on design, culture, everyday observations and ideas that continue to evolve.",
+                note: "Thoughts are never truly finished."
+            },
+            reading: {
+                index: "INDEX 003 / READING",
+                title: "About what I read",
+                description:
+                    "Books, images, references and visual materials that inspire my thinking and creative practice.",
+                note: "A personal library of references."
+            },
+            wants: {
+                index: "INDEX 004 / WANTS",
+                title: "About what I want",
+                description:
+                    "A space for future plans, personal projects, experiments and things I want to explore.",
+                note: "Collecting possibilities, one by one."
+            }
         }
-      },
+    },
 
-      zh: {
+    zh: {
         nav: [
-          "关于我",
-          "关于思考",
-          "关于阅读",
-          "关于想要"
+            "关于我",
+            "关于我的思考",
+            "关于我的阅读",
+            "关于我的愿望"
         ],
-
-        footerOne: "一个持续进行的过程",
-        footerTwo: "一切尚未完成",
-
-        close: "关闭 ×",
-
+        explore: "进入栏目 ↗",
         sections: {
-          about: {
-            number: "索引 / 01",
-            title: "关于我",
-            description:
-              "一个人从来不是一幅已经完成的肖像。这里收集构成我的生活碎片、经历与变化。",
-            note: "关于自我的探索，仍在继续。"
-          },
-
-          thoughts: {
-            number: "索引 / 02",
-            title: "关于思考",
-            description:
-              "记录尚未定型的想法、问题与观察。它们可以随着时间改变，也可以彼此矛盾。",
-            note: "想法可以改变。"
-          },
-
-          reading: {
-            number: "索引 / 03",
-            title: "关于阅读",
-            description:
-              "书籍、文章、摘录，以及那些合上书页之后，仍然留在脑海里的东西。",
-            note: "记录那些留下来的内容。"
-          },
-
-          wants: {
-            number: "索引 / 04",
-            title: "关于想要",
-            description:
-              "愿望、方向与尚未发生的未来。这里不是一张固定的终点清单，而是一幅不断重绘的地图。",
-            note: "未来不是一份最终定稿。"
-          }
+            about: {
+                index: "索引 001 / 关于我",
+                title: "关于我",
+                description:
+                    "记录塑造我的经历、身份，以及那些不断构成自我的细碎片段。",
+                note: "一份持续生长中的个人记录。"
+            },
+            thoughts: {
+                index: "索引 002 / 思考",
+                title: "关于我的思考",
+                description:
+                    "关于设计、文化、日常观察，以及那些仍在不断变化和发展的想法。",
+                note: "思考并不总是有最终答案。"
+            },
+            reading: {
+                index: "索引 003 / 阅读",
+                title: "关于我的阅读",
+                description:
+                    "收集书籍、图像、参考资料，以及启发我思考和创作的视觉材料。",
+                note: "一座持续扩充的私人资料库。"
+            },
+            wants: {
+                index: "索引 004 / 愿望",
+                title: "关于我的愿望",
+                description:
+                    "关于未来计划、个人项目、实验，以及所有我希望继续探索的事情。",
+                note: "一点一点，收集未来的可能性。"
+            }
         }
-      },
+    },
 
-      fr: {
+    fr: {
         nav: [
-          "À propos de moi",
-          "Mes pensées",
-          "Mes lectures",
-          "Mes envies"
+            "À propos de moi",
+            "Mes réflexions",
+            "Mes lectures",
+            "Mes envies"
         ],
-
-        footerOne: "UN PROCESSUS CONTINU",
-        footerTwo: "RIEN N'EST ACHEVÉ",
-
-        close: "FERMER ×",
-
+        explore: "EXPLORER ↗",
         sections: {
-          about: {
-            number: "INDEX / 01",
-            title: "À propos de moi",
-            description:
-              "Une personne n'est jamais un portrait achevé. Cet espace rassemble les fragments qui composent une vie.",
-            note: "L'IDENTITÉ EST EN MOUVEMENT."
-          },
-
-          thoughts: {
-            number: "INDEX / 02",
-            title: "Mes pensées",
-            description:
-              "Des notes issues d'un esprit en devenir : pensées, questions et observations susceptibles d'évoluer.",
-            note: "LES IDÉES PEUVENT CHANGER."
-          },
-
-          reading: {
-            number: "INDEX / 03",
-            title: "Mes lectures",
-            description:
-              "Des livres, des textes et des citations qui continuent de résonner après la dernière page.",
-            note: "UNE TRACE DE CE QUI RESTE."
-          },
-
-          wants: {
-            number: "INDEX / 04",
-            title: "Mes envies",
-            description:
-              "Des désirs, des directions et des futurs possibles. Non pas une destination fixe, mais une carte à redessiner.",
-            note: "LE FUTUR N'EST PAS UNE VERSION FINALE."
-          }
+            about: {
+                index: "INDEX 001 / À PROPOS",
+                title: "À propos de moi",
+                description:
+                    "Une collection d'expériences, d'identités et de fragments qui ont façonné qui je suis.",
+                note: "Une histoire personnelle en devenir."
+            },
+            thoughts: {
+                index: "INDEX 002 / RÉFLEXIONS",
+                title: "Mes réflexions",
+                description:
+                    "Des notes sur le design, la culture, les observations quotidiennes et les idées en évolution.",
+                note: "Les pensées ne sont jamais vraiment terminées."
+            },
+            reading: {
+                index: "INDEX 003 / LECTURES",
+                title: "Mes lectures",
+                description:
+                    "Des livres, des images et des références qui nourrissent ma réflexion et ma pratique créative.",
+                note: "Une bibliothèque personnelle de références."
+            },
+            wants: {
+                index: "INDEX 004 / ENVIES",
+                title: "Mes envies",
+                description:
+                    "Un espace dédié aux projets futurs, aux expériences et aux choses que je souhaite explorer.",
+                note: "Collectionner les possibilités, une à une."
+            }
         }
-      }
-    };
+    }
+};
+
+const sectionLinks = {
+    about: "about-me/index.html",
+    thoughts: "thoughts/index.html",
+    reading: "reading/index.html",
+    wants: "wants/index.html"
+};
+
+let currentLanguage = "en";
+let activeSection = null;
 
 
-    /* =====================================================
-       02. LANGUAGE SWITCHING
-       ===================================================== */
+/* --------------------------------
+   HERO TITLE
+-------------------------------- */
 
-    let currentLanguage = "en";
-    let activeSection = null;
+function createLetters(elementId, text) {
+    const element = document.getElementById(elementId);
+    element.innerHTML = "";
 
-    const navButtons = document.querySelectorAll(".nav-link");
-    const languageButtons = document.querySelectorAll(".language-button");
+    [...text].forEach((letter, index) => {
+        const span = document.createElement("span");
+        span.textContent = letter === " " ? "\u00A0" : letter;
+        span.style.transitionDelay = `${index * 12}ms`;
+        element.appendChild(span);
+    });
+}
 
-    const panel = document.getElementById("contentPanel");
-    const panelBackdrop = document.getElementById("panelBackdrop");
-
-    const panelNumber = document.getElementById("panelNumber");
-    const panelTitle = document.getElementById("panelTitle");
-    const panelDescription = document.getElementById("panelDescription");
-    const panelNote = document.getElementById("panelNote");
-    const panelClose = document.getElementById("panelClose");
+createLetters("still", "STILL");
+createLetters("becoming", "BECOMING");
 
 
-    function setLanguage(language) {
-      if (!translations[language]) return;
+/* --------------------------------
+   LANGUAGE SWITCHING
+-------------------------------- */
 
-      currentLanguage = language;
+function setLanguage(language) {
+    currentLanguage = language;
 
-      document.documentElement.lang =
-        language === "zh" ? "zh-CN" : language;
+    document.documentElement.lang =
+        language === "zh" ? "zh-CN" :
+        language === "fr" ? "fr" : "en";
 
-      languageButtons.forEach(button => {
-        const isActive = button.dataset.lang === language;
+    document.querySelectorAll(".language-button").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.lang === language
+        );
+    });
 
-        button.classList.toggle("active", isActive);
-        button.setAttribute("aria-pressed", String(isActive));
-      });
-
-      navButtons.forEach((button, index) => {
+    document.querySelectorAll(".nav-button").forEach((button, index) => {
         button.textContent = translations[language].nav[index];
-      });
+    });
 
-      document.querySelector('[data-i18n="footerOne"]').textContent =
-        translations[language].footerOne;
-
-      document.querySelector('[data-i18n="footerTwo"]').textContent =
-        translations[language].footerTwo;
-
-      panelClose.textContent = translations[language].close;
-
-      if (activeSection) {
+    if (activeSection) {
         renderPanel(activeSection);
-      }
     }
+}
 
-
-    languageButtons.forEach(button => {
-      button.addEventListener("click", () => {
+document.querySelectorAll(".language-button").forEach(button => {
+    button.addEventListener("click", () => {
         setLanguage(button.dataset.lang);
-      });
     });
+});
 
 
-    /* =====================================================
-       03. NAVIGATION PANELS
-       ===================================================== */
+/* --------------------------------
+   SIDE PANEL
+-------------------------------- */
 
-    function renderPanel(sectionKey) {
-      const section =
-        translations[currentLanguage].sections[sectionKey];
+const panel = document.getElementById("contentPanel");
+const backdrop = document.getElementById("panelBackdrop");
+const panelExplore = document.getElementById("panelExplore");
 
-      if (!section) return;
+function renderPanel(sectionKey) {
+    const content = translations[currentLanguage].sections[sectionKey];
 
-      panelNumber.textContent = section.number;
-      panelTitle.textContent = section.title;
-      panelDescription.textContent = section.description;
-      panelNote.textContent = section.note;
-    }
+    if (!content) return;
 
+    document.getElementById("panelIndex").textContent = content.index;
+    document.getElementById("panelTitle").textContent = content.title;
+    document.getElementById("panelDescription").textContent = content.description;
+    document.getElementById("panelNote").textContent = content.note;
 
-    function openPanel(sectionKey) {
-      activeSection = sectionKey;
+    panelExplore.textContent = translations[currentLanguage].explore;
+    panelExplore.href = sectionLinks[sectionKey] || "#";
+}
 
-      renderPanel(sectionKey);
+function openPanel(sectionKey) {
+    activeSection = sectionKey;
 
-      panel.classList.add("open");
-      panelBackdrop.classList.add("open");
+    renderPanel(sectionKey);
 
-      panel.setAttribute("aria-hidden", "false");
+    panel.classList.add("open");
+    backdrop.classList.add("open");
+    panel.setAttribute("aria-hidden", "false");
 
-      navButtons.forEach(button => {
-        const active = button.dataset.section === sectionKey;
-
-        button.setAttribute("aria-expanded", String(active));
-      });
-
-      document.body.style.overflow = "hidden";
-    }
-
-
-    function closePanel() {
-      activeSection = null;
-
-      panel.classList.remove("open");
-      panelBackdrop.classList.remove("open");
-
-      panel.setAttribute("aria-hidden", "true");
-
-      navButtons.forEach(button => {
-        button.setAttribute("aria-expanded", "false");
-      });
-
-      document.body.style.overflow = "";
-    }
-
-
-    navButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        const sectionKey = button.dataset.section;
-
-        if (activeSection === sectionKey) {
-          closePanel();
-        } else {
-          openPanel(sectionKey);
-        }
-      });
+    document.querySelectorAll(".nav-button").forEach(button => {
+        button.classList.toggle(
+            "active",
+            button.dataset.section === sectionKey
+        );
     });
+}
 
+function closePanel() {
+    activeSection = null;
 
-    panelClose.addEventListener("click", closePanel);
-    panelBackdrop.addEventListener("click", closePanel);
+    panel.classList.remove("open");
+    backdrop.classList.remove("open");
+    panel.setAttribute("aria-hidden", "true");
 
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
+    document.querySelectorAll(".nav-button").forEach(button => {
+        button.classList.remove("active");
+    });
+}
+
+document.querySelectorAll(".nav-button").forEach(button => {
+    button.addEventListener("click", () => {
+        openPanel(button.dataset.section);
+    });
+});
+
+document.getElementById("panelClose").addEventListener("click", closePanel);
+backdrop.addEventListener("click", closePanel);
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
         closePanel();
-      }
-    });
-
-
-    /* =====================================================
-       04. SUBTLE LETTER INTERACTION
-       ===================================================== */
-
-    const titleLetters =
-      document.querySelectorAll(".title-letter");
-
-    const prefersReducedMotion =
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!prefersReducedMotion && window.matchMedia("(hover: hover)").matches) {
-      titleLetters.forEach((letter, index) => {
-        letter.addEventListener("pointermove", event => {
-          const rect = letter.getBoundingClientRect();
-
-          const x =
-            (event.clientX - rect.left) / rect.width - 0.5;
-
-          const y =
-            (event.clientY - rect.top) / rect.height - 0.5;
-
-          letter.style.transform =
-            `translate(${x * 3}px, ${y * 2}px)`;
-        });
-
-        letter.addEventListener("pointerleave", () => {
-          letter.style.transform = "";
-        });
-      });
     }
+});
 
 
-    /* =====================================================
-       05. COSMIC BACKGROUND
-       Sparse continuous lines and restrained light points.
-       ===================================================== */
+/* --------------------------------
+   COSMIC BACKGROUND
+-------------------------------- */
 
-    const spaceCanvas = document.getElementById("space");
-    const spaceContext = spaceCanvas.getContext("2d");
+const spaceCanvas = document.getElementById("space");
+const spaceCtx = spaceCanvas.getContext("2d");
 
-    let width = 0;
-    let height = 0;
-    let pixelRatio = 1;
+let width;
+let height;
+let stars = [];
+let curves = [];
 
-    let stars = [];
-    let paths = [];
+function resizeCanvas() {
+    width = spaceCanvas.width = window.innerWidth * devicePixelRatio;
+    height = spaceCanvas.height = window.innerHeight * devicePixelRatio;
 
-    let pointerX = 0;
-    let pointerY = 0;
+    spaceCanvas.style.width = window.innerWidth + "px";
+    spaceCanvas.style.height = window.innerHeight + "px";
 
-    let targetPointerX = 0;
-    let targetPointerY = 0;
+    spaceCtx.setTransform(
+        devicePixelRatio, 0, 0, devicePixelRatio, 0, 0
+    );
 
+    width = window.innerWidth;
+    height = window.innerHeight;
 
-    function seededRandom(seed) {
-      let value = seed >>> 0;
+    createStars();
+    createCurves();
+}
 
-      return function () {
-        value = (value * 1664525 + 1013904223) >>> 0;
-        return value / 4294967296;
-      };
-    }
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
 
+function createStars() {
+    stars = [];
 
-    function resizeSpace() {
-      pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+    const count = Math.min(
+        110,
+        Math.floor(window.innerWidth * window.innerHeight / 10000)
+    );
 
-      width = window.innerWidth;
-      height = window.innerHeight;
-
-      spaceCanvas.width = Math.round(width * pixelRatio);
-      spaceCanvas.height = Math.round(height * pixelRatio);
-
-      spaceCanvas.style.width = width + "px";
-      spaceCanvas.style.height = height + "px";
-
-      spaceContext.setTransform(
-        pixelRatio, 0, 0, pixelRatio, 0, 0
-      );
-
-      createSpace();
-      drawSpace();
-    }
-
-
-    function createSpace() {
-      const random = seededRandom(20261105);
-
-      stars = [];
-      paths = [];
-
-      const starCount = Math.min(
-        85,
-        Math.max(35, Math.floor(width * height / 16000))
-      );
-
-      for (let i = 0; i < starCount; i++) {
+    for (let i = 0; i < count; i++) {
         stars.push({
-          x: random() * width,
-          y: random() * height,
-          r: random() * 0.8 + 0.2,
-          alpha: random() * 0.32 + 0.08
+            x: random(0, width),
+            y: random(0, height),
+            radius: random(0.3, 1.1),
+            alpha: random(0.15, 0.6),
+            phase: random(0, Math.PI * 2)
         });
-      }
-
-      /*
-        A small number of continuous trajectories.
-        These are curves, not dotted or dashed lines.
-      */
-
-      const pathCount = width < 620 ? 5 : 8;
-
-      for (let i = 0; i < pathCount; i++) {
-        const startX = random() * width;
-        const startY = random() * height;
-
-        const reach = width * (0.16 + random() * 0.28);
-        const rise = height * (0.06 + random() * 0.14);
-
-        paths.push({
-          x1: startX,
-          y1: startY,
-
-          c1x: startX + reach * 0.25,
-          c1y: startY - rise,
-
-          c2x: startX + reach * 0.65,
-          c2y: startY + rise * 0.3,
-
-          x2: startX + reach,
-          y2: startY + rise * 0.55,
-
-          alpha: 0.045 + random() * 0.055
-        });
-      }
     }
+}
 
+function createCurves() {
+    curves = [];
 
-    function drawSpace() {
-      spaceContext.clearRect(0, 0, width, height);
+    for (let i = 0; i < 7; i++) {
+        curves.push({
+            x: random(-width * 0.2, width * 0.8),
+            y: random(-height * 0.2, height * 0.8),
+            length: random(width * 0.4, width * 1.2),
+            height: random(height * 0.12, height * 0.55),
+            alpha: random(0.025, 0.09),
+            speed: random(0.00005, 0.00015),
+            phase: random(0, Math.PI * 2)
+        });
+    }
+}
 
-      const shiftX = pointerX * 5;
-      const shiftY = pointerY * 4;
+let animationTime = 0;
 
-      /*
-        Continuous silver-white trajectories.
-      */
+function drawSpace() {
+    spaceCtx.clearRect(0, 0, width, height);
 
-      paths.forEach(path => {
-        spaceContext.beginPath();
+    animationTime += 1;
 
-        spaceContext.moveTo(
-          path.x1 + shiftX,
-          path.y1 + shiftY
-        );
+    stars.forEach(star => {
+        const pulse =
+            0.65 + Math.sin(animationTime * 0.015 + star.phase) * 0.35;
 
-        spaceContext.bezierCurveTo(
-          path.c1x + shiftX,
-          path.c1y + shiftY,
-          path.c2x + shiftX,
-          path.c2y + shiftY,
-          path.x2 + shiftX,
-          path.y2 + shiftY
-        );
-
-        spaceContext.strokeStyle =
-          `rgba(190, 198, 200, ${path.alpha})`;
-
-        spaceContext.lineWidth = 0.65;
-        spaceContext.stroke();
-      });
-
-
-      /*
-        Sparse, subtle points.
-      */
-
-      stars.forEach(star => {
-        spaceContext.beginPath();
-
-        spaceContext.arc(
-          star.x + shiftX * 0.3,
-          star.y + shiftY * 0.3,
-          star.r,
-          0,
-          Math.PI * 2
-        );
-
-        spaceContext.fillStyle =
-          `rgba(220, 224, 224, ${star.alpha})`;
-
-        spaceContext.fill();
-      });
-
-
-      /*
-        A few understated reference points.
-      */
-
-      if (width > 600) {
-        const marks = [
-          [width * 0.19, height * 0.31],
-          [width * 0.78, height * 0.68],
-          [width * 0.68, height * 0.24]
-        ];
-
-        marks.forEach((point, index) => {
-          spaceContext.beginPath();
-
-          spaceContext.arc(
-            point[0],
-            point[1],
-            index === 1 ? 1.3 : 0.8,
+        spaceCtx.beginPath();
+        spaceCtx.arc(
+            star.x,
+            star.y,
+            star.radius,
             0,
             Math.PI * 2
-          );
+        );
 
-          spaceContext.fillStyle =
-            index === 1
-              ? "rgba(73, 32, 42, 0.65)"
-              : "rgba(180, 190, 190, 0.32)";
+        spaceCtx.fillStyle =
+            `rgba(220, 220, 225, ${star.alpha * pulse})`;
 
-          spaceContext.fill();
-        });
-      }
-    }
-
-
-    window.addEventListener("pointermove", event => {
-      if (prefersReducedMotion) return;
-
-      targetPointerX =
-        (event.clientX / window.innerWidth - 0.5) * 2;
-
-      targetPointerY =
-        (event.clientY / window.innerHeight - 0.5) * 2;
+        spaceCtx.fill();
     });
 
+    curves.forEach((curve, index) => {
+        const movement =
+            Math.sin(animationTime * curve.speed + curve.phase) * 15;
 
-    function animateSpace() {
-      if (!prefersReducedMotion) {
-        pointerX += (targetPointerX - pointerX) * 0.025;
-        pointerY += (targetPointerY - pointerY) * 0.025;
+        spaceCtx.beginPath();
 
-        drawSpace();
-        requestAnimationFrame(animateSpace);
-      }
+        spaceCtx.moveTo(
+            curve.x,
+            curve.y + movement
+        );
+
+        spaceCtx.bezierCurveTo(
+            curve.x + curve.length * 0.3,
+            curve.y - curve.height + movement,
+            curve.x + curve.length * 0.7,
+            curve.y + curve.height + movement,
+            curve.x + curve.length,
+            curve.y + movement
+        );
+
+        spaceCtx.strokeStyle =
+            `rgba(190, 190, 200, ${curve.alpha})`;
+
+        spaceCtx.lineWidth = 0.7;
+        spaceCtx.stroke();
+    });
+
+    requestAnimationFrame(drawSpace);
+}
+
+
+/* --------------------------------
+   FILM GRAIN
+-------------------------------- */
+
+const grainCanvas = document.getElementById("grain");
+const grainCtx = grainCanvas.getContext("2d");
+
+function drawGrain() {
+    const w = grainCanvas.width = window.innerWidth;
+    const h = grainCanvas.height = window.innerHeight;
+
+    grainCanvas.style.width = w + "px";
+    grainCanvas.style.height = h + "px";
+
+    const imageData = grainCtx.createImageData(w, h);
+
+    for (let i = 0; i < imageData.data.length; i += 4) {
+        const noise = Math.random() * 255;
+
+        imageData.data[i] = noise;
+        imageData.data[i + 1] = noise;
+        imageData.data[i + 2] = noise;
+        imageData.data[i + 3] = 18;
     }
 
+    grainCtx.putImageData(imageData, 0, 0);
+}
 
-    window.addEventListener("resize", resizeSpace);
-
-    resizeSpace();
-
-    if (!prefersReducedMotion) {
-      requestAnimationFrame(animateSpace);
-    }
+setInterval(drawGrain, 120);
 
 
-    /* =====================================================
-       06. SOFT FILM GRAIN
-       Grain is separate from the continuous background lines.
-       ===================================================== */
+/* --------------------------------
+   INITIALIZATION
+-------------------------------- */
 
-    const grainCanvas = document.getElementById("grain");
-    const grainContext = grainCanvas.getContext("2d");
+window.addEventListener("resize", resizeCanvas);
 
-    let grainTimer = null;
+resizeCanvas();
+drawSpace();
+setLanguage("en");
 
+document.getElementById("year").textContent =
+    new Date().getFullYear();
 
-    function resizeGrain() {
-      const grainScale = 0.35;
-
-      grainCanvas.width = Math.max(
-        1,
-        Math.floor(window.innerWidth * grainScale)
-      );
-
-      grainCanvas.height = Math.max(
-        1,
-        Math.floor(window.innerHeight * grainScale)
-      );
-
-      grainCanvas.style.width = "100%";
-      grainCanvas.style.height = "100%";
-
-      drawGrain();
-    }
-
-
-    function drawGrain() {
-      const imageData = grainContext.createImageData(
-        grainCanvas.width,
-        grainCanvas.height
-      );
-
-      const data = imageData.data;
-
-      for (let i = 0; i < data.length; i += 4) {
-        const value = Math.random() * 255;
-
-        data[i] = value;
-        data[i + 1] = value;
-        data[i + 2] = value;
-
-        /*
-          Very low alpha creates a soft texture,
-          not visible dots or dashed lines.
-        */
-
-        data[i + 3] = Math.random() * 18;
-      }
-
-      grainContext.putImageData(imageData, 0, 0);
-    }
-
-
-    function startGrain() {
-      if (grainTimer) {
-        clearInterval(grainTimer);
-      }
-
-      if (!prefersReducedMotion) {
-        grainTimer = setInterval(drawGrain, 220);
-      }
-    }
-
-
-    window.addEventListener("resize", resizeGrain);
-
-    resizeGrain();
-    startGrain();
-
-
-    /* =====================================================
-       07. INITIALIZATION
-       ===================================================== */
-
-    document.getElementById("yearLabel").textContent =
-      "© " + new Date().getFullYear();
-
-    setLanguage("en");
-
-  </script>
+</script>
 
 </body>
 </html>
