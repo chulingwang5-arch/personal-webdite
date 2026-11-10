@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Language Learning — Draft Box</title>
+
+<style>
+:root {
+  --bg: #111110;
+  --panel: #191918;
+  --line: rgba(235,231,220,.16);
+  --text: #eeeae1;
+  --muted: #a6a197;
+  --soft: #77736c;
+  --accent: #a8b77a;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  background-image: radial-gradient(
+    rgba(255,255,255,.10) .55px,
+    transparent .55px
+  );
+  background-size: 5px 5px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  width: min(1160px, calc(100% - 56px));
+  margin: auto;
+}
+
+header {
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.brand-mark {
+  width: 8px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(168,183,122,.55);
+}
+
+.back {
+  color: var(--muted);
+}
+
+.hero {
+  padding: 76px 0 38px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font: 400 clamp(42px, 7vw, 76px)/.98 var(--serif);
+  letter-spacing: -.045em;
+  margin: 18px 0 16px;
+}
+
+.subtitle {
+  max-width: 560px;
+  color: var(--muted);
+  font: 16px/1.7 var(--serif);
+}
+
+.language-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 34px;
+}
+
+.lang-btn {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  padding: 11px 18px;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.lang-btn.active {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(168,183,122,.08);
+}
+
+.lang-note {
+  margin-left: auto;
+  color: var(--soft);
+  font-size: 10px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.55fr .8fr;
+  gap: 18px;
+  padding: 20px 0 70px;
+}
+
+.card {
+  border: 1px solid var(--line);
+  background: rgba(25,25,24,.94);
+}
+
+.card-head {
+  padding: 20px 22px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+
+.card-title {
+  font-size: 10px;
+  letter-spacing: .19em;
+  text-transform: uppercase;
+}
+
+.card-index {
+  color: var(--soft);
+  font: italic 14px var(--serif);
+}
+
+.input-area {
+  padding: 22px;
+}
+
+textarea {
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  background: #121211;
+  color: var(--text);
+  padding: 18px;
+  outline: none;
+  font: 15px/1.8 var(--serif);
+}
+
+textarea:focus {
+  border-color: var(--accent);
+}
+
+textarea::placeholder {
+  color: #68645d;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.field label {
+  display: block;
+  color: var(--soft);
+  font-size: 9px;
+  letter-spacing: .16em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+select,
+input[type="text"] {
+  width: 100%;
+  background: #121211;
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 12px;
+}
+
+.upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+.upload-label,
+.action-btn {
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  padding: 11px 14px;
+  font-size: 9px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.upload-label:hover,
+.action-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.file-status {
+  color: var(--soft);
+  font-size: 11px;
+}
+
+.primary {
+  width: 100%;
+  margin-top: 18px;
+  padding: 16px;
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #171812;
+  cursor: pointer;
+  font-size: 10px;
+  letter-spacing: .2em;
+  font-weight: bold;
+}
+
+.primary:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+.notice {
+  margin-top: 14px;
+  color: var(--soft);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.stat {
+  padding: 20px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.stat:nth-child(2n) {
+  border-right: 0;
+}
+
+.stat:nth-last-child(-n+2) {
+  border-bottom: 0;
+}
+
+.stat-num {
+  font: 34px var(--serif);
+  color: var(--accent);
+}
+
+.stat-label {
+  color: var(--soft);
+  font-size: 9px;
+  letter-spacing: .13em;
+  margin-top: 6px;
+}
+
+.knowledge-list {
+  padding: 4px 22px 14px;
+}
+
+.knowledge-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.knowledge-item:last-child {
+  border-bottom: 0;
+}
+
+.recent-list {
+  padding: 0 22px 16px;
+}
+
+.recent-entry {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.recent-date {
+  color: var(--accent);
+  font-size: 9px;
+}
+
+.recent-text {
+  color: var(--text);
+  font: 14px/1.5 var(--serif);
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+
+.recent-meta {
+  color: var(--soft);
+  font-size: 9px;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+
+.empty {
+  color: var(--soft);
+  font: italic 14px var(--serif);
+  padding: 18px 0;
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 20px 0 34px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--soft);
+  font-size: 9px;
+  letter-spacing: .13em;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: #171715;
+  padding: 12px 18px;
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity .25s;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+@media(max-width:800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 54px;
+  }
+
+  .lang-note {
+    display: none;
+  }
+}
+
+@media(max-width:520px) {
+  .shell {
+    width: calc(100% - 32px);
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .input-area {
+    padding: 15px;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="shell">
+
+<header>
+  <a class="brand" href="../">
+    <span class="brand-mark"></span>
+    <span>Draft Box</span>
+  </a>
+
+  <a class="back" href="../">
+    ← Back to Draft Box
+  </a>
+</header>
+
+<main>
+
+<section class="hero">
+
+  <div class="eyebrow">
+    A personal language laboratory / 01
+  </div>
+
+  <h1>
+    Language<br>Learning.
+  </h1>
+
+  <div class="subtitle">
+    Collect what you encounter.
+    Understand how language works.
+    Build a knowledge archive that grows with you.
+  </div>
+
+  <div class="language-row">
+
+    <button class="lang-btn active" data-lang="French">
+      French
+    </button>
+
+    <button class="lang-btn" data-lang="English">
+      English
+    </button>
+
+    <span class="lang-note">
+      Full content recognition · No level filtering
+    </span>
+
+  </div>
+
+</section>
+
+<section class="layout">
+
+<div class="card">
+
+  <div class="card-head">
+    <span class="card-title">AI Learning Desk</span>
+    <span class="card-index">01 / Input</span>
+  </div>
+
+  <div class="input-area">
+
+    <textarea
+      id="learningText"
+      placeholder="Paste your learning material here..."
+    ></textarea>
+
+    <div class="controls">
+
+      <div class="field">
+        <label>Learning source</label>
+
+        <select id="sourceType">
+          <option>Reading</option>
+          <option>Podcast</option>
+          <option>Video / Film</option>
+          <option>Conversation</option>
+          <option>Class / Course</option>
+          <option>Writing</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Topic / Context</label>
+
+        <input
+          type="text"
+          id="topic"
+          placeholder="e.g. Work, culture, daily life"
+        >
+      </div>
+
+    </div>
+
+    <div class="upload-row">
+
+      <label class="upload-label" for="fileInput">
+        + Add text file
+      </label>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept=".txt,.md,.csv,.text"
+      >
+
+      <label class="upload-label" for="imageInput">
+        + Add image
+      </label>
+
+      <input
+        id="imageInput"
+        type="file"
+        accept="image/*"
+      >
+
+      <span class="file-status" id="fileStatus">
+        No file selected
+      </span>
+
+    </div>
+
+    <button class="primary" disabled>
+      AI ANALYSIS — COMING SOON
+    </button>
+
+    <div class="notice">
+      AI analysis will be activated after secure API integration.
+      Your learning materials will not be filtered by proficiency level.
+    </div>
+
+    <div class="upload-row">
+
+      <button class="action-btn" id="saveBtn">
+        Save learning entry
+      </button>
+
+      <button class="action-btn" id="clearBtn">
+        Clear
+      </button>
+
+      <button class="action-btn" id="exportBtn">
+        Export JSON
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<aside class="side-stack">
+
+  <div class="card">
+
+    <div class="card-head">
+      <span class="card-title">My Knowledge</span>
+      <span class="card-index">02 / Archive</span>
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div class="stat-num" id="entryCount">00</div>
+        <div class="stat-label">Learning entries</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num">02</div>
+        <div class="stat-label">Languages</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num">04</div>
+        <div class="stat-label">Knowledge types</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Room to grow</div>
+      </div>
+
+    </div>
+
+    <div class="knowledge-list">
+      <div class="knowledge-item">
+        <span>Vocabulary</span>
+        <span>Archive ↗</span>
+      </div>
+
+      <div class="knowledge-item">
+        <span>Expressions</span>
+        <span>Archive ↗</span>
+      </div>
+
+      <div class="knowledge-item">
+        <span>Grammar</span>
+        <span>Archive ↗</span>
+      </div>
+
+      <div class="knowledge-item">
+        <span>Usage contexts</span>
+        <span>Archive ↗</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <div class="card-head">
+      <span class="card-title">Recent Learning History</span>
+      <span class="card-index">03 / Log</span>
+    </div>
+
+    <div class="recent-list" id="recentList">
+      <div class="empty">
+        Your learning archive will begin here.
+      </div>
+    </div>
+
+  </div>
+
+</aside>
+
+</section>
+
+</main>
+
+<footer class="footer">
+  <span>Draft Box / Language Learning</span>
+  <span>Learn beyond your current level.</span>
+</footer>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+const STORAGE_KEY = "draftbox_language_learning_entries_v1";
+
+let selectedLanguage = "French";
+
+const textEl = document.getElementById("learningText");
+
+function getEntries() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "[]"
+    );
+  } catch(e) {
+    return [];
+  }
+}
+
+function showToast(message) {
+
+  const toast = document.getElementById("toast");
+
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2300);
+
+}
+
+function escapeHTML(value) {
+
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+
+}
+
+function renderEntries() {
+
+  const entries = getEntries();
+
+  const filtered = entries.filter(
+    entry => entry.language === selectedLanguage
+  );
+
+  document.getElementById("entryCount").textContent =
+    String(entries.length).padStart(2, "0");
+
+  const list = document.getElementById("recentList");
+
+  if (!filtered.length) {
+
+    list.innerHTML = `
+      <div class="empty">
+        No entries yet.
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML = filtered.slice(0, 5).map(entry => `
+
+    <article class="recent-entry">
+
+      <div class="recent-date">
+        ${escapeHTML(entry.dateLabel)}
+      </div>
+
+      <div class="recent-text">
+        ${escapeHTML(entry.preview)}
+      </div>
+
+      <div class="recent-meta">
+        ${escapeHTML(entry.language)}
+        ·
+        ${escapeHTML(entry.source)}
+      </div>
+
+    </article>
+
+  `).join("");
+
+}
+
+document.querySelectorAll(".lang-btn").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    selectedLanguage = button.dataset.lang;
+
+    document.querySelectorAll(".lang-btn").forEach(item => {
+      item.classList.toggle("active", item === button);
+    });
+
+    renderEntries();
+
+  });
+
+});
+
+document.getElementById("fileInput").addEventListener("change", async event => {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const content = await file.text();
+
+  textEl.value += "\n\n" + content;
+
+  document.getElementById("fileStatus").textContent =
+    file.name;
+
+});
+
+document.getElementById("imageInput").addEventListener("change", event => {
+
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  document.getElementById("fileStatus").textContent =
+    file.name + " (AI recognition coming soon)";
+
+});
+
+document.getElementById("saveBtn").addEventListener("click", () => {
+
+  const content = textEl.value.trim();
+
+  if (!content) {
+    showToast("Please enter some learning material.");
+    return;
+  }
+
+  const entries = getEntries();
+
+  const now = new Date();
+
+  entries.unshift({
+
+    id: Date.now(),
+
+    language: selectedLanguage,
+
+    source: document.getElementById("sourceType").value,
+
+    topic: document.getElementById("topic").value,
+
+    content: content,
+
+    createdAt: now.toISOString(),
+
+    dateLabel: now.toLocaleDateString(),
+
+    preview: content.length > 135
+      ? content.slice(0,135) + "..."
+      : content
+
+  });
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(entries)
+  );
+
+  renderEntries();
+
+  showToast("Learning entry saved.");
+
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+
+  textEl.value = "";
+
+  document.getElementById("topic").value = "";
+
+  document.getElementById("fileStatus").textContent =
+    "No file selected";
+
+});
+
+document.getElementById("exportBtn").addEventListener("click", () => {
+
+  const data = getEntries();
+
+  const blob = new Blob(
+    [JSON.stringify(data, null, 2)],
+    {type: "application/json"}
+  );
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+
+  link.download = "language-learning-backup.json";
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+  showToast("Backup exported.");
+
+});
+
+renderEntries();
+
+</script>
+
+</body>
+</html>
